@@ -1,0 +1,1703 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>KAI[FRAME] · FTM Masc Build Protocol</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Barlow+Condensed:wght@300;400;500;600;700;800;900&family=Barlow:wght@300;400;500;600&display=swap');
+
+  :root {
+    --black: #0a0a0a;
+    --dark: #111111;
+    --card: #161616;
+    --border: #1f1f1f;
+    --accent: #c8ff00;
+    --accent2: #ff4b4b;
+    --text: #e8e8e8;
+    --muted: #666;
+    --mid: #333;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--black);
+    color: var(--text);
+    font-family: 'Barlow', sans-serif;
+    font-size: 16px;
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+
+  /* ── NOISE OVERLAY ── */
+  body::before {
+    content: '';
+    position: fixed; inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none; z-index: 999; opacity: .4;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 16px 40px;
+    border-bottom: 1px solid var(--border);
+    background: rgba(10,10,10,0.92);
+    backdrop-filter: blur(12px);
+  }
+  .nav-logo {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 900; font-size: 22px; letter-spacing: 2px;
+    color: var(--accent);
+  }
+  .nav-logo span { color: var(--text); }
+  nav a {
+    font-family: 'Space Mono', monospace;
+    font-size: 11px; color: var(--muted);
+    text-decoration: none; letter-spacing: 1px;
+    transition: color .2s;
+  }
+  nav a:hover { color: var(--accent); }
+  .nav-links { display: flex; gap: 32px; align-items: center; }
+  .nav-cta {
+    background: var(--accent); color: var(--black) !important;
+    padding: 8px 18px; font-weight: 700 !important;
+  }
+
+  /* ── HERO ── */
+  .hero {
+    min-height: 100vh;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    align-items: center;
+    padding: 100px 40px 60px;
+    gap: 60px;
+    border-bottom: 1px solid var(--border);
+  }
+  .hero-text {}
+  .tag {
+    display: inline-block;
+    font-family: 'Space Mono', monospace;
+    font-size: 11px; color: var(--muted);
+    letter-spacing: 2px; border: 1px solid var(--border);
+    padding: 4px 10px; margin-bottom: 24px;
+  }
+  .tag-accent { border-color: var(--accent); color: var(--accent); }
+  h1 {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 900; font-size: clamp(56px, 7vw, 96px);
+    line-height: .95; letter-spacing: -1px;
+    text-transform: uppercase; margin-bottom: 24px;
+  }
+  h1 em { color: var(--accent); font-style: normal; }
+  h1 .strike {
+    position: relative; color: var(--muted);
+  }
+  h1 .strike::after {
+    content: ''; position: absolute;
+    left: 0; top: 50%; width: 100%; height: 3px;
+    background: var(--accent2);
+  }
+  .hero-sub {
+    font-size: 18px; color: #aaa; max-width: 480px;
+    margin-bottom: 40px; line-height: 1.7;
+  }
+  .hero-sub strong { color: var(--text); }
+  .btn-row { display: flex; gap: 16px; flex-wrap: wrap; }
+  .btn-primary {
+    background: var(--accent); color: var(--black);
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 800; font-size: 16px; letter-spacing: 2px;
+    padding: 16px 32px; border: none; cursor: pointer;
+    text-transform: uppercase; transition: transform .15s, box-shadow .15s;
+  }
+  .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(200,255,0,.3); }
+  .btn-outline {
+    background: transparent; color: var(--text);
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 700; font-size: 16px; letter-spacing: 2px;
+    padding: 16px 32px; border: 1px solid var(--border); cursor: pointer;
+    text-transform: uppercase; transition: border-color .2s, color .2s;
+  }
+  .btn-outline:hover { border-color: var(--accent); color: var(--accent); }
+
+  /* ── CHARACTER ── */
+  .hero-visual {
+    display: flex; flex-direction: column; align-items: center;
+    position: relative;
+  }
+  .char-wrapper {
+    position: relative;
+    width: 320px; height: 420px;
+  }
+  .char-svg { width: 100%; height: 100%; }
+
+  /* Idle float animation */
+  @keyframes float {
+    0%,100% { transform: translateY(0); }
+    50%      { transform: translateY(-14px); }
+  }
+  @keyframes breathe {
+    0%,100% { transform: scaleY(1); }
+    50%      { transform: scaleY(1.03); }
+  }
+  @keyframes eyeblink {
+    0%,92%,100% { transform: scaleY(1); }
+    95%          { transform: scaleY(0.08); }
+  }
+  @keyframes scanline {
+    0%   { top: -10%; }
+    100% { top: 110%; }
+  }
+  @keyframes glitch {
+    0%,94%,100% { clip-path: none; transform: none; }
+    95%          { clip-path: inset(30% 0 50% 0); transform: translateX(4px); }
+    97%          { clip-path: inset(60% 0 10% 0); transform: translateX(-4px); }
+  }
+
+  .char-float { animation: float 4s ease-in-out infinite; }
+  .char-body  { animation: breathe 3.5s ease-in-out infinite; }
+  .char-eye   { animation: eyeblink 5s ease-in-out infinite; transform-origin: center; }
+
+  /* Speech bubble */
+  .speech-bubble {
+    position: absolute; top: 20px; right: -130px;
+    background: var(--card); border: 1px solid var(--accent);
+    padding: 12px 16px; max-width: 180px;
+    font-family: 'Space Mono', monospace; font-size: 11px;
+    line-height: 1.5; color: var(--accent);
+    animation: float 4s ease-in-out infinite;
+    animation-delay: .5s;
+  }
+  .speech-bubble::before {
+    content: '';
+    position: absolute; left: -10px; top: 20px;
+    border: 5px solid transparent;
+    border-right-color: var(--accent);
+  }
+
+  /* Glitch frame */
+  .glitch-frame {
+    position: absolute; inset: 0;
+    border: 2px solid var(--accent);
+    animation: glitch 8s infinite;
+    pointer-events: none;
+  }
+  .scanline-effect {
+    position: absolute; inset: 0; overflow: hidden;
+    pointer-events: none;
+  }
+  .scanline-effect::after {
+    content: '';
+    position: absolute; left: 0; width: 100%; height: 3px;
+    background: rgba(200,255,0,.15);
+    animation: scanline 3s linear infinite;
+  }
+
+  /* Status tags below character */
+  .char-tags {
+    display: flex; gap: 8px; margin-top: 20px; flex-wrap: wrap;
+    justify-content: center;
+  }
+  .char-tag {
+    font-family: 'Space Mono', monospace; font-size: 10px;
+    border: 1px solid var(--border); padding: 3px 8px;
+    color: var(--muted); letter-spacing: 1px;
+  }
+
+  /* ── STATS BAR ── */
+  .stats-bar {
+    display: flex; gap: 0;
+    border-bottom: 1px solid var(--border);
+    overflow-x: auto;
+  }
+  .stat-item {
+    flex: 1; min-width: 140px;
+    padding: 28px 32px;
+    border-right: 1px solid var(--border);
+  }
+  .stat-item:last-child { border-right: none; }
+  .stat-num {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 900; font-size: 42px;
+    color: var(--accent); letter-spacing: -1px;
+    display: block;
+  }
+  .stat-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px; color: var(--muted); letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+
+  /* ── SECTIONS ── */
+  section { padding: 80px 40px; border-bottom: 1px solid var(--border); }
+  .section-tag {
+    font-family: 'Space Mono', monospace; font-size: 11px;
+    color: var(--muted); letter-spacing: 2px;
+    margin-bottom: 12px; display: block;
+  }
+  h2 {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 900; font-size: clamp(36px, 5vw, 60px);
+    text-transform: uppercase; letter-spacing: -0.5px;
+    margin-bottom: 40px; line-height: 1;
+  }
+  h2 em { color: var(--accent); font-style: normal; }
+
+  /* ── KAI INTRO PANEL ── */
+  .kai-intro {
+    display: grid; grid-template-columns: 200px 1fr; gap: 48px;
+    align-items: start;
+  }
+  .kai-mini-char { width: 180px; }
+  .kai-bio p { color: #aaa; max-width: 600px; margin-bottom: 16px; line-height: 1.8; }
+  .kai-bio strong { color: var(--accent); }
+
+  /* ── MYTHS GRID ── */
+  .myths-grid {
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1px; background: var(--border);
+    margin-top: 40px;
+  }
+  .myth-card {
+    background: var(--card); padding: 28px 24px;
+    transition: background .2s;
+  }
+  .myth-card:hover { background: #1a1a1a; }
+  .myth-num {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 900; font-size: 48px;
+    color: var(--mid); line-height: 1; margin-bottom: 8px;
+  }
+  .myth-title {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 700; font-size: 18px;
+    color: var(--accent2); text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+  .myth-rebuttal { font-size: 14px; color: #aaa; line-height: 1.6; }
+
+  /* ── PROGRAM PHASES ── */
+  .phases { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1px; background: var(--border); }
+  .phase-card {
+    background: var(--card); padding: 36px 28px;
+  }
+  .phase-label {
+    font-family: 'Space Mono', monospace; font-size: 10px;
+    color: var(--muted); letter-spacing: 2px; margin-bottom: 16px;
+  }
+  .phase-title {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 900; font-size: 32px;
+    text-transform: uppercase; color: var(--accent);
+    margin-bottom: 12px;
+  }
+  .phase-desc { font-size: 14px; color: #aaa; line-height: 1.7; margin-bottom: 24px; }
+
+  /* ── WORKOUT TABLE ── */
+  .workout-section { margin-top: 48px; }
+  .phase-header {
+    display: flex; align-items: center; gap: 16px;
+    margin-bottom: 24px; cursor: pointer;
+    padding: 16px 20px; background: var(--card);
+    border: 1px solid var(--border);
+    transition: border-color .2s;
+  }
+  .phase-header:hover { border-color: var(--accent); }
+  .phase-header-title {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 800; font-size: 22px;
+    text-transform: uppercase; letter-spacing: 1px;
+  }
+  .phase-toggle {
+    margin-left: auto;
+    font-family: 'Space Mono', monospace;
+    font-size: 18px; color: var(--accent);
+  }
+  .phase-content { display: none; }
+  .phase-content.open { display: block; }
+
+  .day-block { margin-bottom: 32px; }
+  .day-label {
+    font-family: 'Space Mono', monospace; font-size: 11px;
+    color: var(--muted); letter-spacing: 2px;
+    padding: 8px 0; border-bottom: 1px solid var(--border);
+    margin-bottom: 0;
+  }
+  table { width: 100%; border-collapse: collapse; }
+  th {
+    font-family: 'Space Mono', monospace; font-size: 10px;
+    color: var(--muted); letter-spacing: 1px;
+    text-align: left; padding: 12px 16px;
+    border-bottom: 1px solid var(--border);
+    text-transform: uppercase;
+  }
+  td {
+    padding: 14px 16px; font-size: 14px;
+    border-bottom: 1px solid var(--border);
+    vertical-align: top;
+  }
+  tr:last-child td { border-bottom: none; }
+  tr:hover td { background: rgba(200,255,0,.03); }
+  .td-exercise { font-weight: 600; color: var(--text); }
+  .td-sets { font-family: 'Space Mono', monospace; font-size: 12px; color: var(--accent); }
+  .td-tempo { font-family: 'Space Mono', monospace; font-size: 12px; color: #888; }
+  .td-muscle { font-size: 12px; color: var(--muted); }
+  .td-note { font-size: 12px; color: #aaa; font-style: italic; }
+
+  /* ── GLOSSARY ── */
+  .glossary-grid {
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 1px; background: var(--border); margin-top: 32px;
+  }
+  .glossary-card {
+    background: var(--card); padding: 20px;
+  }
+  .glossary-term {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 800; font-size: 20px;
+    color: var(--accent); text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+  .glossary-def { font-size: 13px; color: #aaa; line-height: 1.5; }
+
+  /* ── NUTRITION ── */
+  .nutrition-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; }
+  .nutrition-card {
+    background: var(--card); border: 1px solid var(--border); padding: 32px;
+  }
+  .nutrition-card h3 {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 800; font-size: 24px;
+    text-transform: uppercase; color: var(--accent);
+    margin-bottom: 20px; letter-spacing: 1px;
+  }
+  .food-list { list-style: none; }
+  .food-list li {
+    font-size: 14px; color: #aaa;
+    padding: 8px 0; border-bottom: 1px solid var(--border);
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  .food-list li:last-child { border-bottom: none; }
+  .food-price {
+    font-family: 'Space Mono', monospace; font-size: 11px;
+    color: var(--accent); letter-spacing: 1px;
+  }
+  .macro-bar { margin-bottom: 16px; }
+  .macro-label {
+    font-family: 'Space Mono', monospace; font-size: 11px;
+    color: var(--muted); letter-spacing: 1px;
+    display: flex; justify-content: space-between; margin-bottom: 6px;
+  }
+  .macro-track {
+    height: 4px; background: var(--border); border-radius: 2px;
+  }
+  .macro-fill {
+    height: 100%; border-radius: 2px; background: var(--accent);
+    transition: width 1s ease;
+  }
+  .macro-fill.carbs { background: #4b9fff; }
+  .macro-fill.fat   { background: #ff4b4b; }
+
+  /* ── KAI CALLOUT BLOCKS ── */
+  .kai-callout {
+    display: flex; gap: 20px; align-items: flex-start;
+    background: var(--card); border-left: 3px solid var(--accent);
+    padding: 24px; margin: 32px 0;
+  }
+  .kai-callout-avatar { width: 48px; height: 48px; flex-shrink: 0; }
+  .kai-callout-text {
+    font-size: 15px; color: #ccc; line-height: 1.7;
+    font-style: italic;
+  }
+  .kai-callout-text strong { color: var(--accent); font-style: normal; }
+
+  /* ── HRT SECTION ── */
+  .hrt-section { background: #0d0d0d; }
+  .hrt-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; margin-top: 40px; }
+  .hrt-card {
+    background: var(--card); border: 1px solid var(--border);
+    padding: 28px;
+  }
+  .hrt-card h3 {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 800; font-size: 22px;
+    color: var(--accent); text-transform: uppercase;
+    margin-bottom: 16px;
+  }
+  .hrt-card p { font-size: 14px; color: #aaa; line-height: 1.8; margin-bottom: 12px; }
+
+  /* ── NEWSLETTER / PDF FUNNEL ── */
+  .funnel-section {
+    background: linear-gradient(135deg, #0d0d0d 0%, #111 50%, #0a0a0a 100%);
+    position: relative; overflow: hidden;
+  }
+  .funnel-section::before {
+    content: 'GET THE PROGRAM';
+    position: absolute; top: 0; right: -20px;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 900; font-size: 200px;
+    color: rgba(200,255,0,0.03); line-height: 1;
+    white-space: nowrap; pointer-events: none;
+    user-select: none;
+  }
+  .funnel-inner {
+    max-width: 600px;
+    position: relative; z-index: 1;
+  }
+  .funnel-inner h2 { margin-bottom: 16px; }
+  .funnel-inner p {
+    font-size: 16px; color: #aaa; margin-bottom: 32px; line-height: 1.7;
+  }
+  .form-group { display: flex; gap: 0; margin-bottom: 16px; }
+  .form-input {
+    flex: 1; background: var(--card); border: 1px solid var(--border);
+    border-right: none; color: var(--text);
+    font-family: 'Space Mono', monospace; font-size: 13px;
+    padding: 16px 20px; outline: none;
+    transition: border-color .2s;
+  }
+  .form-input:focus { border-color: var(--accent); }
+  .form-input::placeholder { color: var(--muted); }
+  .form-submit {
+    background: var(--accent); color: var(--black);
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 800; font-size: 16px; letter-spacing: 2px;
+    padding: 16px 28px; border: none; cursor: pointer;
+    text-transform: uppercase; white-space: nowrap;
+    transition: opacity .2s;
+  }
+  .form-submit:hover { opacity: .85; }
+  .form-fine {
+    font-family: 'Space Mono', monospace; font-size: 10px;
+    color: var(--muted); letter-spacing: 1px;
+  }
+
+  /* Success state */
+  .funnel-success {
+    display: none;
+    background: var(--card); border: 1px solid var(--accent);
+    padding: 32px; text-align: center;
+  }
+  .funnel-success h3 {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 900; font-size: 32px;
+    color: var(--accent); text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+  .funnel-success p { color: #aaa; font-size: 15px; margin-bottom: 24px; }
+  .pdf-download-btn {
+    display: inline-flex; align-items: center; gap: 12px;
+    background: var(--accent); color: var(--black);
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 800; font-size: 18px; letter-spacing: 2px;
+    padding: 18px 36px; border: none; cursor: pointer;
+    text-decoration: none; text-transform: uppercase;
+    transition: transform .15s, box-shadow .15s;
+  }
+  .pdf-download-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 32px rgba(200,255,0,.25); }
+
+  /* ── TEASER SECTION ── */
+  .teaser-section { background: var(--black); }
+  .teaser-cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 1px; background: var(--border); margin-top: 40px; }
+  .teaser-card {
+    background: var(--card); padding: 32px 24px;
+    position: relative; overflow: hidden;
+    transition: background .2s;
+  }
+  .teaser-card:hover { background: #181818; }
+  .teaser-card-num {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 900; font-size: 72px;
+    color: rgba(200,255,0,.08); position: absolute;
+    right: -8px; top: -8px; line-height: 1;
+  }
+  .teaser-card h3 {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 800; font-size: 22px;
+    color: var(--text); text-transform: uppercase;
+    margin-bottom: 10px; position: relative; z-index: 1;
+  }
+  .teaser-card p { font-size: 13px; color: var(--muted); line-height: 1.6; position: relative; z-index: 1; }
+  .teaser-locked {
+    display: inline-block; margin-top: 12px;
+    font-family: 'Space Mono', monospace; font-size: 10px;
+    color: var(--accent); letter-spacing: 1px;
+    border: 1px solid var(--accent); padding: 3px 8px;
+  }
+
+  /* ── FOOTER ── */
+  footer {
+    padding: 40px 40px;
+    border-top: 1px solid var(--border);
+    display: flex; justify-content: space-between; align-items: center;
+    flex-wrap: wrap; gap: 20px;
+  }
+  .footer-logo {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 900; font-size: 20px; letter-spacing: 2px;
+    color: var(--accent);
+  }
+  .footer-logo span { color: var(--muted); }
+  .footer-note {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px; color: var(--muted); letter-spacing: 1px;
+  }
+
+  /* ── PDF CONTENT (hidden, used for generation) ── */
+  #pdf-content { display: none; }
+
+  /* ── ANIMATIONS ── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  .fade-up { animation: fadeUp .7s ease forwards; }
+  .delay-1 { animation-delay: .1s; opacity: 0; }
+  .delay-2 { animation-delay: .25s; opacity: 0; }
+  .delay-3 { animation-delay: .4s; opacity: 0; }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 768px) {
+    nav { padding: 14px 20px; }
+    .nav-links { display: none; }
+    .hero { grid-template-columns: 1fr; padding: 90px 20px 40px; }
+    .hero-visual { order: -1; }
+    .char-wrapper { width: 240px; height: 320px; }
+    .speech-bubble { display: none; }
+    section { padding: 60px 20px; }
+    .phases, .hrt-grid, .nutrition-grid { grid-template-columns: 1fr; }
+    .kai-intro { grid-template-columns: 1fr; }
+    .kai-mini-char { display: none; }
+    .form-group { flex-direction: column; }
+    .form-input { border-right: 1px solid var(--border); border-bottom: none; }
+    footer { padding: 30px 20px; }
+    .stat-item { min-width: 100px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">KAI<span>[FRAME]</span></div>
+  <div class="nav-links">
+    <a href="#program">program</a>
+    <a href="#nutrition">nutrition</a>
+    <a href="#hrt">hrt + gains</a>
+    <a href="#download" class="nav-cta">free pdf →</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-text">
+    <div class="tag tag-accent">[ FTM · MASC BUILD PROTOCOL · v1.0 ]</div>
+    <h1 class="fade-up">
+      ENGINEER<br>
+      YOUR<br>
+      <em>FRAME.</em>
+    </h1>
+    <p class="hero-sub fade-up delay-1">
+      No fluff. No bro-science. No gatekeeping. <strong>A 24-month body protocol</strong> built specifically for FTM and transmasc bodies. Free. Downloadable. Straight to the point.
+    </p>
+    <div class="btn-row fade-up delay-2">
+      <button class="btn-primary" onclick="document.getElementById('download').scrollIntoView({behavior:'smooth'})">grab the pdf →</button>
+      <button class="btn-outline" onclick="document.getElementById('program').scrollIntoView({behavior:'smooth'})">see the program</button>
+    </div>
+  </div>
+
+  <div class="hero-visual">
+    <div class="char-wrapper">
+      <!-- Animated Kai Character (Toji-inspired) -->
+      <svg class="char-svg char-float" viewBox="0 0 320 420" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <radialGradient id="bodyGrad" cx="50%" cy="40%" r="60%">
+            <stop offset="0%" stop-color="#2a2a2a"/>
+            <stop offset="100%" stop-color="#111"/>
+          </radialGradient>
+          <radialGradient id="skinGrad" cx="50%" cy="30%" r="70%">
+            <stop offset="0%" stop-color="#c8975a"/>
+            <stop offset="100%" stop-color="#a0733e"/>
+          </radialGradient>
+          <filter id="glow">
+            <feGaussianBlur stdDeviation="3" result="blur"/>
+            <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+          </filter>
+        </defs>
+
+        <!-- Shadow/Ground -->
+        <ellipse cx="160" cy="410" rx="80" ry="10" fill="rgba(200,255,0,0.08)"/>
+
+        <!-- Body group (breathe) -->
+        <g class="char-body" style="transform-origin: 160px 250px;">
+
+          <!-- Torso / tank -->
+          <path d="M110 180 L210 180 L220 300 L100 300 Z" fill="url(#bodyGrad)" stroke="#333" stroke-width="1"/>
+          <!-- Tank straps -->
+          <rect x="128" y="165" width="24" height="20" rx="2" fill="#1a1a1a" stroke="#333"/>
+          <rect x="168" y="165" width="24" height="20" rx="2" fill="#1a1a1a" stroke="#333"/>
+          <!-- Top surgery scars -->
+          <line x1="118" y1="208" x2="148" y2="208" stroke="#7a5a3a" stroke-width="2" stroke-linecap="round" opacity="0.9"/>
+          <line x1="172" y1="208" x2="202" y2="208" stroke="#7a5a3a" stroke-width="2" stroke-linecap="round" opacity="0.9"/>
+          <!-- KAI[FRAME] text on shirt -->
+          <text x="160" y="258" text-anchor="middle" fill="rgba(200,255,0,0.6)" font-family="monospace" font-size="9" letter-spacing="1">KAI[FRAME]</text>
+
+          <!-- Abs definition -->
+          <line x1="160" y1="215" x2="160" y2="290" stroke="rgba(0,0,0,0.4)" stroke-width="1.5"/>
+          <line x1="135" y1="230" x2="185" y2="230" stroke="rgba(0,0,0,0.25)" stroke-width="1"/>
+          <line x1="133" y1="250" x2="187" y2="250" stroke="rgba(0,0,0,0.25)" stroke-width="1"/>
+
+          <!-- Arms -->
+          <!-- Left arm -->
+          <path d="M110 185 Q85 200 80 240 Q80 260 90 270" fill="none" stroke="#c8975a" stroke-width="26" stroke-linecap="round"/>
+          <path d="M110 185 Q85 200 80 240 Q80 260 90 270" fill="none" stroke="#b07840" stroke-width="24" stroke-linecap="round"/>
+          <!-- Left forearm tattoo hint -->
+          <path d="M84 230 Q82 240 84 248" fill="none" stroke="rgba(200,255,0,0.3)" stroke-width="8" stroke-linecap="round"/>
+          <!-- Left hand -->
+          <ellipse cx="93" cy="275" rx="14" ry="10" fill="#c8975a"/>
+          <line x1="84" y1="272" x2="80" y2="282" stroke="#b07840" stroke-width="4" stroke-linecap="round"/>
+          <line x1="90" y1="275" x2="88" y2="286" stroke="#b07840" stroke-width="4" stroke-linecap="round"/>
+          <line x1="97" y1="276" x2="97" y2="287" stroke="#b07840" stroke-width="4" stroke-linecap="round"/>
+          <line x1="103" y1="274" x2="105" y2="284" stroke="#b07840" stroke-width="4" stroke-linecap="round"/>
+
+          <!-- Right arm -->
+          <path d="M210 185 Q235 200 240 240 Q240 260 230 270" fill="none" stroke="#c8975a" stroke-width="26" stroke-linecap="round"/>
+          <path d="M210 185 Q235 200 240 240 Q240 260 230 270" fill="none" stroke="#b07840" stroke-width="24" stroke-linecap="round"/>
+          <!-- Right hand (loose, casual) -->
+          <ellipse cx="227" cy="275" rx="14" ry="10" fill="#c8975a"/>
+          <line x1="220" y1="272" x2="218" y2="282" stroke="#b07840" stroke-width="4" stroke-linecap="round"/>
+          <line x1="227" y1="274" x2="226" y2="285" stroke="#b07840" stroke-width="4" stroke-linecap="round"/>
+          <line x1="233" y1="275" x2="234" y2="285" stroke="#b07840" stroke-width="4" stroke-linecap="round"/>
+          <line x1="238" y1="272" x2="241" y2="281" stroke="#b07840" stroke-width="4" stroke-linecap="round"/>
+
+          <!-- Neck -->
+          <rect x="147" y="152" width="26" height="32" rx="6" fill="#c8975a"/>
+          <line x1="160" y1="155" x2="160" y2="180" stroke="#a07035" stroke-width="1.5" opacity="0.4"/>
+
+          <!-- Head -->
+          <ellipse cx="160" cy="130" rx="52" ry="58" fill="url(#skinGrad)"/>
+          <!-- Jaw / face shape -->
+          <path d="M118 140 Q115 165 130 178 Q145 188 160 190 Q175 188 190 178 Q205 165 202 140" fill="url(#skinGrad)"/>
+          <!-- Scar on face (left cheek) -->
+          <line x1="125" y1="130" x2="133" y2="148" stroke="#8a6535" stroke-width="2" stroke-linecap="round" opacity="0.8"/>
+
+          <!-- Hair - messy dark -->
+          <path d="M108 115 Q110 75 135 68 Q160 60 185 68 Q210 76 212 115" fill="#1a1212" stroke="#111" stroke-width="1"/>
+          <path d="M108 118 Q104 96 112 82 Q118 72 125 70" fill="#1a1212"/>
+          <path d="M212 118 Q216 96 208 82 Q202 72 195 70" fill="#1a1212"/>
+          <!-- Hair strands -->
+          <path d="M130 68 Q125 55 128 46" fill="none" stroke="#1a1212" stroke-width="8" stroke-linecap="round"/>
+          <path d="M145 63 Q142 50 146 42" fill="none" stroke="#1a1212" stroke-width="6" stroke-linecap="round"/>
+          <path d="M160 60 Q159 47 163 40" fill="none" stroke="#1a1212" stroke-width="7" stroke-linecap="round"/>
+          <path d="M175 63 Q178 50 174 42" fill="none" stroke="#1a1212" stroke-width="6" stroke-linecap="round"/>
+
+          <!-- Ears -->
+          <ellipse cx="110" cy="130" rx="10" ry="14" fill="#b07840"/>
+          <ellipse cx="210" cy="130" rx="10" ry="14" fill="#b07840"/>
+
+          <!-- Eyes - sharp -->
+          <g class="char-eye" style="transform-origin: 140px 125px;">
+            <ellipse cx="140" cy="125" rx="14" ry="8" fill="#1a1212"/>
+            <ellipse cx="140" cy="125" rx="8" ry="6" fill="#2a1a0a"/>
+            <ellipse cx="140" cy="125" rx="5" ry="4" fill="#111"/>
+            <ellipse cx="137" cy="123" rx="2" ry="1.5" fill="rgba(255,255,255,0.7)"/>
+          </g>
+          <g class="char-eye" style="transform-origin: 180px 125px; animation-delay: .1s;">
+            <ellipse cx="180" cy="125" rx="14" ry="8" fill="#1a1212"/>
+            <ellipse cx="180" cy="125" rx="8" ry="6" fill="#2a1a0a"/>
+            <ellipse cx="180" cy="125" rx="5" ry="4" fill="#111"/>
+            <ellipse cx="177" cy="123" rx="2" ry="1.5" fill="rgba(255,255,255,0.7)"/>
+          </g>
+          <!-- Eyebrows - heavy, furrowed slightly -->
+          <path d="M126 113 Q133 108 154 111" fill="none" stroke="#1a1212" stroke-width="3.5" stroke-linecap="round"/>
+          <path d="M166 111 Q187 108 194 113" fill="none" stroke="#1a1212" stroke-width="3.5" stroke-linecap="round"/>
+
+          <!-- Nose -->
+          <path d="M158 130 Q155 142 150 148 Q158 152 170 148 Q165 142 162 130" fill="none" stroke="#a07035" stroke-width="1.5" opacity="0.6"/>
+
+          <!-- Mouth - slight smirk -->
+          <path d="M148 162 Q160 170 174 162" fill="none" stroke="#8a5a2a" stroke-width="2" stroke-linecap="round"/>
+          <path d="M174 162 Q178 160 180 156" fill="none" stroke="#8a5a2a" stroke-width="1.5" stroke-linecap="round"/>
+
+          <!-- Legs / joggers -->
+          <path d="M100 300 L120 390 L150 390 L160 330 L170 390 L200 390 L220 300 Z" fill="#1a1a1a" stroke="#222" stroke-width="1"/>
+          <!-- Jogger details -->
+          <line x1="155" y1="305" x2="148" y2="385" stroke="#333" stroke-width="1"/>
+          <line x1="165" y1="305" x2="172" y2="385" stroke="#333" stroke-width="1"/>
+          <!-- Shoes -->
+          <ellipse cx="135" cy="395" rx="22" ry="8" fill="#222" stroke="#333"/>
+          <ellipse cx="185" cy="395" rx="22" ry="8" fill="#222" stroke="#333"/>
+          <!-- Shoe accent -->
+          <path d="M116 392 Q135 388 154 392" fill="none" stroke="rgba(200,255,0,0.5)" stroke-width="2" stroke-linecap="round"/>
+          <path d="M166 392 Q185 388 204 392" fill="none" stroke="rgba(200,255,0,0.5)" stroke-width="2" stroke-linecap="round"/>
+
+        </g><!-- end char-body -->
+
+        <!-- Accent glow under character -->
+        <ellipse cx="160" cy="410" rx="60" ry="6" fill="rgba(200,255,0,0.12)" filter="url(#glow)"/>
+      </svg>
+
+      <!-- Scanline overlay -->
+      <div class="scanline-effect"></div>
+      <!-- Glitch border -->
+      <div class="glitch-frame"></div>
+    </div>
+
+    <!-- Speech bubble -->
+    <div class="speech-bubble">
+      listen up.<br>no excuses.<br>just build.
+    </div>
+
+    <!-- Tags -->
+    <div class="char-tags">
+      <div class="char-tag">[ KAI · TRAINER ]</div>
+      <div class="char-tag">[ FTM · CERTIFIED ]</div>
+      <div class="char-tag">[ TOP SURGERY ✓ ]</div>
+    </div>
+  </div>
+</section>
+
+<!-- STATS BAR -->
+<div class="stats-bar">
+  <div class="stat-item">
+    <span class="stat-num">24</span>
+    <span class="stat-label">month protocol</span>
+  </div>
+  <div class="stat-item">
+    <span class="stat-num">4</span>
+    <span class="stat-label">days / week</span>
+  </div>
+  <div class="stat-item">
+    <span class="stat-num">&lt;45</span>
+    <span class="stat-label">mins per session</span>
+  </div>
+  <div class="stat-item">
+    <span class="stat-num">0</span>
+    <span class="stat-label">gatekeeping</span>
+  </div>
+  <div class="stat-item">
+    <span class="stat-num">100%</span>
+    <span class="stat-label">free</span>
+  </div>
+</div>
+
+<!-- KAI INTRO -->
+<section>
+  <span class="section-tag">[ 00 · meet your coach ]</span>
+  <div class="kai-intro">
+    <svg class="kai-mini-char" viewBox="0 0 180 220" xmlns="http://www.w3.org/2000/svg">
+      <!-- Mini Kai portrait -->
+      <rect width="180" height="220" fill="#161616"/>
+      <rect x="0" y="0" width="180" height="220" fill="none" stroke="rgba(200,255,0,0.3)" stroke-width="1"/>
+      <!-- head -->
+      <ellipse cx="90" cy="85" rx="40" ry="44" fill="#c8975a"/>
+      <path d="M62 95 Q60 115 70 128 Q80 138 90 140 Q100 138 110 128 Q120 115 118 95" fill="#c8975a"/>
+      <!-- hair -->
+      <path d="M52 88 Q53 55 72 48 Q90 42 108 48 Q127 55 128 88" fill="#1a1212"/>
+      <path d="M52 90 Q48 70 56 58 Q62 50 68 48" fill="#1a1212"/>
+      <!-- eyes -->
+      <ellipse cx="78" cy="82" rx="9" ry="5" fill="#111"/>
+      <ellipse cx="102" cy="82" rx="9" ry="5" fill="#111"/>
+      <!-- scar -->
+      <line x1="56" y1="84" x2="62" y2="96" stroke="#8a6535" stroke-width="1.5" opacity="0.8"/>
+      <!-- eyebrows -->
+      <path d="M69 73 Q75 70 87 72" fill="none" stroke="#1a1212" stroke-width="2.5" stroke-linecap="round"/>
+      <path d="M93 72 Q105 70 111 73" fill="none" stroke="#1a1212" stroke-width="2.5" stroke-linecap="round"/>
+      <!-- smirk -->
+      <path d="M82 115 Q90 121 100 115" fill="none" stroke="#8a5a2a" stroke-width="1.5" stroke-linecap="round"/>
+      <!-- neck + shirt -->
+      <rect x="82" y="135" width="16" height="22" rx="4" fill="#c8975a"/>
+      <!-- shirt body -->
+      <path d="M55 152 L125 152 L130 220 L50 220 Z" fill="#1a1a1a"/>
+      <!-- top scar lines -->
+      <line x1="63" y1="168" x2="83" y2="168" stroke="#7a5a3a" stroke-width="1.5" stroke-linecap="round"/>
+      <line x1="97" y1="168" x2="117" y2="168" stroke="#7a5a3a" stroke-width="1.5" stroke-linecap="round"/>
+      <!-- arms -->
+      <path d="M55 155 Q38 165 36 190 Q36 200 42 206" fill="none" stroke="#c8975a" stroke-width="18" stroke-linecap="round"/>
+      <path d="M125 155 Q142 165 144 190 Q144 200 138 206" fill="none" stroke="#c8975a" stroke-width="18" stroke-linecap="round"/>
+      <!-- arm tattoo -->
+      <path d="M38 178 Q36 186 38 192" fill="none" stroke="rgba(200,255,0,0.4)" stroke-width="6" stroke-linecap="round"/>
+      <!-- label -->
+      <text x="90" y="212" text-anchor="middle" fill="rgba(200,255,0,0.5)" font-family="monospace" font-size="7" letter-spacing="1">KAI · FRAME</text>
+    </svg>
+    <div class="kai-bio">
+      <h2>hi. i'm <em>kai.</em></h2>
+      <p>NASM-certified trainer. FTM. Been lifting for years — first as a guy who had no clue what he was doing, then as a guy who figured it out the hard way so you don't have to.</p>
+      <p>I built this program because the fitness industry either pretends we don't exist or gives us watered-down garbage. <strong>You deserve a real protocol.</strong> One that works with your body, your hormones, and the actual frame you're trying to build.</p>
+      <p>No gatekeeping. No selling you supplements you don't need. No toxic alpha-male BS. Just <strong>the actual science</strong>, the actual workouts, and a guide that respects your intelligence.</p>
+      <p>Here's what's real: <strong>this takes time.</strong> But every month you follow this, you are literally reshaping your silhouette. That's not motivational poster crap — that's biology. Let's run it.</p>
+    </div>
+  </div>
+</section>
+
+<!-- MYTHS -->
+<section>
+  <span class="section-tag">[ 01 · myth busting ]</span>
+  <h2>the <em>lies</em><br>fitness sold you.</h2>
+  <div class="myths-grid">
+    <div class="myth-card">
+      <div class="myth-num">01</div>
+      <div class="myth-title">"you need muscle to be a man"</div>
+      <div class="myth-rebuttal">You're already a man. Muscle is for <em>you</em> — for confidence, health, and the silhouette you want. Not for anyone else's checklist.</div>
+    </div>
+    <div class="myth-card">
+      <div class="myth-num">02</div>
+      <div class="myth-title">"train hard or you're not masculine"</div>
+      <div class="myth-rebuttal">Smart training beats hard training every time. Grinding yourself into the dirt weekly is how you get injured and quit. Progressive overload + recovery = actual results.</div>
+    </div>
+    <div class="myth-card">
+      <div class="myth-num">03</div>
+      <div class="myth-title">"cardio kills your gains"</div>
+      <div class="myth-rebuttal">Nah. Recent studies show cardio actually boosts total muscle growth when done right. Low-intensity stuff — walking, cycling, swimming — basically zero impact on your gains.</div>
+    </div>
+    <div class="myth-card">
+      <div class="myth-num">04</div>
+      <div class="myth-title">"eat less to lose weight faster"</div>
+      <div class="myth-rebuttal">Eating below ~1400 cals damages your organs. Slow cuts (0.5lb/week) preserve muscle, keep you full, and reduce loose skin. Faster ≠ better. The math just doesn't work.</div>
+    </div>
+    <div class="myth-card">
+      <div class="myth-num">05</div>
+      <div class="myth-title">"crunches burn belly fat"</div>
+      <div class="myth-rebuttal">Spot reduction is straight-up fiction. Fat loss is systemic — it comes off based on genetics and total body fat %. You can't "target" it. Build the muscle underneath instead.</div>
+    </div>
+    <div class="myth-card">
+      <div class="myth-num">06</div>
+      <div class="myth-title">"exercise turns fat into muscle"</div>
+      <div class="myth-rebuttal">These are completely different biological processes. Fat loss needs a caloric deficit. Muscle growth needs protein + stimulus. You can do both at once but they're separate systems.</div>
+    </div>
+    <div class="myth-card">
+      <div class="myth-num">07</div>
+      <div class="myth-title">"exercise should hurt"</div>
+      <div class="myth-rebuttal">Pain = injury risk, not progress. Mild burn from muscle fatigue is normal. Sharp pain, joint pain, or pain that persists? Stop. Rest. Your body isn't your enemy.</div>
+    </div>
+    <div class="myth-card">
+      <div class="myth-num">08</div>
+      <div class="myth-title">"you need to work out to love your body"</div>
+      <div class="myth-rebuttal">You don't. Exercise is a tool, not a requirement for self-worth. Do this because you want to — not because you think you owe it to anyone or because you hate what you see.</div>
+    </div>
+  </div>
+</section>
+
+<!-- PROGRAM OVERVIEW -->
+<section id="program">
+  <span class="section-tag">[ 02 · program overview ]</span>
+  <h2>the <em>24-month</em><br>build protocol.</h2>
+
+  <div class="phases">
+    <div class="phase-card">
+      <div class="phase-label">[ phase 01 · months 0–6 ]</div>
+      <div class="phase-title">Foundation</div>
+      <div class="phase-desc">This is your "learn your body" era. Don't skip it because it looks easy — it's not. You're building the movement patterns, stability, and baseline strength that every future gain runs on. 4 days a week, under 45 mins. Upper/lower split. Get familiar with failure.</div>
+      <div class="tag">stability + control</div>
+    </div>
+    <div class="phase-card" style="border-left: 1px solid var(--border);">
+      <div class="phase-label">[ phase 02 · months 6–12 ]</div>
+      <div class="phase-title">Frame Build</div>
+      <div class="phase-desc">Now we get to work. Lats, shoulders, triceps — the V-taper holy trinity. This phase is specifically engineered to widen your upper frame and start filling out a masculine silhouette. Weight progressions start here. Track everything.</div>
+      <div class="tag">v-taper focus</div>
+    </div>
+    <div class="phase-card" style="border-left: 1px solid var(--border);">
+      <div class="phase-label">[ phase 03 · months 12–24 ]</div>
+      <div class="phase-title">Bodybuilding</div>
+      <div class="phase-desc">Newbie gains are gone. Welcome to the real work. 5 training days, heavier compounds, full bodybuilding methodology. This is where your body actually starts to look different in the mirror. Read the progression section before you start this.</div>
+      <div class="tag">mass + volume</div>
+    </div>
+  </div>
+
+  <!-- WORKOUT DETAILS -->
+  <div class="workout-section">
+
+    <!-- GLOSSARY first -->
+    <div class="kai-callout">
+      <svg class="kai-callout-avatar" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="24" cy="24" r="24" fill="#161616"/>
+        <ellipse cx="24" cy="20" rx="12" ry="13" fill="#c8975a"/>
+        <path d="M14 26 Q12 34 16 38 Q20 42 24 43 Q28 42 32 38 Q36 34 34 26" fill="#c8975a"/>
+        <path d="M13 19 Q14 8 24 6 Q34 8 35 19" fill="#1a1212"/>
+        <ellipse cx="20" cy="19" rx="4" ry="2.5" fill="#111"/>
+        <ellipse cx="28" cy="19" rx="4" ry="2.5" fill="#111"/>
+        <path d="M20 32 Q24 36 28 32" fill="none" stroke="#8a5a2a" stroke-width="1.2" stroke-linecap="round"/>
+        <line x1="13" y1="20" x2="16" y2="26" stroke="#8a6535" stroke-width="1" opacity="0.8"/>
+      </svg>
+      <div class="kai-callout-text">
+        "Before you look at the workouts, learn the vocab. I'm not gonna repeat myself mid-set. <strong>Know what a superset is. Know what RPE means. Know your tempo.</strong> It's in the glossary below. Read it once, then hit the program."
+      </div>
+    </div>
+
+    <span class="section-tag">[ glossary ]</span>
+    <div class="glossary-grid">
+      <div class="glossary-card"><div class="glossary-term">Rep</div><div class="glossary-def">One complete motion of an exercise. 8 reps = 8 full movements.</div></div>
+      <div class="glossary-card"><div class="glossary-term">Set</div><div class="glossary-def">A group of reps. "3x8" = do 8 reps, rest, repeat 3 times total.</div></div>
+      <div class="glossary-card"><div class="glossary-term">RPE</div><div class="glossary-def">Rate of Perceived Exertion. 8 = 2 reps left. 9 = 1 rep left. 10 = dead. Aim for 8-9 most sets.</div></div>
+      <div class="glossary-card"><div class="glossary-term">RIR</div><div class="glossary-def">Reps In Reserve. Flip side of RPE. "2 RIR" = you coulda done 2 more. Stay at 1-2 RIR most sets.</div></div>
+      <div class="glossary-card"><div class="glossary-term">Tempo</div><div class="glossary-def">Speed of each rep phase. "2-1-2" = 2s down, 1s pause, 2s up. Slowing down = more gains.</div></div>
+      <div class="glossary-card"><div class="glossary-term">Concentric</div><div class="glossary-def">The "push/pull" phase — muscle shortens. Curling up = concentric. This is where power goes.</div></div>
+      <div class="glossary-card"><div class="glossary-term">Eccentric</div><div class="glossary-def">The "lowering" phase — muscle lengthens. Curling down = eccentric. THIS is where gains happen.</div></div>
+      <div class="glossary-card"><div class="glossary-term">Superset</div><div class="glossary-def">Two exercises back-to-back with zero rest. Brutal. Efficient. Great for volume.</div></div>
+      <div class="glossary-card"><div class="glossary-term">Drop Set</div><div class="glossary-def">Hit failure, drop weight immediately, keep going. Only on final sets. Don't overuse this.</div></div>
+      <div class="glossary-card"><div class="glossary-term">Deload</div><div class="glossary-def">A lighter week every 4-8 weeks. Not weakness — it's how you avoid burning out and actually progress.</div></div>
+      <div class="glossary-card"><div class="glossary-term">TDEE</div><div class="glossary-def">Total Daily Energy Expenditure. How many calories your body burns daily. Your nutrition math starts here.</div></div>
+      <div class="glossary-card"><div class="glossary-term">Bulk / Cut</div><div class="glossary-def">Bulk = small caloric surplus to grow muscle. Cut = small deficit to lose fat. Both should be slow and controlled.</div></div>
+    </div>
+
+    <!-- PHASE 1 WORKOUTS -->
+    <br/><br/>
+    <div class="phase-header" onclick="togglePhase('phase1')">
+      <span class="phase-label" style="margin-bottom:0">[ phase 01 ]</span>
+      <span class="phase-header-title">Months 0–6 · Foundation Split</span>
+      <span class="phase-toggle" id="phase1-icon">+</span>
+    </div>
+    <div class="phase-content" id="phase1">
+      <div class="kai-callout">
+        <svg class="kai-callout-avatar" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg"><circle cx="24" cy="24" r="24" fill="#161616"/><ellipse cx="24" cy="20" rx="12" ry="13" fill="#c8975a"/><path d="M14 26 Q12 34 16 38 Q20 42 24 43 Q28 42 32 38 Q36 34 34 26" fill="#c8975a"/><path d="M13 19 Q14 8 24 6 Q34 8 35 19" fill="#1a1212"/><ellipse cx="20" cy="19" rx="4" ry="2.5" fill="#111"/><ellipse cx="28" cy="19" rx="4" ry="2.5" fill="#111"/><path d="M20 32 Q24 36 28 32" fill="none" stroke="#8a5a2a" stroke-width="1.2" stroke-linecap="round"/></svg>
+        <div class="kai-callout-text">"<strong>Movement quality over weight. Always.</strong> I don't care if the guy next to you is squatting twice what you are. You're learning patterns. Get them right now or pay for it later with an injury."</div>
+      </div>
+
+      <div class="day-block">
+        <div class="day-label">DAY 1 — LOWER A (stability focus)</div>
+        <table>
+          <thead><tr><th>Exercise</th><th>Sets & Reps</th><th>Tempo</th><th>Muscles</th><th>Notes</th></tr></thead>
+          <tbody>
+            <tr><td class="td-exercise">Lunges</td><td class="td-sets">4 × 10/leg</td><td class="td-tempo">2-1-2</td><td class="td-muscle">Quads, Glutes</td><td class="td-note">Drive UP not forward. Feel the glute contract at top.</td></tr>
+            <tr><td class="td-exercise">Hip Thrusts</td><td class="td-sets">3 × 15</td><td class="td-tempo">2-0-3</td><td class="td-muscle">Glutes</td><td class="td-note">Slow and controlled. Squeeze at the top for a full second.</td></tr>
+            <tr><td class="td-exercise">Calf Raises</td><td class="td-sets">4 × 12</td><td class="td-tempo">1-0-3</td><td class="td-muscle">Calves</td><td class="td-note">Fast up, SLOW down. Full stretch at the bottom.</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="day-block">
+        <div class="day-label">DAY 2 — UPPER A (stability focus)</div>
+        <table>
+          <thead><tr><th>Exercise</th><th>Sets & Reps</th><th>Tempo</th><th>Muscles</th><th>Notes</th></tr></thead>
+          <tbody>
+            <tr><td class="td-exercise">Bicep Curls</td><td class="td-sets">3 × 8</td><td class="td-tempo">3-1-2</td><td class="td-muscle">Biceps, Forearms</td><td class="td-note">Full extension at bottom. Don't swing.</td></tr>
+            <tr><td class="td-exercise">Tricep Extensions</td><td class="td-sets">3 × 8</td><td class="td-tempo">3-1-2</td><td class="td-muscle">Triceps</td><td class="td-note">Lock elbows. Only forearms move.</td></tr>
+            <tr><td class="td-exercise">Push-Ups</td><td class="td-sets">4 × 12</td><td class="td-tempo">2-0-2</td><td class="td-muscle">Chest, Triceps</td><td class="td-note">Incline if needed. Full ROM or don't count it.</td></tr>
+            <tr><td class="td-exercise">Knee Tucks</td><td class="td-sets">3 × 15</td><td class="td-tempo">1-1-3</td><td class="td-muscle">Core, Trunk</td><td class="td-note">Slow the eccentric down. Feel the abs stretching.</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="day-block">
+        <div class="day-label">DAY 3 — LOWER B (strength focus)</div>
+        <table>
+          <thead><tr><th>Exercise</th><th>Sets & Reps</th><th>Tempo</th><th>Muscles</th><th>Notes</th></tr></thead>
+          <tbody>
+            <tr><td class="td-exercise">Squats</td><td class="td-sets">4 × 6</td><td class="td-tempo">2-1-2</td><td class="td-muscle">Quads, Glutes</td><td class="td-note">Heavier day. Test your limits. Depth matters.</td></tr>
+            <tr><td class="td-exercise">Hip Thrusts</td><td class="td-sets">3 × 6</td><td class="td-tempo">2-0-3</td><td class="td-muscle">Glutes</td><td class="td-note">Load it up compared to Day 1.</td></tr>
+            <tr><td class="td-exercise">Hamstring Curls</td><td class="td-sets">4 × 10–12</td><td class="td-tempo">2-1-3</td><td class="td-muscle">Hamstrings</td><td class="td-note">Slow eccentric is the whole point here.</td></tr>
+            <tr><td class="td-exercise">Leg Abductions</td><td class="td-sets">3 × 12–15</td><td class="td-tempo">1-1-1</td><td class="td-muscle">Abductors</td><td class="td-note">Cable or machine. Control the movement.</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="day-block">
+        <div class="day-label">DAY 4 — UPPER B (strength focus)</div>
+        <table>
+          <thead><tr><th>Exercise</th><th>Sets & Reps</th><th>Tempo</th><th>Muscles</th><th>Notes</th></tr></thead>
+          <tbody>
+            <tr><td class="td-exercise">Low Rows</td><td class="td-sets">4 × 8–10</td><td class="td-tempo">1-0-2</td><td class="td-muscle">Lats, Rear Delts</td><td class="td-note">Squeeze the shoulder blades. Row to your stomach.</td></tr>
+            <tr><td class="td-exercise">Bench Press</td><td class="td-sets">2 × 12–15</td><td class="td-tempo">2-1-2</td><td class="td-muscle">Chest, Triceps</td><td class="td-note">Learn the bar path. Chest to bar, full lockout.</td></tr>
+            <tr><td class="td-exercise">Assisted Pull-Ups</td><td class="td-sets">4 × 8–10</td><td class="td-tempo">2-0-2</td><td class="td-muscle">Lats, Mid-Back</td><td class="td-note">Use the machine or bands. Full hang at bottom.</td></tr>
+            <tr><td class="td-exercise">Knee Tucks</td><td class="td-sets">3 × 15</td><td class="td-tempo">1-1-3</td><td class="td-muscle">Core, Trunk</td><td class="td-note">Same as Day 2. Feel the stretch.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- PHASE 2 -->
+    <div class="phase-header" onclick="togglePhase('phase2')">
+      <span class="phase-label" style="margin-bottom:0">[ phase 02 ]</span>
+      <span class="phase-header-title">Months 6–12 · Frame Build</span>
+      <span class="phase-toggle" id="phase2-icon">+</span>
+    </div>
+    <div class="phase-content" id="phase2">
+      <div class="kai-callout">
+        <svg class="kai-callout-avatar" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg"><circle cx="24" cy="24" r="24" fill="#161616"/><ellipse cx="24" cy="20" rx="12" ry="13" fill="#c8975a"/><path d="M14 26 Q12 34 16 38 Q20 42 24 43 Q28 42 32 38 Q36 34 34 26" fill="#c8975a"/><path d="M13 19 Q14 8 24 6 Q34 8 35 19" fill="#1a1212"/><ellipse cx="20" cy="19" rx="4" ry="2.5" fill="#111"/><ellipse cx="28" cy="19" rx="4" ry="2.5" fill="#111"/><path d="M20 32 Q24 36 28 32" fill="none" stroke="#8a5a2a" stroke-width="1.2" stroke-linecap="round"/></svg>
+        <div class="kai-callout-text">"<strong>V-taper season.</strong> Lats, shoulders, triceps. This is what makes your upper body look wide and your waist look narrow without changing your waist at all. Geometry is your best friend. Track your weights every single session."</div>
+      </div>
+
+      <div class="day-block">
+        <div class="day-label">DAY 1 — LOWER</div>
+        <table>
+          <thead><tr><th>Exercise</th><th>Sets & Reps</th><th>Tempo</th><th>Muscles</th><th>Notes</th></tr></thead>
+          <tbody>
+            <tr><td class="td-exercise">Squats</td><td class="td-sets">4 × 6–10</td><td class="td-tempo">2-0-2</td><td class="td-muscle">Quads, Glutes</td><td class="td-note">Progressive overload starts now. Add 5lb when you hit top of range.</td></tr>
+            <tr><td class="td-exercise">Hip Thrusts</td><td class="td-sets">3 × 12–15</td><td class="td-tempo">1-1-1</td><td class="td-muscle">Glutes</td><td class="td-note">Loaded. Should be uncomfortable by rep 12.</td></tr>
+            <tr><td class="td-exercise">Hamstring Curls</td><td class="td-sets">3 × 8–15</td><td class="td-tempo">1-1-3</td><td class="td-muscle">Hamstrings</td><td class="td-note">Eccentric emphasis. Let it stretch at the bottom.</td></tr>
+            <tr><td class="td-exercise">Calf Raises</td><td class="td-sets">4 × 8–12</td><td class="td-tempo">2-0-2</td><td class="td-muscle">Calves</td><td class="td-note">Full range. Don't bounce at the bottom.</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="day-block">
+        <div class="day-label">DAY 2 — UPPER PUSH</div>
+        <table>
+          <thead><tr><th>Exercise</th><th>Sets & Reps</th><th>Tempo</th><th>Muscles</th><th>Notes</th></tr></thead>
+          <tbody>
+            <tr><td class="td-exercise">Flat Bench Press</td><td class="td-sets">5 × 6–10</td><td class="td-tempo">1-0-2</td><td class="td-muscle">Chest, Triceps</td><td class="td-note">This is your main chest builder. Prioritize it fresh.</td></tr>
+            <tr><td class="td-exercise">Forearm Curls</td><td class="td-sets">3 × 10–18</td><td class="td-tempo">1-1-2</td><td class="td-muscle">Forearms</td><td class="td-note">Bigger forearms = hands look bigger = masculine as hell.</td></tr>
+            <tr><td class="td-exercise">Tricep Extensions</td><td class="td-sets">2 × 10–15</td><td class="td-tempo">1-1-2</td><td class="td-muscle">Triceps</td><td class="td-note">Triceps = 2/3 of arm size. Don't sleep on these.</td></tr>
+            <tr><td class="td-exercise">Bicep Curls</td><td class="td-sets">3 × 6–12</td><td class="td-tempo">2-0-2</td><td class="td-muscle">Biceps</td><td class="td-note">Full stretch at the bottom. That's the growth stimulus.</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="day-block">
+        <div class="day-label">DAY 3 — LOWER + CORE</div>
+        <table>
+          <thead><tr><th>Exercise</th><th>Sets & Reps</th><th>Tempo</th><th>Muscles</th><th>Notes</th></tr></thead>
+          <tbody>
+            <tr><td class="td-exercise">RDLs (Romanian Deadlift)</td><td class="td-sets">4 × 10–15</td><td class="td-tempo">2-1-2</td><td class="td-muscle">Hamstrings, Glutes</td><td class="td-note">Hinge at the hips. Feel the stretch. Don't round your back.</td></tr>
+            <tr><td class="td-exercise">Farmer's Carries</td><td class="td-sets">3 × 60 sec</td><td class="td-tempo">N/A</td><td class="td-muscle">Forearms, Core</td><td class="td-note">Heavy. Shoulders back. Walk slowly. Grip is a limiting factor — that's fine.</td></tr>
+            <tr><td class="td-exercise">Leg Extensions</td><td class="td-sets">3 × 8–12</td><td class="td-tempo">1-1-2</td><td class="td-muscle">Quads</td><td class="td-note">Slow at the top. Don't let it just drop back down.</td></tr>
+            <tr><td class="td-exercise">Hamstring Curls</td><td class="td-sets">3 × 8–12</td><td class="td-tempo">1-1-3</td><td class="td-muscle">Hamstrings</td><td class="td-note">Second hamstring session this week — volume builds size.</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="day-block">
+        <div class="day-label">DAY 4 — UPPER PULL</div>
+        <table>
+          <thead><tr><th>Exercise</th><th>Sets & Reps</th><th>Tempo</th><th>Muscles</th><th>Notes</th></tr></thead>
+          <tbody>
+            <tr><td class="td-exercise">Dumbbell Incline Bench</td><td class="td-sets">3 × 6–8</td><td class="td-tempo">2-0-2</td><td class="td-muscle">Upper Chest</td><td class="td-note">Upper chest fills out that square chest look. Important for masc silhouette.</td></tr>
+            <tr><td class="td-exercise">Low Rows</td><td class="td-sets">4 × 8–10</td><td class="td-tempo">2-0-2</td><td class="td-muscle">Lats</td><td class="td-note">V-taper builder. Drive your elbows back and down.</td></tr>
+            <tr><td class="td-exercise">Bicep Curls</td><td class="td-sets">3 × 10–12</td><td class="td-tempo">3-1-2</td><td class="td-muscle">Biceps</td><td class="td-note">Slow today. Time under tension is the focus.</td></tr>
+            <tr><td class="td-exercise">Tricep Skis (Pushdowns)</td><td class="td-sets">3 × 10–12</td><td class="td-tempo">3-1-2</td><td class="td-muscle">Triceps</td><td class="td-note">Elbows pinned to sides. Full extension every rep.</td></tr>
+            <tr><td class="td-exercise">Leg Raises</td><td class="td-sets">3 × 15</td><td class="td-tempo">1-1-3</td><td class="td-muscle">Core</td><td class="td-note">Lower the legs S L O W. Don't let momentum do the work.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- PHASE 3 -->
+    <div class="phase-header" onclick="togglePhase('phase3')">
+      <span class="phase-label" style="margin-bottom:0">[ phase 03 ]</span>
+      <span class="phase-header-title">Months 12–24 · Full Bodybuilding Protocol</span>
+      <span class="phase-toggle" id="phase3-icon">+</span>
+    </div>
+    <div class="phase-content" id="phase3">
+      <div class="kai-callout">
+        <svg class="kai-callout-avatar" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg"><circle cx="24" cy="24" r="24" fill="#161616"/><ellipse cx="24" cy="20" rx="12" ry="13" fill="#c8975a"/><path d="M14 26 Q12 34 16 38 Q20 42 24 43 Q28 42 32 38 Q36 34 34 26" fill="#c8975a"/><path d="M13 19 Q14 8 24 6 Q34 8 35 19" fill="#1a1212"/><ellipse cx="20" cy="19" rx="4" ry="2.5" fill="#111"/><ellipse cx="28" cy="19" rx="4" ry="2.5" fill="#111"/><path d="M20 32 Q24 36 28 32" fill="none" stroke="#8a5a2a" stroke-width="1.2" stroke-linecap="round"/></svg>
+        <div class="kai-callout-text">"<strong>Newbie gains are done.</strong> Good. That means you built the base. Now the real work starts. 5 days, heavier compounds, actual bodybuilding. Progress will be slower — that's normal. Don't let it mess with your head. Trust the process and the data."</div>
+      </div>
+
+      <div class="day-block">
+        <div class="day-label">DAY 1 — LOWER MODERATE</div>
+        <table>
+          <thead><tr><th>Exercise</th><th>Sets & Reps</th><th>Tempo</th><th>Muscles</th></tr></thead>
+          <tbody>
+            <tr><td class="td-exercise">Squats</td><td class="td-sets">5 × 8–12</td><td class="td-tempo">1-0-2</td><td class="td-muscle">Quads, Glutes</td></tr>
+            <tr><td class="td-exercise">RDLs</td><td class="td-sets">3 × 6–10</td><td class="td-tempo">2-1-1</td><td class="td-muscle">Hamstrings, Glutes</td></tr>
+            <tr><td class="td-exercise">Farmer's Carries</td><td class="td-sets">3 × 60 sec</td><td class="td-tempo">N/A</td><td class="td-muscle">Forearms, Core</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="day-block">
+        <div class="day-label">DAY 2 — UPPER PUSH + PULL</div>
+        <table>
+          <thead><tr><th>Exercise</th><th>Sets & Reps</th><th>Tempo</th><th>Muscles</th></tr></thead>
+          <tbody>
+            <tr><td class="td-exercise">Bench Press</td><td class="td-sets">5 × 6–8</td><td class="td-tempo">2-0-2</td><td class="td-muscle">Chest, Triceps</td></tr>
+            <tr><td class="td-exercise">Rows</td><td class="td-sets">5 × 6–8</td><td class="td-tempo">3-1-2</td><td class="td-muscle">Lats, Rear Delts</td></tr>
+            <tr><td class="td-exercise">Tricep Skis</td><td class="td-sets">4 × 10–12</td><td class="td-tempo">3-1-2</td><td class="td-muscle">Triceps</td></tr>
+            <tr><td class="td-exercise">Bicep Curls</td><td class="td-sets">4 × 10–12</td><td class="td-tempo">3-1-2</td><td class="td-muscle">Biceps</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="day-block">
+        <div class="day-label">DAY 3 — LOWER HEAVY</div>
+        <table>
+          <thead><tr><th>Exercise</th><th>Sets & Reps</th><th>Tempo</th><th>Muscles</th></tr></thead>
+          <tbody>
+            <tr><td class="td-exercise">Deadlifts</td><td class="td-sets">5 × 3–5</td><td class="td-tempo">N/A — form focus</td><td class="td-muscle">Lower Back, Hamstrings</td></tr>
+            <tr><td class="td-exercise">RDLs (light)</td><td class="td-sets">3 × 10–12</td><td class="td-tempo">2-1-2</td><td class="td-muscle">Hamstrings</td></tr>
+            <tr><td class="td-exercise">Hip Thrusts</td><td class="td-sets">3 × 12–15</td><td class="td-tempo">2-0-3</td><td class="td-muscle">Glutes</td></tr>
+            <tr><td class="td-exercise">Abductor + Adductor</td><td class="td-sets">3 × 10–12 each</td><td class="td-tempo">1-1-3</td><td class="td-muscle">Inner/Outer Thigh</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="day-block">
+        <div class="day-label">DAY 4 — UPPER PUSH + CORE</div>
+        <table>
+          <thead><tr><th>Exercise</th><th>Sets & Reps</th><th>Tempo</th><th>Muscles</th></tr></thead>
+          <tbody>
+            <tr><td class="td-exercise">Incline Bench</td><td class="td-sets">5 × 6–10</td><td class="td-tempo">1-0-1</td><td class="td-muscle">Upper Chest</td></tr>
+            <tr><td class="td-exercise">Bicep Curls</td><td class="td-sets">4 × 10–12</td><td class="td-tempo">2-1-2</td><td class="td-muscle">Biceps</td></tr>
+            <tr><td class="td-exercise">Behind-the-Back Tricep Extensions</td><td class="td-sets">4 × 10–12</td><td class="td-tempo">2-1-2</td><td class="td-muscle">Triceps</td></tr>
+            <tr><td class="td-exercise">Suitcase Marches</td><td class="td-sets">3 × 60 sec</td><td class="td-tempo">N/A</td><td class="td-muscle">Core, Obliques</td></tr>
+            <tr><td class="td-exercise">Leg Raises</td><td class="td-sets">4 × 10</td><td class="td-tempo">1-0-2</td><td class="td-muscle">Core</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="day-block">
+        <div class="day-label">DAY 5 — BACK + SHOULDERS (V-taper day)</div>
+        <table>
+          <thead><tr><th>Exercise</th><th>Sets & Reps</th><th>Tempo</th><th>Muscles</th><th>Notes</th></tr></thead>
+          <tbody>
+            <tr><td class="td-exercise">Lat Pulldowns</td><td class="td-sets">4 × 8–12</td><td class="td-tempo">1-1-3</td><td class="td-muscle">Lats</td><td class="td-note">Mid-width grip. Controlled eccentric all the way. This is V-taper HQ.</td></tr>
+            <tr><td class="td-exercise">Chest-Supported Rows</td><td class="td-sets">4 × 5–10</td><td class="td-tempo">1-1-2</td><td class="td-muscle">Lats, Mid-Back</td><td class="td-note">Chest on pad removes cheating. Pure back work.</td></tr>
+            <tr><td class="td-exercise">Lateral Raises</td><td class="td-sets">5 × 12–15</td><td class="td-tempo">1-0-2</td><td class="td-muscle">Side Delts</td><td class="td-note">Width = masculine silhouette. These are your secret weapon.</td></tr>
+            <tr><td class="td-exercise">Shoulder Press</td><td class="td-sets">5 × 10–15</td><td class="td-tempo">1-0-2</td><td class="td-muscle">Delts</td><td class="td-note">Full range. Don't lock out at the top — keep tension on the muscle.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROGRESSION GUIDE -->
+<section style="background:#0d0d0d;">
+  <span class="section-tag">[ 03 · progression protocol ]</span>
+  <h2>how to actually <em>get stronger.</em></h2>
+
+  <div class="kai-callout">
+    <svg class="kai-callout-avatar" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg"><circle cx="24" cy="24" r="24" fill="#161616"/><ellipse cx="24" cy="20" rx="12" ry="13" fill="#c8975a"/><path d="M14 26 Q12 34 16 38 Q20 42 24 43 Q28 42 32 38 Q36 34 34 26" fill="#c8975a"/><path d="M13 19 Q14 8 24 6 Q34 8 35 19" fill="#1a1212"/><ellipse cx="20" cy="19" rx="4" ry="2.5" fill="#111"/><ellipse cx="28" cy="19" rx="4" ry="2.5" fill="#111"/><path d="M20 32 Q24 36 28 32" fill="none" stroke="#8a5a2a" stroke-width="1.2" stroke-linecap="round"/></svg>
+    <div class="kai-callout-text">"Track. Your. Weights. I don't care if it's in your notes app, a journal, or a napkin. If you don't know what you lifted last week, you can't progress. This is non-negotiable. <strong>You're an engineer now. Engineers have data.</strong>"</div>
+  </div>
+
+  <div class="myths-grid" style="margin-top:32px;">
+    <div class="myth-card">
+      <div class="myth-num" style="color:rgba(200,255,0,0.15);">01</div>
+      <div class="myth-title" style="color:var(--accent);">Know failure</div>
+      <div class="myth-rebuttal">Test your actual failure point 2-4x per month per major lift. You can't push close to failure if you don't know where it is. The research is clear: training within 3 reps of failure = 95–99% of max possible gains.</div>
+    </div>
+    <div class="myth-card">
+      <div class="myth-num" style="color:rgba(200,255,0,0.15);">02</div>
+      <div class="myth-title" style="color:var(--accent);">Stop 1–2 reps short</div>
+      <div class="myth-rebuttal">Going to complete failure every set causes excess muscle damage and extended recovery with barely any extra gain. Leave 1-2 reps in the tank on most sets. Save true failure for your last set only.</div>
+    </div>
+    <div class="myth-card">
+      <div class="myth-num" style="color:rgba(200,255,0,0.15);">03</div>
+      <div class="myth-title" style="color:var(--accent);">Increase weight → reps → sets</div>
+      <div class="myth-rebuttal">Hit the top of your rep range? Add 5lb. Can't add weight? Add 1-2 reps. Can't do that? Add a set for 2-4 weeks, then try again. This is the whole game. Every session, try to do more than last time.</div>
+    </div>
+    <div class="myth-card">
+      <div class="myth-num" style="color:rgba(200,255,0,0.15);">04</div>
+      <div class="myth-title" style="color:var(--accent);">Rest times matter</div>
+      <div class="myth-rebuttal">Big muscles (chest, back, legs): rest 2–2.5 mins between sets. Small muscles (arms, shoulders, calves): 1.5 mins is fine. Rushing rest periods is one of the most common beginner mistakes. Your muscles literally can't perform without recovery.</div>
+    </div>
+  </div>
+</section>
+
+<!-- HRT + EXERCISE -->
+<section id="hrt" class="hrt-section">
+  <span class="section-tag">[ 04 · hrt + exercise ]</span>
+  <h2>ftm specific:<br><em>hormones + gains.</em></h2>
+
+  <div class="kai-callout">
+    <svg class="kai-callout-avatar" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg"><circle cx="24" cy="24" r="24" fill="#161616"/><ellipse cx="24" cy="20" rx="12" ry="13" fill="#c8975a"/><path d="M14 26 Q12 34 16 38 Q20 42 24 43 Q28 42 32 38 Q36 34 34 26" fill="#c8975a"/><path d="M13 19 Q14 8 24 6 Q34 8 35 19" fill="#1a1212"/><ellipse cx="20" cy="19" rx="4" ry="2.5" fill="#111"/><ellipse cx="28" cy="19" rx="4" ry="2.5" fill="#111"/><path d="M20 32 Q24 36 28 32" fill="none" stroke="#8a5a2a" stroke-width="1.2" stroke-linecap="round"/></svg>
+    <div class="kai-callout-text">"This section exists because you deserve actual information about how T interacts with exercise, not some vague 'consult your doctor' copout. <strong>Knowledge is the whole point.</strong> Use it."</div>
+  </div>
+
+  <div class="hrt-grid">
+    <div class="hrt-card">
+      <h3>T + muscle building</h3>
+      <p>Higher testosterone = more muscle protein synthesis = faster recovery = higher TDEE (your baseline calorie burn). This is a massive advantage. If you're on T and training consistently, you're working with a hormonal environment built for this.</p>
+      <p>The baseline assumption of this program is that you're either past P3 male puberty naturally or 12+ months into HRT. If you're earlier in your transition, the program still works — progress just might look slightly different timeline-wise.</p>
+    </div>
+    <div class="hrt-card">
+      <h3>Fat redistribution</h3>
+      <p>T shifts fat from the hips/thighs to abdominal distribution over time. Combined with resistance training building upper body mass, this creates the frame shift you're after. <strong>You cannot spot-reduce fat</strong> — but you can reduce total body fat % and build the muscle that fills your frame.</p>
+      <p>Lower body fat also reduces breast tissue over time. Exercise accelerates this by increasing your TDEE and building muscle that improves body composition. Not a replacement for other medical options, but a real factor.</p>
+    </div>
+    <div class="hrt-card">
+      <h3>Height + frame reality check</h3>
+      <p>Height matters less socially than FTM Twitter will make you think. Stocky, shorter guys exist everywhere and read male without a second thought. Your muscle fill, shoulder-to-waist ratio, and posture do more work for passing than height ever will.</p>
+      <p>Focus on what's actually in your control: building your shoulders, lats, and arms. That's what changes your silhouette in the mirror and in public.</p>
+    </div>
+    <div class="hrt-card">
+      <h3>using your tdee correctly on hrt</h3>
+      <p>If you've been on HRT 6+ months: use the male TDEE calculator when estimating your caloric needs. Your metabolic rate has shifted. Running calculations based on pre-T physiology will have you eating below maintenance without realizing it.</p>
+      <p>Eat enough to support your training. Undereating while lifting is the fastest way to stall progress and feel terrible. If you're unsure, start at maintenance and adjust from there.</p>
+    </div>
+  </div>
+</section>
+
+<!-- NUTRITION -->
+<section id="nutrition">
+  <span class="section-tag">[ 05 · nutrition ]</span>
+  <h2>eat like you mean it.<br><em>actually.</em></h2>
+
+  <div class="kai-callout">
+    <svg class="kai-callout-avatar" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg"><circle cx="24" cy="24" r="24" fill="#161616"/><ellipse cx="24" cy="20" rx="12" ry="13" fill="#c8975a"/><path d="M14 26 Q12 34 16 38 Q20 42 24 43 Q28 42 32 38 Q36 34 34 26" fill="#c8975a"/><path d="M13 19 Q14 8 24 6 Q34 8 35 19" fill="#1a1212"/><ellipse cx="20" cy="19" rx="4" ry="2.5" fill="#111"/><ellipse cx="28" cy="19" rx="4" ry="2.5" fill="#111"/><path d="M20 32 Q24 36 28 32" fill="none" stroke="#8a5a2a" stroke-width="1.2" stroke-linecap="round"/></svg>
+    <div class="kai-callout-text">"Look — calorie tracking apps are great if you can use them without it messing with your head. If they cause anxiety or disordered thinking, <strong>use the hand-portion method instead. Both work.</strong> Pick the one you'll actually stick to."</div>
+  </div>
+
+  <div class="nutrition-grid">
+    <div class="nutrition-card">
+      <h3>Macro targets (example: 190lb, 5'10)</h3>
+      <p style="color:#aaa; font-size:13px; margin-bottom:20px;">Use a TDEE calculator for your specific numbers. For HRT 6mo+, calculate as male.</p>
+      <div class="macro-bar">
+        <div class="macro-label"><span>Protein · 0.7–1g/lb bodyweight</span><span style="color:var(--accent)">160–190g</span></div>
+        <div class="macro-track"><div class="macro-fill" style="width:75%"></div></div>
+      </div>
+      <div class="macro-bar">
+        <div class="macro-label"><span>Carbohydrates</span><span style="color:#4b9fff">~350g</span></div>
+        <div class="macro-track"><div class="macro-fill carbs" style="width:60%"></div></div>
+      </div>
+      <div class="macro-bar">
+        <div class="macro-label"><span>Fats</span><span style="color:#ff4b4b">~75g</span></div>
+        <div class="macro-track"><div class="macro-fill fat" style="width:30%"></div></div>
+      </div>
+      <br/>
+      <p style="color:#666; font-size:12px; font-family:'Space Mono', monospace; letter-spacing:.5px;">[ ~2750 KCAL TOTAL · ADJUST BY ±200 FOR BULK/CUT ]</p>
+      <br/>
+      <h3 style="font-size:18px; margin-top:16px;">Hand-portion method (4 meals/day)</h3>
+      <ul class="food-list">
+        <li><span>Protein per meal</span><span class="food-price">2–3 fist portions</span></li>
+        <li><span>Carbs per meal</span><span class="food-price">2–3 fist portions</span></li>
+        <li><span>Fats per meal</span><span class="food-price">palm-size only</span></li>
+        <li><span>Veggies/fruit per meal</span><span class="food-price">3–4 portions</span></li>
+      </ul>
+    </div>
+
+    <div class="nutrition-card">
+      <h3>Supplement stack</h3>
+      <ul class="food-list">
+        <li><span>🥇 Creatine Monohydrate</span><span class="food-price">5g/day</span></li>
+        <li><span>🥈 Magnesium</span><span class="food-price">250mg/day</span></li>
+        <li><span>🥉 Multivitamin (after 6 months)</span><span class="food-price">dietary insurance only</span></li>
+      </ul>
+      <br/>
+      <p style="color:#666; font-size:12px; font-family:'Space Mono',monospace;">[ creatine = more strength · more size · faster recovery. non-negotiable. drink 120oz water daily with it. ]</p>
+      <br/>
+      <h3 style="font-size:18px;">Budget protein sources</h3>
+      <ul class="food-list">
+        <li><span>Chicken thighs</span><span class="food-price">$</span></li>
+        <li><span>Cottage cheese (2%)</span><span class="food-price">$</span></li>
+        <li><span>Fairlife 2% milk</span><span class="food-price">$</span></li>
+        <li><span>Beans + rice combined</span><span class="food-price">$</span></li>
+        <li><span>Whey protein isolate</span><span class="food-price">$</span></li>
+        <li><span>Greek yogurt (plain, fat-free)</span><span class="food-price">$</span></li>
+        <li><span>85% ground beef</span><span class="food-price">$</span></li>
+        <li><span>Tofu (firm/extra firm)</span><span class="food-price">$$</span></li>
+        <li><span>Salmon</span><span class="food-price">$$</span></li>
+        <li><span>Chicken breast</span><span class="food-price">$$</span></li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- PDF DOWNLOAD + NEWSLETTER FUNNEL -->
+<section id="download" class="funnel-section">
+  <div class="funnel-inner">
+    <span class="section-tag">[ 06 · free download ]</span>
+    <h2>get the full <em>pdf.</em></h2>
+    <p>Drop your email and the complete 24-month KAI[FRAME] program PDF hits your inbox immediately. No spam. No upsells. Just the program — workouts, nutrition, progression guide, and the full glossary. Formatted and printer-ready.</p>
+
+    <div id="funnel-form">
+      <div class="form-group">
+        <input type="email" class="form-input" id="email-input" placeholder="your@email.com" />
+        <button class="form-submit" onclick="submitForm()">GET THE PDF →</button>
+      </div>
+      <p class="form-fine">[ no spam ever · unsubscribe any time · you're joining the KAI[FRAME] newsletter for weekly drops ]</p>
+    </div>
+
+    <div class="funnel-success" id="funnel-success">
+      <h3>you're in.</h3>
+      <p>Check your inbox — the PDF is on its way. While you wait, download it directly below.</p>
+      <a href="#" class="pdf-download-btn" onclick="generatePDF(); return false;">
+        <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+        DOWNLOAD PDF
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- COMING NEXT TEASER -->
+<section class="teaser-section">
+  <span class="section-tag">[ 07 · coming next ]</span>
+  <h2>what drops<br><em>next.</em></h2>
+  <p style="color:#666; max-width:500px; margin-bottom:40px; font-family:'Space Mono',monospace; font-size:12px; letter-spacing:.5px;">[ newsletter subscribers get early access. drop your email above if you haven't. ]</p>
+
+  <div class="teaser-cards">
+    <div class="teaser-card">
+      <div class="teaser-card-num">01</div>
+      <h3>DIY HRT: what you need to know</h3>
+      <p>Self-administered HRT — the actual pharmacology, sourcing landscape, dosing protocols, and harm reduction for guys navigating access on their own terms. No judgment. Just information.</p>
+      <span class="teaser-locked">[ COMING SOON · NEWSLETTER ONLY ]</span>
+    </div>
+    <div class="teaser-card">
+      <div class="teaser-card-num">02</div>
+      <h3>Advanced training: periodization for FTM bodies</h3>
+      <p>Linear progression will eventually stall. Here's the full roadmap for block periodization, peaking cycles, deload programming, and specialization phases once you've outgrown beginner programming.</p>
+      <span class="teaser-locked">[ COMING SOON · NEWSLETTER ONLY ]</span>
+    </div>
+    <div class="teaser-card">
+      <div class="teaser-card-num">03</div>
+      <h3>Confidence + social passing: the real stuff</h3>
+      <p>Body language, vocal training, how to carry yourself in gendered spaces, building social confidence as a transmasc person — the stuff nobody writes guides about but everyone needs.</p>
+      <span class="teaser-locked">[ COMING SOON · NEWSLETTER ONLY ]</span>
+    </div>
+    <div class="teaser-card">
+      <div class="teaser-card-num">04</div>
+      <h3>FTM grooming: the actual guide</h3>
+      <p>Beard care from day one on T, skincare for changing skin texture, haircuts that read masculine on your face shape, and the grooming basics no one taught any of us.</p>
+      <span class="teaser-locked">[ COMING SOON · NEWSLETTER ONLY ]</span>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">KAI<span>[FRAME]</span></div>
+  <div class="footer-note">[ BUILT FOR FTM + TRANSMASC BODIES · FREE ALWAYS · © 2026 ]</div>
+  <div class="footer-note">[ NOT MEDICAL ADVICE · CONSULT YOUR HEALTHCARE PROVIDER ]</div>
+</footer>
+
+<script>
+  // ── TOGGLE PHASE SECTIONS ──
+  function togglePhase(id) {
+    const content = document.getElementById(id);
+    const icon = document.getElementById(id + '-icon');
+    const isOpen = content.classList.contains('open');
+    content.classList.toggle('open', !isOpen);
+    icon.textContent = isOpen ? '+' : '−';
+  }
+
+  // ── FORM SUBMISSION ──
+  function submitForm() {
+    const email = document.getElementById('email-input').value;
+    if (!email || !email.includes('@')) {
+      document.getElementById('email-input').style.borderColor = '#ff4b4b';
+      document.getElementById('email-input').placeholder = 'enter a valid email';
+      return;
+    }
+    document.getElementById('funnel-form').style.display = 'none';
+    document.getElementById('funnel-success').style.display = 'block';
+    // In production: POST to your email service here
+    console.log('Email captured:', email);
+  }
+
+  // ── PDF GENERATION ──
+  function generatePDF() {
+    const doc = buildPDFContent();
+    const blob = new Blob([doc], { type: 'text/html' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'KAI_FRAME_FTM_Program_v1.html';
+    a.click();
+    URL.revokeObjectURL(url);
+  }
+
+  function buildPDFContent() {
+    return `<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>KAI[FRAME] · FTM Masc Build Protocol v1.0</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Barlow+Condensed:wght@400;700;900&family=Barlow:wght@300;400;600&display=swap');
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: #0a0a0a; color: #e8e8e8; font-family: 'Barlow', sans-serif; padding: 40px; line-height: 1.7; }
+  h1 { font-family: 'Barlow Condensed', sans-serif; font-weight: 900; font-size: 64px; text-transform: uppercase; color: #c8ff00; letter-spacing: -1px; margin-bottom: 8px; }
+  h2 { font-family: 'Barlow Condensed', sans-serif; font-weight: 900; font-size: 36px; text-transform: uppercase; color: #c8ff00; margin: 40px 0 16px; border-top: 1px solid #1f1f1f; padding-top: 32px; }
+  h3 { font-family: 'Barlow Condensed', sans-serif; font-weight: 800; font-size: 22px; text-transform: uppercase; color: #e8e8e8; margin: 24px 0 10px; }
+  .tag { font-family: 'Space Mono', monospace; font-size: 11px; color: #555; letter-spacing: 2px; display: block; margin-bottom: 8px; }
+  p { color: #aaa; font-size: 14px; margin-bottom: 12px; }
+  strong { color: #c8ff00; }
+  table { width: 100%; border-collapse: collapse; margin: 16px 0; }
+  th { font-family: 'Space Mono', monospace; font-size: 10px; color: #555; text-align: left; padding: 10px 12px; border-bottom: 1px solid #1f1f1f; text-transform: uppercase; letter-spacing: 1px; }
+  td { padding: 12px; font-size: 13px; border-bottom: 1px solid #161616; color: #aaa; vertical-align: top; }
+  td:first-child { color: #e8e8e8; font-weight: 600; }
+  td:nth-child(2) { font-family: 'Space Mono', monospace; font-size: 11px; color: #c8ff00; }
+  .section { margin-bottom: 48px; }
+  .callout { border-left: 3px solid #c8ff00; background: #111; padding: 16px 20px; margin: 20px 0; font-style: italic; color: #ccc; font-size: 14px; }
+  .day { font-family: 'Space Mono', monospace; font-size: 11px; color: #555; letter-spacing: 1.5px; border-bottom: 1px solid #1f1f1f; padding: 8px 0; margin: 28px 0 0; text-transform: uppercase; }
+  .cover { text-align: center; padding: 60px 0; border-bottom: 1px solid #1f1f1f; margin-bottom: 48px; }
+  .cover-sub { font-family: 'Space Mono', monospace; font-size: 13px; color: #555; letter-spacing: 2px; margin-top: 12px; }
+  .myth { background: #111; border: 1px solid #1f1f1f; padding: 16px 20px; margin: 8px 0; }
+  .myth-title { color: #ff4b4b; font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 16px; text-transform: uppercase; margin-bottom: 6px; }
+  ul { color: #aaa; font-size: 14px; padding-left: 20px; margin: 8px 0; }
+  li { margin-bottom: 6px; }
+  .footer { border-top: 1px solid #1f1f1f; padding-top: 24px; margin-top: 48px; font-family: 'Space Mono', monospace; font-size: 10px; color: #333; letter-spacing: 1px; }
+  .teaser-card { background: #111; border: 1px solid #1f1f1f; padding: 20px; margin: 8px 0; }
+  .teaser-card h3 { color: #c8ff00; margin: 0 0 8px; }
+  .teaser-card p { margin: 0; }
+  .locked { font-family: 'Space Mono', monospace; font-size: 10px; color: #c8ff00; border: 1px solid #c8ff00; padding: 3px 8px; display: inline-block; margin-top: 10px; letter-spacing: 1px; }
+</style>
+</head>
+<body>
+
+<div class="cover">
+  <div class="tag">[ KAI[FRAME] · FTM MASC BUILD PROTOCOL · v1.0 ]</div>
+  <h1>ENGINEER<br>YOUR FRAME.</h1>
+  <div class="cover-sub">24 MONTHS · GYM-BASED · BUILT FOR FTM + TRANSMASC BODIES</div>
+  <div class="cover-sub" style="margin-top:8px;">FREE. ALWAYS.</div>
+</div>
+
+<div class="section">
+  <span class="tag">[ 00 · from kai ]</span>
+  <h2>Read this first.</h2>
+  <p>No fluff. This is a 24-month body protocol built specifically for FTM and transmasc bodies. The goal is to engineer a masculine frame through resistance training, smart nutrition, and understanding how your body actually works.</p>
+  <p>Assumptions: you have gym access, you're past P3 of puberty naturally or 12+ months into HRT. If you're not there yet — this still works. The timeline might differ slightly but the principles are identical.</p>
+  <div class="callout">"I built this because the fitness industry either ignores us or gives us watered-down BS. You deserve the real program. So here it is. <strong>Read every section before you start.</strong>"</div>
+</div>
+
+<div class="section">
+  <span class="tag">[ 01 · myth busting ]</span>
+  <h2>Lies fitness sold you.</h2>
+  <div class="myth"><div class="myth-title">You need muscle to be a man.</div><p>You're already a man. Muscle is a tool for your goals — confidence, health, silhouette. Not a requirement for your identity.</p></div>
+  <div class="myth"><div class="myth-title">Train hard or you're not masculine.</div><p>Smart > hard. Progressive overload + recovery = actual results. Grinding yourself into the dirt weekly = injury and burnout.</p></div>
+  <div class="myth"><div class="myth-title">Cardio kills your gains.</div><p>Low-intensity cardio (walking, cycling, swimming) has near-zero impact on muscle gains. Recent research shows it can actually boost total muscle development.</p></div>
+  <div class="myth"><div class="myth-title">Eat less to lose weight faster.</div><p>Below ~1400 cals damages your organs. Slow cuts (0.5lb/week) preserve muscle, keep you full, reduce loose skin. Faster is not better here.</p></div>
+  <div class="myth"><div class="myth-title">Spot reduction is real.</div><p>You cannot target fat loss to a specific area. It's genetically determined and systemic. Lower total body fat % instead.</p></div>
+</div>
+
+<div class="section">
+  <span class="tag">[ 02 · program glossary ]</span>
+  <h2>Know the vocab.</h2>
+  <table>
+    <thead><tr><th>Term</th><th>What it means</th></tr></thead>
+    <tbody>
+      <tr><td>Rep</td><td>One complete motion of an exercise.</td></tr>
+      <tr><td>Set</td><td>A group of reps. 3x8 = 8 reps, rest, x3 total.</td></tr>
+      <tr><td>RPE</td><td>Rate of Perceived Exertion. 8 = 2 reps left. 9 = 1 left. 10 = failure.</td></tr>
+      <tr><td>RIR</td><td>Reps in Reserve. Flip side of RPE. Aim for 1-2 RIR most sets.</td></tr>
+      <tr><td>Tempo</td><td>Speed of each rep phase. 2-1-2 = 2s eccentric, 1s pause, 2s concentric.</td></tr>
+      <tr><td>Eccentric</td><td>The lengthening phase. The "down" part. Where gains happen.</td></tr>
+      <tr><td>Concentric</td><td>The shortening phase. The "up" part.</td></tr>
+      <tr><td>Superset</td><td>Two exercises back-to-back, no rest between.</td></tr>
+      <tr><td>Drop Set</td><td>Hit failure, drop weight, keep going. Final set only.</td></tr>
+      <tr><td>Deload</td><td>A planned lighter week. Not weakness — essential for long-term progress.</td></tr>
+      <tr><td>TDEE</td><td>Total Daily Energy Expenditure. Your daily calorie burn. Nutrition math starts here.</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="section">
+  <span class="tag">[ 03 · phase 01 · months 0-6 ]</span>
+  <h2>Foundation. Learn your body.</h2>
+  <p>Upper/lower split, 4 days/week, sub-45 mins. Focus on movement quality over weight. Build the patterns that all future gains run on.</p>
+  
+  <div class="day">DAY 1 — LOWER A</div>
+  <table><thead><tr><th>Exercise</th><th>Sets & Reps</th><th>Tempo</th><th>Notes</th></tr></thead><tbody>
+    <tr><td>Lunges</td><td>4 × 10/leg</td><td>2-1-2</td><td>Drive up, not forward</td></tr>
+    <tr><td>Hip Thrusts</td><td>3 × 15</td><td>2-0-3</td><td>Squeeze at the top</td></tr>
+    <tr><td>Calf Raises</td><td>4 × 12</td><td>1-0-3</td><td>Full stretch at bottom</td></tr>
+  </tbody></table>
+
+  <div class="day">DAY 2 — UPPER A</div>
+  <table><thead><tr><th>Exercise</th><th>Sets & Reps</th><th>Tempo</th><th>Notes</th></tr></thead><tbody>
+    <tr><td>Bicep Curls</td><td>3 × 8</td><td>3-1-2</td><td>Full extension at bottom</td></tr>
+    <tr><td>Tricep Extensions</td><td>3 × 8</td><td>3-1-2</td><td>Elbows locked</td></tr>
+    <tr><td>Push-Ups</td><td>4 × 12</td><td>2-0-2</td><td>Full ROM only</td></tr>
+    <tr><td>Knee Tucks</td><td>3 × 15</td><td>1-1-3</td><td>Slow the eccentric</td></tr>
+  </tbody></table>
+
+  <div class="day">DAY 3 — LOWER B</div>
+  <table><thead><tr><th>Exercise</th><th>Sets & Reps</th><th>Tempo</th><th>Notes</th></tr></thead><tbody>
+    <tr><td>Squats</td><td>4 × 6</td><td>2-1-2</td><td>Heavier — test limits</td></tr>
+    <tr><td>Hip Thrusts</td><td>3 × 6</td><td>2-0-3</td><td>Load it up vs Day 1</td></tr>
+    <tr><td>Hamstring Curls</td><td>4 × 10–12</td><td>2-1-3</td><td>Eccentric is the point</td></tr>
+    <tr><td>Leg Abductions</td><td>3 × 12–15</td><td>1-1-1</td><td>Controlled</td></tr>
+  </tbody></table>
+
+  <div class="day">DAY 4 — UPPER B</div>
+  <table><thead><tr><th>Exercise</th><th>Sets & Reps</th><th>Tempo</th><th>Notes</th></tr></thead><tbody>
+    <tr><td>Low Rows</td><td>4 × 8–10</td><td>1-0-2</td><td>Row to stomach</td></tr>
+    <tr><td>Bench Press</td><td>2 × 12–15</td><td>2-1-2</td><td>Learn the bar path</td></tr>
+    <tr><td>Assisted Pull-Ups</td><td>4 × 8–10</td><td>2-0-2</td><td>Full hang at bottom</td></tr>
+    <tr><td>Knee Tucks</td><td>3 × 15</td><td>1-1-3</td><td>Controlled eccentric</td></tr>
+  </tbody></table>
+</div>
+
+<div class="section">
+  <span class="tag">[ 04 · phase 02 · months 6-12 ]</span>
+  <h2>Frame Build. V-taper season.</h2>
+  <p>Lats, shoulders, triceps. Geometry is your best friend. Track weights every single session — progressive overload starts now.</p>
+  
+  <div class="day">DAY 1 — LOWER</div>
+  <table><thead><tr><th>Exercise</th><th>Sets & Reps</th><th>Tempo</th></tr></thead><tbody>
+    <tr><td>Squats</td><td>4 × 6–10</td><td>2-0-2</td></tr>
+    <tr><td>Hip Thrusts</td><td>3 × 12–15</td><td>1-1-1</td></tr>
+    <tr><td>Hamstring Curls</td><td>3 × 8–15</td><td>1-1-3</td></tr>
+    <tr><td>Calf Raises</td><td>4 × 8–12</td><td>2-0-2</td></tr>
+  </tbody></table>
+
+  <div class="day">DAY 2 — UPPER PUSH</div>
+  <table><thead><tr><th>Exercise</th><th>Sets & Reps</th><th>Tempo</th></tr></thead><tbody>
+    <tr><td>Flat Bench Press</td><td>5 × 6–10</td><td>1-0-2</td></tr>
+    <tr><td>Forearm Curls</td><td>3 × 10–18</td><td>1-1-2</td></tr>
+    <tr><td>Tricep Extensions</td><td>2 × 10–15</td><td>1-1-2</td></tr>
+    <tr><td>Bicep Curls</td><td>3 × 6–12</td><td>2-0-2</td></tr>
+  </tbody></table>
+
+  <div class="day">DAY 3 — LOWER + CORE</div>
+  <table><thead><tr><th>Exercise</th><th>Sets & Reps</th><th>Tempo</th></tr></thead><tbody>
+    <tr><td>RDLs</td><td>4 × 10–15</td><td>2-1-2</td></tr>
+    <tr><td>Farmer's Carries</td><td>3 × 60 sec</td><td>N/A</td></tr>
+    <tr><td>Leg Extensions</td><td>3 × 8–12</td><td>1-1-2</td></tr>
+    <tr><td>Hamstring Curls</td><td>3 × 8–12</td><td>1-1-3</td></tr>
+  </tbody></table>
+
+  <div class="day">DAY 4 — UPPER PULL</div>
+  <table><thead><tr><th>Exercise</th><th>Sets & Reps</th><th>Tempo</th></tr></thead><tbody>
+    <tr><td>Dumbbell Incline Bench</td><td>3 × 6–8</td><td>2-0-2</td></tr>
+    <tr><td>Low Rows</td><td>4 × 8–10</td><td>2-0-2</td></tr>
+    <tr><td>Bicep Curls</td><td>3 × 10–12</td><td>3-1-2</td></tr>
+    <tr><td>Tricep Skis</td><td>3 × 10–12</td><td>3-1-2</td></tr>
+    <tr><td>Leg Raises</td><td>3 × 15</td><td>1-1-3</td></tr>
+  </tbody></table>
+</div>
+
+<div class="section">
+  <span class="tag">[ 05 · phase 03 · months 12-24 ]</span>
+  <h2>Full bodybuilding protocol.</h2>
+  <p>Newbie gains are done. 5 days/week, heavier compounds, actual bodybuilding methodology. Read the progression section carefully — it matters more now than it ever did.</p>
+  
+  <div class="day">DAY 1 — LOWER MODERATE</div>
+  <table><thead><tr><th>Exercise</th><th>Sets & Reps</th><th>Tempo</th></tr></thead><tbody>
+    <tr><td>Squats</td><td>5 × 8–12</td><td>1-0-2</td></tr>
+    <tr><td>RDLs</td><td>3 × 6–10</td><td>2-1-1</td></tr>
+    <tr><td>Farmer's Carries</td><td>3 × 60 sec</td><td>N/A</td></tr>
+  </tbody></table>
+
+  <div class="day">DAY 2 — UPPER PUSH + PULL</div>
+  <table><thead><tr><th>Exercise</th><th>Sets & Reps</th><th>Tempo</th></tr></thead><tbody>
+    <tr><td>Bench Press</td><td>5 × 6–8</td><td>2-0-2</td></tr>
+    <tr><td>Rows</td><td>5 × 6–8</td><td>3-1-2</td></tr>
+    <tr><td>Tricep Skis</td><td>4 × 10–12</td><td>3-1-2</td></tr>
+    <tr><td>Bicep Curls</td><td>4 × 10–12</td><td>3-1-2</td></tr>
+  </tbody></table>
+
+  <div class="day">DAY 3 — LOWER HEAVY</div>
+  <table><thead><tr><th>Exercise</th><th>Sets & Reps</th><th>Tempo</th></tr></thead><tbody>
+    <tr><td>Deadlifts</td><td>5 × 3–5</td><td>Form focus</td></tr>
+    <tr><td>RDLs (light)</td><td>3 × 10–12</td><td>2-1-2</td></tr>
+    <tr><td>Hip Thrusts</td><td>3 × 12–15</td><td>2-0-3</td></tr>
+    <tr><td>Abductor + Adductor</td><td>3 × 10–12 each</td><td>1-1-3</td></tr>
+  </tbody></table>
+
+  <div class="day">DAY 4 — UPPER PUSH + CORE</div>
+  <table><thead><tr><th>Exercise</th><th>Sets & Reps</th><th>Tempo</th></tr></thead><tbody>
+    <tr><td>Incline Bench</td><td>5 × 6–10</td><td>1-0-1</td></tr>
+    <tr><td>Bicep Curls</td><td>4 × 10–12</td><td>2-1-2</td></tr>
+    <tr><td>Behind-the-Back Tricep Ext.</td><td>4 × 10–12</td><td>2-1-2</td></tr>
+    <tr><td>Suitcase Marches</td><td>3 × 60 sec</td><td>N/A</td></tr>
+    <tr><td>Leg Raises</td><td>4 × 10</td><td>1-0-2</td></tr>
+  </tbody></table>
+
+  <div class="day">DAY 5 — BACK + SHOULDERS</div>
+  <table><thead><tr><th>Exercise</th><th>Sets & Reps</th><th>Tempo</th><th>Notes</th></tr></thead><tbody>
+    <tr><td>Lat Pulldowns</td><td>4 × 8–12</td><td>1-1-3</td><td>V-taper HQ. Controlled eccentric.</td></tr>
+    <tr><td>Chest-Supported Rows</td><td>4 × 5–10</td><td>1-1-2</td><td>Pure back work, no cheating.</td></tr>
+    <tr><td>Lateral Raises</td><td>5 × 12–15</td><td>1-0-2</td><td>Your silhouette secret weapon.</td></tr>
+    <tr><td>Shoulder Press</td><td>5 × 10–15</td><td>1-0-2</td><td>Don't lock out — keep tension.</td></tr>
+  </tbody></table>
+</div>
+
+<div class="section">
+  <span class="tag">[ 06 · progression ]</span>
+  <h2>How to actually get stronger.</h2>
+  <p><strong>Track your weights. Every session.</strong> If you don't know what you lifted last week, you cannot progress. This is non-negotiable.</p>
+  <ul>
+    <li>Can do more reps than the top of your range? Add 5lb.</li>
+    <li>Can't add weight? Add 1–2 reps per set.</li>
+    <li>Can't add reps? Add one set for 2–4 weeks, then retry weight.</li>
+    <li>Hit the top of your rep range consistently? Drop 2 reps and add weight.</li>
+    <li>Rest 2–2.5 min for big muscles (legs, chest, back). 1.5 min for small (arms, shoulders).</li>
+    <li>Stop 1–2 reps short of failure on most sets. Save true failure for the final set only.</li>
+  </ul>
+</div>
+
+<div class="section">
+  <span class="tag">[ 07 · hrt + exercise ]</span>
+  <h2>FTM specific: hormones + gains.</h2>
+  <p>Higher T = more muscle protein synthesis, faster recovery, higher TDEE. If you're on HRT for 6+ months, use the male TDEE calculator when estimating caloric needs. Your metabolic rate has shifted.</p>
+  <p>Fat redistribution toward a more android (abdominal) pattern happens over time on T. Combined with resistance training building upper body mass, this contributes to the frame shift you're after.</p>
+  <p>You cannot spot-reduce breast tissue, but lower total body fat % and increased upper body muscle mass both contribute to a more masculine silhouette. Height matters far less socially than online discourse suggests — shoulder-to-waist ratio and posture do more work.</p>
+</div>
+
+<div class="section">
+  <span class="tag">[ 08 · nutrition ]</span>
+  <h2>Eat like you mean it.</h2>
+  <h3>Macro targets (example: 190lb, 5'10")</h3>
+  <ul>
+    <li><strong>Protein:</strong> 0.7–1g/lb bodyweight (160–190g)</li>
+    <li><strong>Carbs:</strong> ~350g</li>
+    <li><strong>Fats:</strong> ~75g</li>
+    <li><strong>Total:</strong> ~2750 kcal/day. Adjust ±200 for bulk/cut.</li>
+  </ul>
+  <h3 style="margin-top:20px;">Hand-portion method (if tracking triggers you)</h3>
+  <p>Per meal, 4 meals/day: 2–3 fist portions protein, 2–3 fist portions carbs, palm-size fats, 3–4 portions veg/fruit.</p>
+  <h3 style="margin-top:20px;">Supplement stack</h3>
+  <ul>
+    <li><strong>Creatine monohydrate</strong> — 5g/day. Non-negotiable. Drink 120oz water daily.</li>
+    <li><strong>Magnesium</strong> — 250mg/day. Recovery + sleep quality.</li>
+    <li><strong>Multivitamin</strong> — after 6 months of solid eating. Insurance, not maintenance.</li>
+  </ul>
+  <h3 style="margin-top:20px;">Recovery</h3>
+  <p>Sleep minimum 7 hours. Optimal 8–9. Sleep deprivation directly reduces muscle protein synthesis, strength progression, and daily energy. It's not optional.</p>
+</div>
+
+<div class="section">
+  <span class="tag">[ 09 · coming next · newsletter only ]</span>
+  <h2>What drops next.</h2>
+  <div class="teaser-card"><h3>DIY HRT: what you need to know</h3><p>Self-administered HRT — pharmacology, sourcing landscape, dosing protocols, and harm reduction. No judgment. Just information.</p><span class="locked">[ COMING SOON ]</span></div>
+  <div class="teaser-card"><h3>Advanced training: periodization for FTM bodies</h3><p>Block periodization, peaking cycles, deload programming, and specialization phases for when you've outgrown beginner programming.</p><span class="locked">[ COMING SOON ]</span></div>
+  <div class="teaser-card"><h3>Confidence + social passing: the real stuff</h3><p>Body language, vocal training, gendered spaces, building social confidence as a transmasc person.</p><span class="locked">[ COMING SOON ]</span></div>
+  <div class="teaser-card"><h3>FTM grooming: the actual guide</h3><p>Beard care from day one on T, skincare for changing skin texture, haircuts for your face shape, grooming basics.</p><span class="locked">[ COMING SOON ]</span></div>
+</div>
+
+<div class="footer">
+  <p>[ KAI[FRAME] · FTM MASC BUILD PROTOCOL v1.0 · FREE · ALWAYS ]</p>
+  <p style="margin-top:4px;">[ NOT MEDICAL ADVICE · CONSULT YOUR HEALTHCARE PROVIDER · © 2026 ]</p>
+</div>
+
+</body>
+</html>`;
+  }
+
+  // ── MACRO BARS ANIMATE ON SCROLL ──
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.querySelectorAll('.macro-fill').forEach(bar => {
+          const w = bar.style.width;
+          bar.style.width = '0%';
+          setTimeout(() => { bar.style.width = w; }, 100);
+        });
+      }
+    });
+  }, { threshold: 0.3 });
+  document.querySelectorAll('.nutrition-card').forEach(c => observer.observe(c));
+
+  // ── SCROLL FADE-IN ──
+  const fadeObserver = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.style.opacity = '1';
+        e.target.style.transform = 'translateY(0)';
+        e.target.style.transition = 'opacity .6s ease, transform .6s ease';
+      }
+    });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.myth-card, .phase-card, .hrt-card, .teaser-card, .glossary-card, .nutrition-card').forEach(el => {
+    el.style.opacity = '0';
+    el.style.transform = 'translateY(20px)';
+    fadeObserver.observe(el);
+  });
+
+  // ── ENTER key on email ──
+  document.getElementById('email-input').addEventListener('keydown', function(e) {
+    if (e.key === 'Enter') submitForm();
+  });
+</script>
+
+</body>
+</html>
+`;
+  

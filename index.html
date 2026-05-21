@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>KAI[FRAME] · FTM Masc Build Protocol</title>
@@ -1309,7 +1311,48 @@
     <div class="funnel-success" id="funnel-success">
       <h3>you're in.</h3>
       <p>Check your inbox — the PDF is on its way. While you wait, download it directly below.</p>
-      <a href="#" class="pdf-download-btn" onclick="generatePDF(); return false;">
+      <a href="#" class="pdf-download-btn" onclick="async function generatePDF() {
+  const { jsPDF } = window.jspdf;
+
+  // temporarily make it visible for capture
+  const el = document.getElementById('pdf-only');
+  el.style.display = 'block';
+
+  const canvas = await html2canvas(el, {
+    backgroundColor: '#0a0a0a',
+    scale: 2,           // retina quality
+    useCORS: true
+  });
+
+  el.style.display = 'none';
+
+  const imgData = canvas.toDataURL('image/png');
+  const pdf = new jsPDF({
+    orientation: 'portrait',
+    unit: 'px',
+    format: 'a4'
+  });
+
+  const pageWidth = pdf.internal.pageSize.getWidth();
+  const pageHeight = pdf.internal.pageSize.getHeight();
+  const imgHeight = (canvas.height * pageWidth) / canvas.width;
+
+  let heightLeft = imgHeight;
+  let position = 0;
+
+  // adds new pages if content is taller than one page
+  pdf.addImage(imgData, 'PNG', 0, position, pageWidth, imgHeight);
+  heightLeft -= pageHeight;
+
+  while (heightLeft > 0) {
+    position = heightLeft - imgHeight;
+    pdf.addPage();
+    pdf.addImage(imgData, 'PNG', 0, position, pageWidth, imgHeight);
+    heightLeft -= pageHeight;
+  }
+
+  pdf.save('KAI_FRAME_Routine.pdf');
+}">
         <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
         DOWNLOAD PDF
       </a>
@@ -1698,7 +1741,25 @@
     if (e.key === 'Enter') submitForm();
   });
 </script>
+<div id="pdf-only" style="display:none; position:absolute; left:-9999px; 
+     background:#0a0a0a; color:#e8e8e8; font-family:sans-serif; 
+     width:800px; padding:48px;">
 
+  <h1 style="color:#c8ff00; font-size:48px; margin-bottom:4px;">KAI[FRAME]</h1>
+  <p style="color:#555; font-size:12px; letter-spacing:2px; margin-bottom:40px;">
+    FTM MASC BUILD PROTOCOL · v1.0
+  </p>
+
+  <!-- PHASE 1 -->
+  <h2 style="color:#c8ff00; font-size:24px; border-top:1px solid #222; 
+      padding-top:24px; margin-bottom:8px;">PHASE 01 · MONTHS 0–6 · FOUNDATION</h2>
+  <p style="color:#aaa; font-size:13px; margin-bottom:20px;">
+    4 days/week · under 45 mins · upper/lower split
+  </p>
+
+  <!-- repeat your workout tables here, styled inline -->
+
+</div>
 </body>
 </html>
 `;

@@ -1019,7 +1019,793 @@
         <li><span>Veggies/fruit per meal</span><span class="food-price">3–4 portions</span></li>
       </ul>
     </div>
- 
+ <!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>KAI[FRAME] · TDEE Calculator</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Barlow+Condensed:wght@300;400;500;600;700;800;900&family=Barlow:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+
+  /* ── SITE CSS VARIABLES (matches index.html exactly) ── */
+  :root {
+    --black:  #0a0a0a;
+    --dark:   #111111;
+    --card:   #161616;
+    --border: #1f1f1f;
+    --accent: #c8ff00;
+    --accent2:#ff4b4b;
+    --text:   #e8e8e8;
+    --muted:  #666;
+    --mid:    #333;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: var(--black);
+    color: var(--text);
+    font-family: 'Barlow', sans-serif;
+    font-size: 16px;
+    line-height: 1.6;
+    padding: 40px;
+  }
+
+  /* preview label */
+  .preview-tag {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px; color: var(--muted);
+    letter-spacing: 2px; border: 1px solid var(--border);
+    padding: 4px 10px; display: inline-block;
+    margin-bottom: 24px;
+  }
+
+  /* ── TDEE CALCULATOR ── */
+  .tdee-wrap {
+    margin: 0;
+    border: 1px solid var(--border);
+    background: var(--card);
+  }
+
+  .tdee-header {
+    padding: 24px 32px;
+    border-bottom: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: space-between;
+    flex-wrap: wrap; gap: 12px;
+  }
+  .tdee-title {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 900; font-size: 28px;
+    text-transform: uppercase; letter-spacing: 1px;
+    color: var(--text); line-height: 1; margin-bottom: 4px;
+  }
+  .tdee-title em { color: var(--accent); font-style: normal; }
+  .tdee-subtitle {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px; color: var(--muted); letter-spacing: 2px;
+  }
+  .tdee-reset {
+    font-family: 'Space Mono', monospace; font-size: 10px;
+    color: var(--muted); letter-spacing: 1px;
+    background: none; border: 1px solid var(--border);
+    padding: 6px 14px; cursor: pointer;
+    transition: border-color .2s, color .2s;
+  }
+  .tdee-reset:hover { border-color: var(--accent); color: var(--accent); }
+
+  .tdee-body {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+
+  /* LEFT */
+  .tdee-inputs {
+    padding: 32px;
+    border-right: 1px solid var(--border);
+  }
+  .tdee-field { margin-bottom: 24px; }
+  .tdee-field:last-child { margin-bottom: 0; }
+
+  .tdee-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px; color: var(--muted); letter-spacing: 2px;
+    text-transform: uppercase; margin-bottom: 10px;
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  .tdee-label-val { color: var(--accent); font-size: 12px; letter-spacing: 1px; }
+
+  .tdee-toggle-row { display: flex; gap: 2px; }
+  .tdee-toggle {
+    flex: 1; padding: 10px 0; text-align: center;
+    font-family: 'Space Mono', monospace; font-size: 11px;
+    color: var(--muted); letter-spacing: 1px;
+    background: var(--black); border: 1px solid var(--border);
+    cursor: pointer; transition: all .15s;
+  }
+  .tdee-toggle.active {
+    background: var(--accent); color: var(--black);
+    border-color: var(--accent); font-weight: 700;
+  }
+  .tdee-toggle:hover:not(.active) { border-color: var(--accent); color: var(--accent); }
+
+  .tdee-number-row { display: flex; gap: 2px; align-items: center; }
+  .tdee-num-btn {
+    width: 36px; height: 40px; flex-shrink: 0;
+    background: var(--black); border: 1px solid var(--border);
+    color: var(--text); font-size: 18px; cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    transition: border-color .15s, color .15s;
+    font-family: 'Space Mono', monospace;
+  }
+  .tdee-num-btn:hover { border-color: var(--accent); color: var(--accent); }
+  .tdee-num-input {
+    flex: 1; height: 40px; text-align: center;
+    background: var(--black); border: 1px solid var(--border);
+    color: var(--text); font-family: 'Space Mono', monospace;
+    font-size: 14px; outline: none; transition: border-color .2s;
+    -moz-appearance: textfield;
+  }
+  .tdee-num-input::-webkit-outer-spin-button,
+  .tdee-num-input::-webkit-inner-spin-button { -webkit-appearance: none; }
+  .tdee-num-input:focus { border-color: var(--accent); }
+
+  .tdee-select {
+    width: 100%; height: 40px; padding: 0 12px;
+    background: var(--black); border: 1px solid var(--border);
+    color: var(--text); font-family: 'Space Mono', monospace;
+    font-size: 11px; outline: none; cursor: pointer;
+    transition: border-color .2s; appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23666' stroke-width='1.5' fill='none'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 14px center;
+  }
+  .tdee-select:focus { border-color: var(--accent); }
+  .tdee-select option { background: #111; }
+
+  .tdee-goal-row { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 2px; }
+  .tdee-goal-btn {
+    padding: 10px 4px; text-align: center;
+    font-family: 'Space Mono', monospace; font-size: 10px;
+    color: var(--muted); letter-spacing: 1px;
+    background: var(--black); border: 1px solid var(--border);
+    cursor: pointer; transition: all .15s; line-height: 1.4;
+  }
+  .tdee-goal-btn.active-cut      { background: #ff4b4b22; border-color: #ff4b4b; color: #ff4b4b; }
+  .tdee-goal-btn.active-maintain { background: rgba(200,255,0,.12); border-color: var(--accent); color: var(--accent); }
+  .tdee-goal-btn.active-bulk     { background: #4b9fff22; border-color: #4b9fff; color: #4b9fff; }
+  .tdee-goal-btn:hover:not(.active-cut):not(.active-maintain):not(.active-bulk) {
+    border-color: var(--accent); color: var(--accent);
+  }
+
+  /* RIGHT */
+  .tdee-results { padding: 32px; display: flex; flex-direction: column; }
+
+  .tdee-result-main {
+    text-align: center; padding-bottom: 24px;
+    border-bottom: 1px solid var(--border); margin-bottom: 24px;
+  }
+  .tdee-result-tag {
+    font-family: 'Space Mono', monospace; font-size: 10px;
+    color: var(--muted); letter-spacing: 2px; margin-bottom: 8px;
+  }
+  .tdee-result-num {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 900; font-size: 64px;
+    color: var(--accent); letter-spacing: -2px; line-height: 1;
+  }
+  .tdee-result-unit {
+    font-family: 'Space Mono', monospace;
+    font-size: 11px; color: var(--muted); letter-spacing: 2px; margin-top: 4px;
+  }
+
+  .tdee-target-row {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 14px 0; border-bottom: 1px solid var(--border);
+  }
+  .tdee-target-row:last-of-type { border-bottom: none; margin-bottom: 0; }
+  .tdee-target-label {
+    font-family: 'Space Mono', monospace; font-size: 10px;
+    color: var(--muted); letter-spacing: 1px;
+  }
+  .tdee-target-val {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 800; font-size: 22px; letter-spacing: -0.5px;
+  }
+  .tdee-target-val.cut      { color: #ff4b4b; }
+  .tdee-target-val.maintain { color: var(--accent); }
+  .tdee-target-val.bulk     { color: #4b9fff; }
+
+  .tdee-verdict {
+    margin-top: 24px; padding: 20px;
+    border: 1px solid var(--border); background: var(--black);
+    transition: border-color .3s, background .3s;
+  }
+  .tdee-verdict.verdict-cut     { border-color: #ff4b4b; background: #ff4b4b0d; }
+  .tdee-verdict.verdict-bulk    { border-color: #4b9fff; background: #4b9fff0d; }
+  .tdee-verdict.verdict-recomp  { border-color: var(--accent); background: rgba(200,255,0,.05); }
+  .tdee-verdict.verdict-maintain{ border-color: var(--accent); background: rgba(200,255,0,.05); }
+
+  .tdee-verdict-tag {
+    font-family: 'Space Mono', monospace; font-size: 9px;
+    letter-spacing: 2px; margin-bottom: 6px;
+  }
+  .tdee-verdict-tag.cut     { color: #ff4b4b; }
+  .tdee-verdict-tag.bulk    { color: #4b9fff; }
+  .tdee-verdict-tag.recomp  { color: var(--accent); }
+  .tdee-verdict-tag.maintain{ color: var(--accent); }
+
+  .tdee-verdict-title {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 900; font-size: 22px;
+    text-transform: uppercase; letter-spacing: 0.5px;
+    margin-bottom: 8px; line-height: 1;
+  }
+  .tdee-verdict-title.cut     { color: #ff4b4b; }
+  .tdee-verdict-title.bulk    { color: #4b9fff; }
+  .tdee-verdict-title.recomp  { color: var(--accent); }
+  .tdee-verdict-title.maintain{ color: var(--accent); }
+
+  .tdee-verdict-text {
+    font-family: 'Space Mono', monospace; font-size: 11px;
+    color: var(--muted); line-height: 1.7; letter-spacing: 0.3px;
+  }
+
+  /* MACROS */
+  .tdee-macros {
+    padding: 28px 32px; border-top: 1px solid var(--border);
+  }
+  .tdee-macros-header {
+    display: flex; justify-content: space-between; align-items: baseline;
+    margin-bottom: 20px;
+  }
+  .tdee-macros-title {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 800; font-size: 18px;
+    text-transform: uppercase; letter-spacing: 1px; color: var(--text);
+  }
+  .tdee-macros-total {
+    font-family: 'Space Mono', monospace; font-size: 10px;
+    color: var(--muted); letter-spacing: 1px;
+  }
+  .tdee-macros-total span { color: var(--accent); }
+  .tdee-macros-total.over span { color: #ff4b4b; }
+
+  .tdee-macro-row { margin-bottom: 20px; }
+  .tdee-macro-row:last-child { margin-bottom: 0; }
+  .tdee-macro-top {
+    display: flex; justify-content: space-between; align-items: baseline;
+    margin-bottom: 8px;
+  }
+  .tdee-macro-name {
+    font-family: 'Space Mono', monospace; font-size: 10px;
+    letter-spacing: 2px; text-transform: uppercase;
+  }
+  .tdee-macro-name.protein { color: var(--accent); }
+  .tdee-macro-name.carbs   { color: #4b9fff; }
+  .tdee-macro-name.fat     { color: #ff4b4b; }
+
+  .tdee-macro-info {
+    font-family: 'Space Mono', monospace; font-size: 10px;
+    color: var(--muted); letter-spacing: 0.5px;
+    display: flex; gap: 16px; align-items: baseline;
+  }
+  .tdee-macro-grams {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 700; font-size: 18px; line-height: 1;
+  }
+  .tdee-macro-grams.protein { color: var(--accent); }
+  .tdee-macro-grams.carbs   { color: #4b9fff; }
+  .tdee-macro-grams.fat     { color: #ff4b4b; }
+
+  input[type="range"].tdee-slider {
+    -webkit-appearance: none; width: 100%; height: 3px;
+    background: var(--border); outline: none; cursor: pointer; border-radius: 0;
+  }
+  input[type="range"].tdee-slider.protein::-webkit-slider-thumb {
+    -webkit-appearance: none; width: 16px; height: 16px;
+    background: var(--accent); cursor: pointer; border-radius: 0;
+    border: 2px solid var(--black);
+  }
+  input[type="range"].tdee-slider.carbs::-webkit-slider-thumb {
+    -webkit-appearance: none; width: 16px; height: 16px;
+    background: #4b9fff; cursor: pointer; border-radius: 0;
+    border: 2px solid var(--black);
+  }
+  input[type="range"].tdee-slider.fat::-webkit-slider-thumb {
+    -webkit-appearance: none; width: 16px; height: 16px;
+    background: #ff4b4b; cursor: pointer; border-radius: 0;
+    border: 2px solid var(--black);
+  }
+  input[type="range"].tdee-slider.protein::-moz-range-thumb { width:16px;height:16px;cursor:pointer;border-radius:0;border:2px solid var(--black);background:var(--accent); }
+  input[type="range"].tdee-slider.carbs::-moz-range-thumb   { width:16px;height:16px;cursor:pointer;border-radius:0;border:2px solid var(--black);background:#4b9fff; }
+  input[type="range"].tdee-slider.fat::-moz-range-thumb     { width:16px;height:16px;cursor:pointer;border-radius:0;border:2px solid var(--black);background:#ff4b4b; }
+
+  .tdee-macro-bar-bg {
+    height: 6px; background: var(--border); margin-top: 16px;
+    position: relative; overflow: hidden;
+  }
+  .tdee-macro-bar-fill { display: flex; height: 100%; }
+  .tdee-macro-bar-protein { background: var(--accent); transition: width .3s; }
+  .tdee-macro-bar-carbs   { background: #4b9fff;       transition: width .3s; }
+  .tdee-macro-bar-fat     { background: #ff4b4b;       transition: width .3s; }
+
+  .tdee-hrt-note {
+    padding: 14px 32px; border-top: 1px solid var(--border);
+    display: flex; align-items: center; gap: 12px;
+    background: rgba(200,255,0,.03);
+  }
+  .tdee-hrt-label {
+    font-family: 'Space Mono', monospace; font-size: 10px;
+    color: var(--muted); letter-spacing: 1px; flex: 1;
+  }
+  .tdee-hrt-label strong { color: var(--accent); }
+  .tdee-switch {
+    width: 36px; height: 20px; background: var(--border);
+    border-radius: 10px; position: relative;
+    transition: background .2s; cursor: pointer; flex-shrink: 0;
+    border: none; outline: none;
+  }
+  .tdee-switch.on { background: var(--accent); }
+  .tdee-switch::after {
+    content: ''; position: absolute;
+    width: 14px; height: 14px; border-radius: 7px;
+    background: var(--black); top: 3px; left: 3px;
+    transition: transform .2s;
+  }
+  .tdee-switch.on::after { transform: translateX(16px); }
+  .tdee-switch-label {
+    font-family: 'Space Mono', monospace; font-size: 10px;
+    color: var(--muted); letter-spacing: 1px;
+  }
+
+  @media (max-width: 768px) {
+    body { padding: 20px; }
+    .tdee-body { grid-template-columns: 1fr; }
+    .tdee-inputs { border-right: none; border-bottom: 1px solid var(--border); }
+    .tdee-result-num { font-size: 48px; }
+    .tdee-macros, .tdee-inputs, .tdee-results { padding: 24px 20px; }
+    .tdee-header { padding: 20px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="preview-tag">[ KAI[FRAME] · TDEE CALCULATOR · PASTE INTO NUTRITION SECTION ]</div>
+
+<div class="tdee-wrap">
+
+  <!-- HEADER -->
+  <div class="tdee-header">
+    <div class="tdee-header-left">
+      <div class="tdee-title">TDEE <em>calculator.</em></div>
+      <div class="tdee-subtitle">[ total daily energy expenditure · macros · goal verdict ]</div>
+    </div>
+    <button class="tdee-reset" onclick="tdeeReset()">↺ RESET</button>
+  </div>
+
+  <!-- BODY -->
+  <div class="tdee-body">
+
+    <!-- LEFT: INPUTS -->
+    <div class="tdee-inputs">
+
+      <div class="tdee-field">
+        <div class="tdee-label">Assigned sex at birth</div>
+        <div class="tdee-toggle-row">
+          <button class="tdee-toggle active" id="toggle-female" onclick="tdeeSetSex('female')">FEMALE</button>
+          <button class="tdee-toggle"        id="toggle-male"   onclick="tdeeSetSex('male')">MALE</button>
+        </div>
+      </div>
+
+      <div class="tdee-field">
+        <div class="tdee-label">Units</div>
+        <div class="tdee-toggle-row">
+          <button class="tdee-toggle active" id="toggle-imperial" onclick="tdeeSetUnit('imperial')">IMPERIAL · LB / FT</button>
+          <button class="tdee-toggle"        id="toggle-metric"   onclick="tdeeSetUnit('metric')">METRIC · KG / CM</button>
+        </div>
+      </div>
+
+      <div class="tdee-field">
+        <div class="tdee-label">Age <span class="tdee-label-val" id="lbl-age">25</span></div>
+        <div class="tdee-number-row">
+          <button class="tdee-num-btn" onclick="tdeeAdj('age',-1)">−</button>
+          <input type="number" class="tdee-num-input" id="inp-age" value="25" min="15" max="80" oninput="tdeeCalc()">
+          <button class="tdee-num-btn" onclick="tdeeAdj('age',1)">+</button>
+        </div>
+      </div>
+
+      <div class="tdee-field" id="field-height-imperial">
+        <div class="tdee-label">Height</div>
+        <div style="display:flex;gap:8px;align-items:center;">
+          <div class="tdee-number-row" style="flex:1;">
+            <button class="tdee-num-btn" onclick="tdeeAdj('ft',-1)">−</button>
+            <input type="number" class="tdee-num-input" id="inp-ft" value="5" min="4" max="7" oninput="tdeeCalc()">
+            <button class="tdee-num-btn" onclick="tdeeAdj('ft',1)">+</button>
+          </div>
+          <span style="font-family:'Space Mono',monospace;font-size:10px;color:var(--muted);">ft</span>
+          <div class="tdee-number-row" style="flex:1;">
+            <button class="tdee-num-btn" onclick="tdeeAdj('in',-1)">−</button>
+            <input type="number" class="tdee-num-input" id="inp-in" value="8" min="0" max="11" oninput="tdeeCalc()">
+            <button class="tdee-num-btn" onclick="tdeeAdj('in',1)">+</button>
+          </div>
+          <span style="font-family:'Space Mono',monospace;font-size:10px;color:var(--muted);">in</span>
+        </div>
+      </div>
+      <div class="tdee-field" id="field-height-metric" style="display:none;">
+        <div class="tdee-label">Height <span class="tdee-label-val" id="lbl-cm">173</span> cm</div>
+        <div class="tdee-number-row">
+          <button class="tdee-num-btn" onclick="tdeeAdj('cm',-1)">−</button>
+          <input type="number" class="tdee-num-input" id="inp-cm" value="173" min="100" max="220" oninput="tdeeCalc()">
+          <button class="tdee-num-btn" onclick="tdeeAdj('cm',1)">+</button>
+        </div>
+      </div>
+
+      <div class="tdee-field" id="field-weight-imperial">
+        <div class="tdee-label">Weight <span class="tdee-label-val" id="lbl-lb">160</span> lb</div>
+        <div class="tdee-number-row">
+          <button class="tdee-num-btn" onclick="tdeeAdj('lb',-1)">−</button>
+          <input type="number" class="tdee-num-input" id="inp-lb" value="160" min="80" max="400" oninput="tdeeCalc()">
+          <button class="tdee-num-btn" onclick="tdeeAdj('lb',1)">+</button>
+        </div>
+      </div>
+      <div class="tdee-field" id="field-weight-metric" style="display:none;">
+        <div class="tdee-label">Weight <span class="tdee-label-val" id="lbl-kg">73</span> kg</div>
+        <div class="tdee-number-row">
+          <button class="tdee-num-btn" onclick="tdeeAdj('kg',-1)">−</button>
+          <input type="number" class="tdee-num-input" id="inp-kg" value="73" min="40" max="180" oninput="tdeeCalc()">
+          <button class="tdee-num-btn" onclick="tdeeAdj('kg',1)">+</button>
+        </div>
+      </div>
+
+      <div class="tdee-field">
+        <div class="tdee-label">Activity level</div>
+        <select class="tdee-select" id="inp-activity" onchange="tdeeCalc()">
+          <option value="1.2">Sedentary · desk job, no exercise</option>
+          <option value="1.375">Light · 1–3 days/week</option>
+          <option value="1.55" selected>Moderate · 3–5 days/week</option>
+          <option value="1.725">Active · 6–7 days/week</option>
+          <option value="1.9">Very active · physical job + training</option>
+        </select>
+      </div>
+
+      <div class="tdee-field">
+        <div class="tdee-label">Your goal</div>
+        <div class="tdee-goal-row">
+          <button class="tdee-goal-btn" id="goal-cut" onclick="tdeeSetGoal('cut')">
+            CUT<br><span style="font-size:9px;opacity:.7;">lose fat</span>
+          </button>
+          <button class="tdee-goal-btn active-maintain" id="goal-maintain" onclick="tdeeSetGoal('maintain')">
+            MAINTAIN<br><span style="font-size:9px;opacity:.7;">recomp</span>
+          </button>
+          <button class="tdee-goal-btn" id="goal-bulk" onclick="tdeeSetGoal('bulk')">
+            BULK<br><span style="font-size:9px;opacity:.7;">build mass</span>
+          </button>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- RIGHT: RESULTS -->
+    <div class="tdee-results">
+
+      <div class="tdee-result-main">
+        <div class="tdee-result-tag">[ YOUR TDEE · MAINTENANCE CALORIES ]</div>
+        <div class="tdee-result-num" id="res-tdee">2,486</div>
+        <div class="tdee-result-unit">KCAL / DAY</div>
+      </div>
+
+      <div class="tdee-target-row">
+        <span class="tdee-target-label">[ CUT TARGET ]</span>
+        <span class="tdee-target-val cut"      id="res-cut">1,986 kcal</span>
+      </div>
+      <div class="tdee-target-row">
+        <span class="tdee-target-label">[ MAINTAIN ]</span>
+        <span class="tdee-target-val maintain"  id="res-maintain">2,486 kcal</span>
+      </div>
+      <div class="tdee-target-row">
+        <span class="tdee-target-label">[ BULK TARGET ]</span>
+        <span class="tdee-target-val bulk"      id="res-bulk">2,736 kcal</span>
+      </div>
+      <div class="tdee-target-row">
+        <span class="tdee-target-label">[ BMR (base rate) ]</span>
+        <span class="tdee-target-val" style="color:var(--muted);font-size:18px;" id="res-bmr">1,604 kcal</span>
+      </div>
+
+      <div class="tdee-verdict verdict-maintain" id="tdee-verdict">
+        <div class="tdee-verdict-tag maintain"   id="verdict-tag">[ VERDICT · RECOMPOSITION ]</div>
+        <div class="tdee-verdict-title maintain"  id="verdict-title">body recomposition.</div>
+        <div class="tdee-verdict-text"            id="verdict-text">
+          eating at maintenance while training hard = lose fat and build muscle simultaneously. slower than a dedicated bulk or cut, but you get both. solid choice for anyone newer to lifting or returning after a break.
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- MACRO SLIDERS -->
+  <div class="tdee-macros">
+    <div class="tdee-macros-header">
+      <div class="tdee-macros-title">macro breakdown</div>
+      <div class="tdee-macros-total" id="macro-total-label">
+        [ <span id="macro-pct-total">100</span>% · <span id="macro-kcal-total">2,486</span> KCAL ]
+      </div>
+    </div>
+
+    <!-- PROTEIN -->
+    <div class="tdee-macro-row">
+      <div class="tdee-macro-top">
+        <div>
+          <span class="tdee-macro-name protein">PROTEIN</span>
+          <span style="font-family:'Space Mono',monospace;font-size:9px;color:var(--muted);margin-left:8px;">4 kcal/g</span>
+        </div>
+        <div class="tdee-macro-info">
+          <span><span class="tdee-macro-grams protein" id="macro-protein-g">155</span><span style="font-size:10px;color:var(--muted);">g</span></span>
+          <span id="macro-protein-pct" style="color:var(--accent);">25%</span>
+          <span id="macro-protein-kcal" style="color:var(--muted);">621 kcal</span>
+        </div>
+      </div>
+      <input type="range" class="tdee-slider protein" id="slider-protein" min="10" max="60" value="25" oninput="tdeeSlider('protein')">
+    </div>
+
+    <!-- CARBS -->
+    <div class="tdee-macro-row">
+      <div class="tdee-macro-top">
+        <div>
+          <span class="tdee-macro-name carbs">CARBS</span>
+          <span style="font-family:'Space Mono',monospace;font-size:9px;color:var(--muted);margin-left:8px;">4 kcal/g</span>
+        </div>
+        <div class="tdee-macro-info">
+          <span><span class="tdee-macro-grams carbs" id="macro-carbs-g">311</span><span style="font-size:10px;color:var(--muted);">g</span></span>
+          <span id="macro-carbs-pct" style="color:#4b9fff;">50%</span>
+          <span id="macro-carbs-kcal" style="color:var(--muted);">1243 kcal</span>
+        </div>
+      </div>
+      <input type="range" class="tdee-slider carbs" id="slider-carbs" min="10" max="70" value="50" oninput="tdeeSlider('carbs')">
+    </div>
+
+    <!-- FAT -->
+    <div class="tdee-macro-row">
+      <div class="tdee-macro-top">
+        <div>
+          <span class="tdee-macro-name fat">FAT</span>
+          <span style="font-family:'Space Mono',monospace;font-size:9px;color:var(--muted);margin-left:8px;">9 kcal/g</span>
+        </div>
+        <div class="tdee-macro-info">
+          <span><span class="tdee-macro-grams fat" id="macro-fat-g">69</span><span style="font-size:10px;color:var(--muted);">g</span></span>
+          <span id="macro-fat-pct" style="color:#ff4b4b;">25%</span>
+          <span id="macro-fat-kcal" style="color:var(--muted);">621 kcal</span>
+        </div>
+      </div>
+      <input type="range" class="tdee-slider fat" id="slider-fat" min="10" max="60" value="25" oninput="tdeeSlider('fat')">
+    </div>
+
+    <div class="tdee-macro-bar-bg" style="margin-top:20px;">
+      <div class="tdee-macro-bar-fill">
+        <div class="tdee-macro-bar-protein" id="bar-protein" style="width:25%;"></div>
+        <div class="tdee-macro-bar-carbs"   id="bar-carbs"   style="width:50%;"></div>
+        <div class="tdee-macro-bar-fat"     id="bar-fat"     style="width:25%;"></div>
+      </div>
+    </div>
+    <div style="display:flex;justify-content:space-between;margin-top:6px;">
+      <span style="font-family:'Space Mono',monospace;font-size:9px;color:var(--muted);">[ slide to adjust · total must = 100% ]</span>
+      <span style="font-family:'Space Mono',monospace;font-size:9px;color:#ff4b4b;" id="macro-warn"></span>
+    </div>
+  </div>
+
+  <!-- HRT NOTE -->
+  <div class="tdee-hrt-note">
+    <div class="tdee-hrt-label">
+      <strong>on HRT 6+ months?</strong> toggle this to calculate using male metabolic rate.
+    </div>
+    <div style="display:flex;align-items:center;gap:8px;cursor:pointer;" onclick="tdeeToggleHRT()">
+      <button class="tdee-switch" id="hrt-switch"></button>
+      <span class="tdee-switch-label" id="hrt-label">OFF</span>
+    </div>
+  </div>
+
+</div>
+
+<script>
+(function() {
+
+  let state = {
+    sex:'female', unit:'imperial', age:25,
+    ft:5, in:8, cm:173, lb:160, kg:73,
+    activity:1.55, goal:'maintain', hrt:false,
+    pProtein:25, pCarbs:50, pFat:25
+  };
+
+  function fmt(n) { return Math.round(n).toLocaleString(); }
+  function getWeightKg() { return state.unit==='imperial' ? state.lb*0.453592 : state.kg; }
+  function getHeightCm() { return state.unit==='imperial' ? (state.ft*12+state.in)*2.54 : state.cm; }
+
+  function calcBMR() {
+    const w=getWeightKg(), h=getHeightCm(), a=state.age;
+    const useMale = state.sex==='male' || state.hrt;
+    return useMale ? (10*w)+(6.25*h)-(5*a)+5 : (10*w)+(6.25*h)-(5*a)-161;
+  }
+  function calcTDEE() { return calcBMR()*state.activity; }
+  function getTargetCals() {
+    const tdee=calcTDEE();
+    if(state.goal==='cut')  return tdee-500;
+    if(state.goal==='bulk') return tdee+250;
+    return tdee;
+  }
+
+  window.tdeeCalc = function() {
+    const age=parseInt(document.getElementById('inp-age').value);
+    if(!isNaN(age)){state.age=Math.min(80,Math.max(15,age));document.getElementById('inp-age').value=state.age;}
+
+    if(state.unit==='imperial'){
+      const lb=parseInt(document.getElementById('inp-lb').value);
+      const ft=parseInt(document.getElementById('inp-ft').value);
+      const inn=parseInt(document.getElementById('inp-in').value);
+      if(!isNaN(lb))state.lb=Math.min(400,Math.max(80,lb));
+      if(!isNaN(ft))state.ft=Math.min(7,Math.max(4,ft));
+      if(!isNaN(inn))state.in=Math.min(11,Math.max(0,inn));
+      document.getElementById('lbl-lb').textContent=state.lb;
+      document.getElementById('inp-lb').value=state.lb;
+      document.getElementById('inp-ft').value=state.ft;
+      document.getElementById('inp-in').value=state.in;
+    } else {
+      const cm=parseInt(document.getElementById('inp-cm').value);
+      const kg=parseInt(document.getElementById('inp-kg').value);
+      if(!isNaN(cm))state.cm=Math.min(220,Math.max(100,cm));
+      if(!isNaN(kg))state.kg=Math.min(180,Math.max(40,kg));
+      document.getElementById('lbl-cm').textContent=state.cm;
+      document.getElementById('lbl-kg').textContent=state.kg;
+      document.getElementById('inp-cm').value=state.cm;
+      document.getElementById('inp-kg').value=state.kg;
+    }
+
+    state.activity=parseFloat(document.getElementById('inp-activity').value);
+    document.getElementById('lbl-age').textContent=state.age;
+
+    const bmr=calcBMR(), tdee=calcTDEE();
+    document.getElementById('res-bmr').textContent     =fmt(bmr)+' kcal';
+    document.getElementById('res-tdee').textContent    =fmt(tdee);
+    document.getElementById('res-cut').textContent     =fmt(tdee-500)+' kcal';
+    document.getElementById('res-maintain').textContent=fmt(tdee)+' kcal';
+    document.getElementById('res-bulk').textContent    =fmt(tdee+250)+' kcal';
+
+    updateVerdict(tdee);
+    updateMacros(tdee);
+  };
+
+  function updateVerdict(tdee) {
+    const target=getTargetCals(), diff=target-tdee;
+    const v=document.getElementById('tdee-verdict');
+    const tag=document.getElementById('verdict-tag');
+    const title=document.getElementById('verdict-title');
+    const text=document.getElementById('verdict-text');
+    v.className='tdee-verdict'; tag.className='tdee-verdict-tag'; title.className='tdee-verdict-title';
+
+    if(state.goal==='cut'){
+      v.classList.add('verdict-cut'); tag.classList.add('cut'); title.classList.add('cut');
+      tag.textContent='[ VERDICT · FAT LOSS ]';
+      title.textContent='cutting phase.';
+      text.textContent=`eating ${fmt(Math.abs(diff))} kcal below maintenance. at this rate you'll lose ~0.5–1lb/week — the sweet spot. fast enough to see progress, slow enough to keep your muscle. make sure protein is 0.7–1g/lb bodyweight or you'll lose gains alongside the fat. non-negotiable.`;
+    } else if(state.goal==='maintain'){
+      v.classList.add('verdict-recomp'); tag.classList.add('recomp'); title.classList.add('recomp');
+      tag.textContent='[ VERDICT · RECOMPOSITION ]';
+      title.textContent='body recomposition.';
+      text.textContent=`eating at maintenance while training = lose fat and build muscle simultaneously. slower than a dedicated bulk or cut, but you get both. best for: beginners, anyone returning after a break, and anyone within 1–2 years of training. keep protein high. track your weights.`;
+    } else if(state.goal==='bulk'){
+      v.classList.add('verdict-bulk'); tag.classList.add('bulk'); title.classList.add('bulk');
+      tag.textContent='[ VERDICT · LEAN BULK ]';
+      title.textContent='lean bulk phase.';
+      text.textContent=`eating ${fmt(diff)} kcal above maintenance. this is a slow, controlled bulk — not a dirty bulk. you'll build muscle with minimal fat gain. expect 0.25–0.5lb/week of total weight gain. if you're gaining faster than that, pull back ${fmt(diff*0.4)} kcal. track everything.`;
+    }
+  }
+
+  window.tdeeSlider = function() {
+    state.pProtein=parseInt(document.getElementById('slider-protein').value);
+    state.pCarbs  =parseInt(document.getElementById('slider-carbs').value);
+    state.pFat    =parseInt(document.getElementById('slider-fat').value);
+    updateMacros(calcTDEE());
+  };
+
+  function updateMacros(tdee) {
+    const target=getTargetCals();
+    const total=state.pProtein+state.pCarbs+state.pFat;
+    const proteinG=Math.round((state.pProtein/100)*target/4);
+    const carbsG  =Math.round((state.pCarbs  /100)*target/4);
+    const fatG    =Math.round((state.pFat    /100)*target/9);
+
+    document.getElementById('macro-protein-g').textContent   =proteinG;
+    document.getElementById('macro-protein-pct').textContent =state.pProtein+'%';
+    document.getElementById('macro-protein-kcal').textContent=fmt(proteinG*4)+' kcal';
+    document.getElementById('macro-carbs-g').textContent     =carbsG;
+    document.getElementById('macro-carbs-pct').textContent   =state.pCarbs+'%';
+    document.getElementById('macro-carbs-kcal').textContent  =fmt(carbsG*4)+' kcal';
+    document.getElementById('macro-fat-g').textContent       =fatG;
+    document.getElementById('macro-fat-pct').textContent     =state.pFat+'%';
+    document.getElementById('macro-fat-kcal').textContent    =fmt(fatG*9)+' kcal';
+
+    document.getElementById('bar-protein').style.width=state.pProtein+'%';
+    document.getElementById('bar-carbs').style.width  =state.pCarbs  +'%';
+    document.getElementById('bar-fat').style.width    =state.pFat    +'%';
+
+    const totalEl=document.getElementById('macro-pct-total');
+    const kcalEl =document.getElementById('macro-kcal-total');
+    const warnEl =document.getElementById('macro-warn');
+    const parentEl=document.getElementById('macro-total-label');
+    totalEl.textContent=total;
+    kcalEl.textContent =fmt(target);
+    if(total!==100){parentEl.classList.add('over');warnEl.textContent='[ adjust sliders to reach 100% ]';}
+    else{parentEl.classList.remove('over');warnEl.textContent='';}
+  }
+
+  window.tdeeSetSex = function(sex) {
+    state.sex=sex;
+    document.getElementById('toggle-female').classList.toggle('active',sex==='female');
+    document.getElementById('toggle-male').classList.toggle('active',sex==='male');
+    tdeeCalc();
+  };
+
+  window.tdeeSetUnit = function(unit) {
+    state.unit=unit;
+    document.getElementById('toggle-imperial').classList.toggle('active',unit==='imperial');
+    document.getElementById('toggle-metric').classList.toggle('active',unit==='metric');
+    document.getElementById('field-height-imperial').style.display=unit==='imperial'?'':'none';
+    document.getElementById('field-height-metric').style.display  =unit==='metric'  ?'':'none';
+    document.getElementById('field-weight-imperial').style.display=unit==='imperial'?'':'none';
+    document.getElementById('field-weight-metric').style.display  =unit==='metric'  ?'':'none';
+    if(unit==='metric'){
+      state.kg=Math.round(state.lb*0.453592);state.cm=Math.round((state.ft*12+state.in)*2.54);
+      document.getElementById('inp-kg').value=state.kg;document.getElementById('inp-cm').value=state.cm;
+    } else {
+      state.lb=Math.round(state.kg/0.453592);
+      const tot=Math.round(state.cm/2.54);state.ft=Math.floor(tot/12);state.in=tot%12;
+      document.getElementById('inp-lb').value=state.lb;document.getElementById('inp-ft').value=state.ft;document.getElementById('inp-in').value=state.in;
+    }
+    tdeeCalc();
+  };
+
+  window.tdeeSetGoal = function(goal) {
+    state.goal=goal;
+    document.getElementById('goal-cut').className     ='tdee-goal-btn'+(goal==='cut'     ?' active-cut'     :'');
+    document.getElementById('goal-maintain').className='tdee-goal-btn'+(goal==='maintain'?' active-maintain':'');
+    document.getElementById('goal-bulk').className    ='tdee-goal-btn'+(goal==='bulk'    ?' active-bulk'    :'');
+    tdeeCalc();
+  };
+
+  window.tdeeAdj = function(field,delta) {
+    const map={age:'inp-age',ft:'inp-ft',in:'inp-in',cm:'inp-cm',lb:'inp-lb',kg:'inp-kg'};
+    const el=document.getElementById(map[field]);
+    el.value=parseInt(el.value)+delta;
+    tdeeCalc();
+  };
+
+  window.tdeeToggleHRT = function() {
+    state.hrt=!state.hrt;
+    const sw=document.getElementById('hrt-switch');
+    const lbl=document.getElementById('hrt-label');
+    sw.classList.toggle('on',state.hrt);
+    lbl.textContent=state.hrt?'ON':'OFF';
+    lbl.style.color=state.hrt?'var(--accent)':'';
+    tdeeCalc();
+  };
+
+  window.tdeeReset = function() {
+    state={sex:'female',unit:'imperial',age:25,ft:5,in:8,cm:173,lb:160,kg:73,activity:1.55,goal:'maintain',hrt:false,pProtein:25,pCarbs:50,pFat:25};
+    document.getElementById('inp-age').value=25;
+    document.getElementById('inp-lb').value=160;document.getElementById('inp-ft').value=5;document.getElementById('inp-in').value=8;
+    document.getElementById('inp-kg').value=73;document.getElementById('inp-cm').value=173;
+    document.getElementById('inp-activity').value='1.55';
+    document.getElementById('slider-protein').value=25;document.getElementById('slider-carbs').value=50;document.getElementById('slider-fat').value=25;
+    document.getElementById('hrt-switch').classList.remove('on');
+    document.getElementById('hrt-label').textContent='OFF';document.getElementById('hrt-label').style.color='';
+    tdeeSetSex('female');tdeeSetUnit('imperial');tdeeSetGoal('maintain');tdeeCalc();
+  };
+
+  tdeeCalc();
+})();
+</script>
+</body>
+</html>
+    
     <div class="nutrition-card">
       <h3>Supplement stack</h3>
       <ul class="food-list">
@@ -1077,7 +1863,7 @@
 <section class="teaser-section">
   <span class="section-tag">[ 07 · coming next ]</span>
   <h2>what drops<br><em>next.</em></h2>
-  <p style="color:#666; max-width:500px; margin-bottom:40px; font-family:'Space Mono',monospace; font-size:12px; letter-spacing:.5px;">[ newsletter subscribers get early access. drop your email above if you haven't. ]</p>
+  <p style="color:#666; max-width:600px; margin-bottom:40px; font-family:'Space Mono',monospace; font-size:12px; letter-spacing:.5px;">[ newsletter subscribers get early access. drop your email above if you haven't. ]</p>
  
   <div class="teaser-cards">
     <div class="teaser-card">

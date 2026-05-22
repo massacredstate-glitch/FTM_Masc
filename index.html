@@ -985,12 +985,164 @@
 <section id="nutrition">
   <span class="section-tag">[ 05 · nutrition ]</span>
   <h2>eat like you mean it.<br><em>actually.</em></h2>
- 
+
   <div class="kai-callout">
     <svg class="kai-callout-avatar" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg"><circle cx="24" cy="24" r="24" fill="#161616"/><ellipse cx="24" cy="20" rx="12" ry="13" fill="#c8975a"/><path d="M14 26 Q12 34 16 38 Q20 42 24 43 Q28 42 32 38 Q36 34 34 26" fill="#c8975a"/><path d="M13 19 Q14 8 24 6 Q34 8 35 19" fill="#1a1212"/><ellipse cx="20" cy="19" rx="4" ry="2.5" fill="#111"/><ellipse cx="28" cy="19" rx="4" ry="2.5" fill="#111"/><path d="M20 32 Q24 36 28 32" fill="none" stroke="#8a5a2a" stroke-width="1.2" stroke-linecap="round"/></svg>
     <div class="kai-callout-text">"Look — calorie tracking apps are great if you can use them without it messing with your head. If they cause anxiety or disordered thinking, <strong>use the hand-portion method instead. Both work.</strong> Pick the one you'll actually stick to."</div>
   </div>
- 
+
+  <!-- TDEE CALCULATOR — sits here, full width, between callout and grid -->
+  <div class="tdee-wrap" style="margin: 32px 0;">
+    <!-- paste only the tdee-wrap inner content here, no DOCTYPE or html tags -->
+    <!-- HEADER -->
+  <div class="tdee-header">
+    <div class="tdee-header-left">
+      <div class="tdee-title">TDEE <em>calculator.</em></div>
+      <div class="tdee-subtitle">[ total daily energy expenditure · macros · goal verdict ]</div>
+    </div>
+    <button class="tdee-reset" onclick="tdeeReset()">↺ RESET</button>
+  </div>
+
+  <!-- BODY -->
+  <div class="tdee-body">
+
+    <!-- LEFT: INPUTS -->
+    <div class="tdee-inputs">
+
+      <div class="tdee-field">
+        <div class="tdee-label">Assigned sex at birth</div>
+        <div class="tdee-toggle-row">
+          <button class="tdee-toggle active" id="toggle-female" onclick="tdeeSetSex('female')">FEMALE</button>
+          <button class="tdee-toggle"        id="toggle-male"   onclick="tdeeSetSex('male')">MALE</button>
+        </div>
+      </div>
+
+      <div class="tdee-field">
+        <div class="tdee-label">Units</div>
+        <div class="tdee-toggle-row">
+          <button class="tdee-toggle active" id="toggle-imperial" onclick="tdeeSetUnit('imperial')">IMPERIAL · LB / FT</button>
+          <button class="tdee-toggle"        id="toggle-metric"   onclick="tdeeSetUnit('metric')">METRIC · KG / CM</button>
+        </div>
+      </div>
+
+      <div class="tdee-field">
+        <div class="tdee-label">Age <span class="tdee-label-val" id="lbl-age">25</span></div>
+        <div class="tdee-number-row">
+          <button class="tdee-num-btn" onclick="tdeeAdj('age',-1)">−</button>
+          <input type="number" class="tdee-num-input" id="inp-age" value="25" min="15" max="80" oninput="tdeeCalc()">
+          <button class="tdee-num-btn" onclick="tdeeAdj('age',1)">+</button>
+        </div>
+      </div>
+
+      <div class="tdee-field" id="field-height-imperial">
+        <div class="tdee-label">Height</div>
+        <div style="display:flex;gap:8px;align-items:center;">
+          <div class="tdee-number-row" style="flex:1;">
+            <button class="tdee-num-btn" onclick="tdeeAdj('ft',-1)">−</button>
+            <input type="number" class="tdee-num-input" id="inp-ft" value="5" min="4" max="7" oninput="tdeeCalc()">
+            <button class="tdee-num-btn" onclick="tdeeAdj('ft',1)">+</button>
+          </div>
+          <span style="font-family:'Space Mono',monospace;font-size:10px;color:var(--muted);">ft</span>
+          <div class="tdee-number-row" style="flex:1;">
+            <button class="tdee-num-btn" onclick="tdeeAdj('in',-1)">−</button>
+            <input type="number" class="tdee-num-input" id="inp-in" value="8" min="0" max="11" oninput="tdeeCalc()">
+            <button class="tdee-num-btn" onclick="tdeeAdj('in',1)">+</button>
+          </div>
+          <span style="font-family:'Space Mono',monospace;font-size:10px;color:var(--muted);">in</span>
+        </div>
+      </div>
+      <div class="tdee-field" id="field-height-metric" style="display:none;">
+        <div class="tdee-label">Height <span class="tdee-label-val" id="lbl-cm">173</span> cm</div>
+        <div class="tdee-number-row">
+          <button class="tdee-num-btn" onclick="tdeeAdj('cm',-1)">−</button>
+          <input type="number" class="tdee-num-input" id="inp-cm" value="173" min="100" max="220" oninput="tdeeCalc()">
+          <button class="tdee-num-btn" onclick="tdeeAdj('cm',1)">+</button>
+        </div>
+      </div>
+
+      <div class="tdee-field" id="field-weight-imperial">
+        <div class="tdee-label">Weight <span class="tdee-label-val" id="lbl-lb">160</span> lb</div>
+        <div class="tdee-number-row">
+          <button class="tdee-num-btn" onclick="tdeeAdj('lb',-1)">−</button>
+          <input type="number" class="tdee-num-input" id="inp-lb" value="160" min="80" max="400" oninput="tdeeCalc()">
+          <button class="tdee-num-btn" onclick="tdeeAdj('lb',1)">+</button>
+        </div>
+      </div>
+      <div class="tdee-field" id="field-weight-metric" style="display:none;">
+        <div class="tdee-label">Weight <span class="tdee-label-val" id="lbl-kg">73</span> kg</div>
+        <div class="tdee-number-row">
+          <button class="tdee-num-btn" onclick="tdeeAdj('kg',-1)">−</button>
+          <input type="number" class="tdee-num-input" id="inp-kg" value="73" min="40" max="180" oninput="tdeeCalc()">
+          <button class="tdee-num-btn" onclick="tdeeAdj('kg',1)">+</button>
+        </div>
+      </div>
+
+      <div class="tdee-field">
+        <div class="tdee-label">Activity level</div>
+        <select class="tdee-select" id="inp-activity" onchange="tdeeCalc()">
+          <option value="1.2">Sedentary · desk job, no exercise</option>
+          <option value="1.375">Light · 1–3 days/week</option>
+          <option value="1.55" selected>Moderate · 3–5 days/week</option>
+          <option value="1.725">Active · 6–7 days/week</option>
+          <option value="1.9">Very active · physical job + training</option>
+        </select>
+      </div>
+
+      <div class="tdee-field">
+        <div class="tdee-label">Your goal</div>
+        <div class="tdee-goal-row">
+          <button class="tdee-goal-btn" id="goal-cut" onclick="tdeeSetGoal('cut')">
+            CUT<br><span style="font-size:9px;opacity:.7;">lose fat</span>
+          </button>
+          <button class="tdee-goal-btn active-maintain" id="goal-maintain" onclick="tdeeSetGoal('maintain')">
+            MAINTAIN<br><span style="font-size:9px;opacity:.7;">recomp</span>
+          </button>
+          <button class="tdee-goal-btn" id="goal-bulk" onclick="tdeeSetGoal('bulk')">
+            BULK<br><span style="font-size:9px;opacity:.7;">build mass</span>
+          </button>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- RIGHT: RESULTS -->
+    <div class="tdee-results">
+
+      <div class="tdee-result-main">
+        <div class="tdee-result-tag">[ YOUR TDEE · MAINTENANCE CALORIES ]</div>
+        <div class="tdee-result-num" id="res-tdee">2,486</div>
+        <div class="tdee-result-unit">KCAL / DAY</div>
+      </div>
+
+      <div class="tdee-target-row">
+        <span class="tdee-target-label">[ CUT TARGET ]</span>
+        <span class="tdee-target-val cut"      id="res-cut">1,986 kcal</span>
+      </div>
+      <div class="tdee-target-row">
+        <span class="tdee-target-label">[ MAINTAIN ]</span>
+        <span class="tdee-target-val maintain"  id="res-maintain">2,486 kcal</span>
+      </div>
+      <div class="tdee-target-row">
+        <span class="tdee-target-label">[ BULK TARGET ]</span>
+        <span class="tdee-target-val bulk"      id="res-bulk">2,736 kcal</span>
+      </div>
+      <div class="tdee-target-row">
+        <span class="tdee-target-label">[ BMR (base rate) ]</span>
+        <span class="tdee-target-val" style="color:var(--muted);font-size:18px;" id="res-bmr">1,604 kcal</span>
+      </div>
+
+      <div class="tdee-verdict verdict-maintain" id="tdee-verdict">
+        <div class="tdee-verdict-tag maintain"   id="verdict-tag">[ VERDICT · RECOMPOSITION ]</div>
+        <div class="tdee-verdict-title maintain"  id="verdict-title">body recomposition.</div>
+        <div class="tdee-verdict-text"            id="verdict-text">
+          eating at maintenance while training hard = lose fat and build muscle simultaneously. slower than a dedicated bulk or cut, but you get both. solid choice for anyone newer to lifting or returning after a break.
+        </div>
+      </div>
+
+    </div>
+  </div>
+  </div>
+
   <div class="nutrition-grid">
     <div class="nutrition-card">
       <h3>Macro targets (example: 190lb, 5'10)</h3>
@@ -1018,47 +1170,34 @@
         <li><span>Veggies/fruit per meal</span><span class="food-price">3–4 portions</span></li>
       </ul>
     </div>
- <!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>KAI[FRAME] · TDEE Calculator</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Barlow+Condensed:wght@300;400;500;600;700;800;900&family=Barlow:wght@300;400;500;600&display=swap" rel="stylesheet">
-<style>
 
-  /* ── SITE CSS VARIABLES (matches index.html exactly) ── */
-  :root {
-    --black:  #0a0a0a;
-    --dark:   #111111;
-    --card:   #161616;
-    --border: #1f1f1f;
-    --accent: #c8ff00;
-    --accent2:#ff4b4b;
-    --text:   #e8e8e8;
-    --muted:  #666;
-    --mid:    #333;
-  }
+    <div class="nutrition-card">
+      <h3>Supplement stack</h3>
+      <ul class="food-list">
+        <li><span>🥇 Creatine Monohydrate</span><span class="food-price">5g/day</span></li>
+        <li><span>🥈 Magnesium</span><span class="food-price">250mg/day</span></li>
+        <li><span>🥉 Multivitamin (after 6 months)</span><span class="food-price">dietary insurance only</span></li>
+      </ul>
+      <br/>
+      <p style="color:#666; font-size:12px; font-family:'Space Mono',monospace;">[ creatine = more strength · more size · faster recovery. non-negotiable. drink 120oz water daily with it. ]</p>
+      <br/>
+      <h3 style="font-size:18px;">Budget protein sources</h3>
+      <ul class="food-list">
+        <li><span>Chicken thighs</span><span class="food-price">$</span></li>
+        <li><span>Cottage cheese (2%)</span><span class="food-price">$</span></li>
+        <li><span>Fairlife 2% milk</span><span class="food-price">$</span></li>
+        <li><span>Beans + rice combined</span><span class="food-price">$</span></li>
+        <li><span>Whey protein isolate</span><span class="food-price">$</span></li>
+        <li><span>Greek yogurt (plain, fat-free)</span><span class="food-price">$</span></li>
+        <li><span>85% ground beef</span><span class="food-price">$</span></li>
+        <li><span>Tofu (firm/extra firm)</span><span class="food-price">$$</span></li>
+        <li><span>Salmon</span><span class="food-price">$$</span></li>
+        <li><span>Chicken breast</span><span class="food-price">$$</span></li>
+      </ul>
+    </div>
+  </div>
 
-  * { margin: 0; padding: 0; box-sizing: border-box; }
-  body {
-    background: var(--black);
-    color: var(--text);
-    font-family: 'Barlow', sans-serif;
-    font-size: 16px;
-    line-height: 1.6;
-    padding: 40px;
-  }
-
-  /* preview label */
-  .preview-tag {
-    font-family: 'Space Mono', monospace;
-    font-size: 10px; color: var(--muted);
-    letter-spacing: 2px; border: 1px solid var(--border);
-    padding: 4px 10px; display: inline-block;
-    margin-bottom: 24px;
-  }
+</section>
 
   /* ── TDEE CALCULATOR ── */
   .tdee-wrap {
@@ -1369,154 +1508,6 @@
 </style>
 </head>
 <body>
-
-  <!-- HEADER -->
-  <div class="tdee-header">
-    <div class="tdee-header-left">
-      <div class="tdee-title">TDEE <em>calculator.</em></div>
-      <div class="tdee-subtitle">[ total daily energy expenditure · macros · goal verdict ]</div>
-    </div>
-    <button class="tdee-reset" onclick="tdeeReset()">↺ RESET</button>
-  </div>
-
-  <!-- BODY -->
-  <div class="tdee-body">
-
-    <!-- LEFT: INPUTS -->
-    <div class="tdee-inputs">
-
-      <div class="tdee-field">
-        <div class="tdee-label">Assigned sex at birth</div>
-        <div class="tdee-toggle-row">
-          <button class="tdee-toggle active" id="toggle-female" onclick="tdeeSetSex('female')">FEMALE</button>
-          <button class="tdee-toggle"        id="toggle-male"   onclick="tdeeSetSex('male')">MALE</button>
-        </div>
-      </div>
-
-      <div class="tdee-field">
-        <div class="tdee-label">Units</div>
-        <div class="tdee-toggle-row">
-          <button class="tdee-toggle active" id="toggle-imperial" onclick="tdeeSetUnit('imperial')">IMPERIAL · LB / FT</button>
-          <button class="tdee-toggle"        id="toggle-metric"   onclick="tdeeSetUnit('metric')">METRIC · KG / CM</button>
-        </div>
-      </div>
-
-      <div class="tdee-field">
-        <div class="tdee-label">Age <span class="tdee-label-val" id="lbl-age">25</span></div>
-        <div class="tdee-number-row">
-          <button class="tdee-num-btn" onclick="tdeeAdj('age',-1)">−</button>
-          <input type="number" class="tdee-num-input" id="inp-age" value="25" min="15" max="80" oninput="tdeeCalc()">
-          <button class="tdee-num-btn" onclick="tdeeAdj('age',1)">+</button>
-        </div>
-      </div>
-
-      <div class="tdee-field" id="field-height-imperial">
-        <div class="tdee-label">Height</div>
-        <div style="display:flex;gap:8px;align-items:center;">
-          <div class="tdee-number-row" style="flex:1;">
-            <button class="tdee-num-btn" onclick="tdeeAdj('ft',-1)">−</button>
-            <input type="number" class="tdee-num-input" id="inp-ft" value="5" min="4" max="7" oninput="tdeeCalc()">
-            <button class="tdee-num-btn" onclick="tdeeAdj('ft',1)">+</button>
-          </div>
-          <span style="font-family:'Space Mono',monospace;font-size:10px;color:var(--muted);">ft</span>
-          <div class="tdee-number-row" style="flex:1;">
-            <button class="tdee-num-btn" onclick="tdeeAdj('in',-1)">−</button>
-            <input type="number" class="tdee-num-input" id="inp-in" value="8" min="0" max="11" oninput="tdeeCalc()">
-            <button class="tdee-num-btn" onclick="tdeeAdj('in',1)">+</button>
-          </div>
-          <span style="font-family:'Space Mono',monospace;font-size:10px;color:var(--muted);">in</span>
-        </div>
-      </div>
-      <div class="tdee-field" id="field-height-metric" style="display:none;">
-        <div class="tdee-label">Height <span class="tdee-label-val" id="lbl-cm">173</span> cm</div>
-        <div class="tdee-number-row">
-          <button class="tdee-num-btn" onclick="tdeeAdj('cm',-1)">−</button>
-          <input type="number" class="tdee-num-input" id="inp-cm" value="173" min="100" max="220" oninput="tdeeCalc()">
-          <button class="tdee-num-btn" onclick="tdeeAdj('cm',1)">+</button>
-        </div>
-      </div>
-
-      <div class="tdee-field" id="field-weight-imperial">
-        <div class="tdee-label">Weight <span class="tdee-label-val" id="lbl-lb">160</span> lb</div>
-        <div class="tdee-number-row">
-          <button class="tdee-num-btn" onclick="tdeeAdj('lb',-1)">−</button>
-          <input type="number" class="tdee-num-input" id="inp-lb" value="160" min="80" max="400" oninput="tdeeCalc()">
-          <button class="tdee-num-btn" onclick="tdeeAdj('lb',1)">+</button>
-        </div>
-      </div>
-      <div class="tdee-field" id="field-weight-metric" style="display:none;">
-        <div class="tdee-label">Weight <span class="tdee-label-val" id="lbl-kg">73</span> kg</div>
-        <div class="tdee-number-row">
-          <button class="tdee-num-btn" onclick="tdeeAdj('kg',-1)">−</button>
-          <input type="number" class="tdee-num-input" id="inp-kg" value="73" min="40" max="180" oninput="tdeeCalc()">
-          <button class="tdee-num-btn" onclick="tdeeAdj('kg',1)">+</button>
-        </div>
-      </div>
-
-      <div class="tdee-field">
-        <div class="tdee-label">Activity level</div>
-        <select class="tdee-select" id="inp-activity" onchange="tdeeCalc()">
-          <option value="1.2">Sedentary · desk job, no exercise</option>
-          <option value="1.375">Light · 1–3 days/week</option>
-          <option value="1.55" selected>Moderate · 3–5 days/week</option>
-          <option value="1.725">Active · 6–7 days/week</option>
-          <option value="1.9">Very active · physical job + training</option>
-        </select>
-      </div>
-
-      <div class="tdee-field">
-        <div class="tdee-label">Your goal</div>
-        <div class="tdee-goal-row">
-          <button class="tdee-goal-btn" id="goal-cut" onclick="tdeeSetGoal('cut')">
-            CUT<br><span style="font-size:9px;opacity:.7;">lose fat</span>
-          </button>
-          <button class="tdee-goal-btn active-maintain" id="goal-maintain" onclick="tdeeSetGoal('maintain')">
-            MAINTAIN<br><span style="font-size:9px;opacity:.7;">recomp</span>
-          </button>
-          <button class="tdee-goal-btn" id="goal-bulk" onclick="tdeeSetGoal('bulk')">
-            BULK<br><span style="font-size:9px;opacity:.7;">build mass</span>
-          </button>
-        </div>
-      </div>
-
-    </div>
-
-    <!-- RIGHT: RESULTS -->
-    <div class="tdee-results">
-
-      <div class="tdee-result-main">
-        <div class="tdee-result-tag">[ YOUR TDEE · MAINTENANCE CALORIES ]</div>
-        <div class="tdee-result-num" id="res-tdee">2,486</div>
-        <div class="tdee-result-unit">KCAL / DAY</div>
-      </div>
-
-      <div class="tdee-target-row">
-        <span class="tdee-target-label">[ CUT TARGET ]</span>
-        <span class="tdee-target-val cut"      id="res-cut">1,986 kcal</span>
-      </div>
-      <div class="tdee-target-row">
-        <span class="tdee-target-label">[ MAINTAIN ]</span>
-        <span class="tdee-target-val maintain"  id="res-maintain">2,486 kcal</span>
-      </div>
-      <div class="tdee-target-row">
-        <span class="tdee-target-label">[ BULK TARGET ]</span>
-        <span class="tdee-target-val bulk"      id="res-bulk">2,736 kcal</span>
-      </div>
-      <div class="tdee-target-row">
-        <span class="tdee-target-label">[ BMR (base rate) ]</span>
-        <span class="tdee-target-val" style="color:var(--muted);font-size:18px;" id="res-bmr">1,604 kcal</span>
-      </div>
-
-      <div class="tdee-verdict verdict-maintain" id="tdee-verdict">
-        <div class="tdee-verdict-tag maintain"   id="verdict-tag">[ VERDICT · RECOMPOSITION ]</div>
-        <div class="tdee-verdict-title maintain"  id="verdict-title">body recomposition.</div>
-        <div class="tdee-verdict-text"            id="verdict-text">
-          eating at maintenance while training hard = lose fat and build muscle simultaneously. slower than a dedicated bulk or cut, but you get both. solid choice for anyone newer to lifting or returning after a break.
-        </div>
-      </div>
-
-    </div>
-  </div>
 
   <!-- MACRO SLIDERS -->
   <div class="tdee-macros">

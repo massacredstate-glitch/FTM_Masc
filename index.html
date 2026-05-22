@@ -2222,20 +2222,27 @@
   document.querySelectorAll('.nutrition-card').forEach(c => observer.observe(c));
  
   // ── SCROLL FADE-IN ──
-  const fadeObserver = new IntersectionObserver((entries) => {
-    entries.forEach(e => {
-      if (e.isIntersecting) {
-        e.target.style.opacity = '1';
-        e.target.style.transform = 'translateY(0)';
-        e.target.style.transition = 'opacity .6s ease, transform .6s ease';
-      }
+  function initFadeObserver() {
+    const fadeObserver = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          e.target.style.opacity = '1';
+          e.target.style.transform = 'translateY(0)';
+          e.target.style.transition = 'opacity .6s ease, transform .6s ease';
+        }
+      });
+    }, { threshold: 0.05 });
+
+    document.querySelectorAll('.myth-card, .phase-card, .hrt-card, .teaser-card, .glossary-card, .nutrition-card').forEach(el => {
+      el.style.opacity = '0';
+      el.style.transform = 'translateY(20px)';
+      fadeObserver.observe(el);
     });
-  }, { threshold: 0.1 });
-  document.querySelectorAll('.myth-card, .phase-card, .hrt-card, .teaser-card, .glossary-card, .nutrition-card').forEach(el => {
-    el.style.opacity = '0';
-    el.style.transform = 'translateY(20px)';
-    fadeObserver.observe(el);
-  });
+  }
+
+  // run on load and after a short delay to catch any late-rendered cards
+  initFadeObserver();
+  setTimeout(initFadeObserver, 500);
  
   // ── ENTER key on email ──
   document.getElementById('email-input').addEventListener('keydown', function(e) {

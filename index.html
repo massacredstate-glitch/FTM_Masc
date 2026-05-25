@@ -11,315 +11,104 @@
   @import url('https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Barlow+Condensed:wght@300;400;500;600;700;800;900&family=Barlow:wght@300;400;500;600&display=swap');
 
   :root {
-    --black: #0a0a0a;
-    --dark: #111111;
-    --card: #161616;
-    --border: #1f1f1f;
-    --accent: #c8ff00;
-    --accent2: #ff4b4b;
-    --text: #e8e8e8;
-    --muted: #666;
-    --mid: #333;
+    --black: #0a0a0a; --dark: #111111; --card: #161616; --border: #1f1f1f;
+    --accent: #c8ff00; --accent2: #ff4b4b; --text: #e8e8e8; --muted: #666; --mid: #333;
   }
-
   * { margin: 0; padding: 0; box-sizing: border-box; }
   html { scroll-behavior: smooth; }
-  body {
-    background: var(--black);
-    color: var(--text);
-    font-family: 'Barlow', sans-serif;
-    font-size: 16px;
-    line-height: 1.6;
-    overflow-x: hidden;
-  }
+  body { background: var(--black); color: var(--text); font-family: 'Barlow', sans-serif; font-size: 16px; line-height: 1.6; overflow-x: hidden; }
+  body::before { content: ''; position: fixed; inset: 0; background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E"); pointer-events: none; z-index: 999; opacity: .4; }
 
-  body::before {
-    content: '';
-    position: fixed; inset: 0;
-    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
-    pointer-events: none; z-index: 999; opacity: .4;
-  }
-
-  nav {
-    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
-    display: flex; align-items: center; justify-content: space-between;
-    padding: 16px 40px;
-    border-bottom: 1px solid var(--border);
-    background: rgba(10,10,10,0.92);
-    backdrop-filter: blur(12px);
-  }
-  .nav-logo {
-    font-family: 'Barlow Condensed', sans-serif;
-    font-weight: 900; font-size: 22px; letter-spacing: 2px;
-    color: var(--accent);
-  }
+  /* NAV */
+  nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; display: flex; align-items: center; justify-content: space-between; padding: 16px 40px; border-bottom: 1px solid var(--border); background: rgba(10,10,10,0.92); backdrop-filter: blur(12px); }
+  .nav-logo { font-family: 'Barlow Condensed', sans-serif; font-weight: 900; font-size: 22px; letter-spacing: 2px; color: var(--accent); }
   .nav-logo span { color: var(--text); }
-  nav a {
-    font-family: 'Space Mono', monospace;
-    font-size: 11px; color: var(--muted);
-    text-decoration: none; letter-spacing: 1px;
-    transition: color .2s;
-  }
+  nav a { font-family: 'Space Mono', monospace; font-size: 11px; color: var(--muted); text-decoration: none; letter-spacing: 1px; transition: color .2s; }
   nav a:hover { color: var(--accent); }
   .nav-links { display: flex; gap: 32px; align-items: center; }
-  .nav-cta {
-    background: var(--accent); color: var(--black) !important;
-    padding: 8px 18px; font-weight: 700 !important;
-  }
+  .nav-cta { background: var(--accent); color: var(--black) !important; padding: 8px 18px; font-weight: 700 !important; }
 
-  .hero {
-    min-height: 100vh;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    align-items: center;
-    padding: 100px 40px 60px;
-    gap: 60px;
-    border-bottom: 1px solid var(--border);
-  }
-  .tag {
-    display: inline-block;
-    font-family: 'Space Mono', monospace;
-    font-size: 11px; color: var(--muted);
-    letter-spacing: 2px; border: 1px solid var(--border);
-    padding: 4px 10px; margin-bottom: 24px;
-  }
+  /* HERO */
+  .hero { min-height: 100vh; display: grid; grid-template-columns: 1fr 1fr; align-items: center; padding: 100px 40px 60px; gap: 60px; border-bottom: 1px solid var(--border); }
+  .tag { display: inline-block; font-family: 'Space Mono', monospace; font-size: 11px; color: var(--muted); letter-spacing: 2px; border: 1px solid var(--border); padding: 4px 10px; margin-bottom: 24px; }
   .tag-accent { border-color: var(--accent); color: var(--accent); }
-  h1 {
-    font-family: 'Barlow Condensed', sans-serif;
-    font-weight: 900; font-size: clamp(56px, 7vw, 96px);
-    line-height: .95; letter-spacing: -1px;
-    text-transform: uppercase; margin-bottom: 24px;
-  }
+  h1 { font-family: 'Barlow Condensed', sans-serif; font-weight: 900; font-size: clamp(56px, 7vw, 96px); line-height: .95; letter-spacing: -1px; text-transform: uppercase; margin-bottom: 24px; }
   h1 em { color: var(--accent); font-style: normal; }
-  .hero-sub {
-    font-size: 18px; color: #aaa; max-width: 480px;
-    margin-bottom: 40px; line-height: 1.7;
-  }
+  .hero-sub { font-size: 18px; color: #aaa; max-width: 480px; margin-bottom: 40px; line-height: 1.7; }
   .hero-sub strong { color: var(--text); }
   .btn-row { display: flex; gap: 16px; flex-wrap: wrap; }
-  .btn-primary {
-    background: var(--accent); color: var(--black);
-    font-family: 'Barlow Condensed', sans-serif;
-    font-weight: 800; font-size: 16px; letter-spacing: 2px;
-    padding: 16px 32px; border: none; cursor: pointer;
-    text-transform: uppercase; transition: transform .15s, box-shadow .15s;
-  }
+  .btn-primary { background: var(--accent); color: var(--black); font-family: 'Barlow Condensed', sans-serif; font-weight: 800; font-size: 16px; letter-spacing: 2px; padding: 16px 32px; border: none; cursor: pointer; text-transform: uppercase; transition: transform .15s, box-shadow .15s; }
   .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(200,255,0,.3); }
-  .btn-outline {
-    background: transparent; color: var(--text);
-    font-family: 'Barlow Condensed', sans-serif;
-    font-weight: 700; font-size: 16px; letter-spacing: 2px;
-    padding: 16px 32px; border: 1px solid var(--border); cursor: pointer;
-    text-transform: uppercase; transition: border-color .2s, color .2s;
-  }
+  .btn-outline { background: transparent; color: var(--text); font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 16px; letter-spacing: 2px; padding: 16px 32px; border: 1px solid var(--border); cursor: pointer; text-transform: uppercase; transition: border-color .2s, color .2s; }
   .btn-outline:hover { border-color: var(--accent); color: var(--accent); }
 
-  .hero-visual {
-    display: flex; flex-direction: column; align-items: center;
-    position: relative;
-  }
-  .char-wrapper {
-    position: relative;
-    width: 320px; height: 420px;
-  }
+  /* CHARACTER */
+  .hero-visual { display: flex; flex-direction: column; align-items: center; position: relative; }
+  .char-wrapper { position: relative; width: 320px; height: 420px; }
   .char-svg { width: 100%; height: 100%; }
-
-  @keyframes float {
-    0%,100% { transform: translateY(0); }
-    50%      { transform: translateY(-14px); }
-  }
-  @keyframes breathe {
-    0%,100% { transform: scaleY(1); }
-    50%      { transform: scaleY(1.03); }
-  }
-  @keyframes eyeblink {
-    0%,92%,100% { transform: scaleY(1); }
-    95%          { transform: scaleY(0.08); }
-  }
-  @keyframes scanline {
-    0%   { top: -10%; }
-    100% { top: 110%; }
-  }
-  @keyframes glitch {
-    0%,94%,100% { clip-path: none; transform: none; }
-    95%          { clip-path: inset(30% 0 50% 0); transform: translateX(4px); }
-    97%          { clip-path: inset(60% 0 10% 0); transform: translateX(-4px); }
-  }
-
+  @keyframes float { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-14px); } }
+  @keyframes breathe { 0%,100% { transform: scaleY(1); } 50% { transform: scaleY(1.03); } }
+  @keyframes eyeblink { 0%,92%,100% { transform: scaleY(1); } 95% { transform: scaleY(0.08); } }
+  @keyframes scanline { 0% { top: -10%; } 100% { top: 110%; } }
+  @keyframes glitch { 0%,94%,100% { clip-path: none; transform: none; } 95% { clip-path: inset(30% 0 50% 0); transform: translateX(4px); } 97% { clip-path: inset(60% 0 10% 0); transform: translateX(-4px); } }
   .char-float { animation: float 4s ease-in-out infinite; }
   .char-body  { animation: breathe 3.5s ease-in-out infinite; }
   .char-eye   { animation: eyeblink 5s ease-in-out infinite; transform-origin: center; }
+  .speech-bubble { position: absolute; top: -80px; left: 50%; transform: translateX(-50%); background: var(--card); border: 1px solid var(--accent); padding: 12px 16px; max-width: 180px; font-family: 'Space Mono', monospace; font-size: 11px; line-height: 1.5; color: var(--accent); animation: float 4s ease-in-out infinite; animation-delay: .5s; white-space: nowrap; }
+  .speech-bubble::before { content: ''; position: absolute; bottom: -10px; left: 50%; transform: translateX(-50%); border: 5px solid transparent; border-top-color: var(--accent); }
+  .glitch-frame { position: absolute; inset: 0; border: 2px solid var(--accent); animation: glitch 8s infinite; pointer-events: none; }
+  .scanline-effect { position: absolute; inset: 0; overflow: hidden; pointer-events: none; }
+  .scanline-effect::after { content: ''; position: absolute; left: 0; width: 100%; height: 3px; background: rgba(200,255,0,.15); animation: scanline 3s linear infinite; }
+  .char-tags { display: flex; gap: 8px; margin-top: 20px; flex-wrap: wrap; justify-content: center; }
+  .char-tag { font-family: 'Space Mono', monospace; font-size: 10px; border: 1px solid var(--border); padding: 3px 8px; color: var(--muted); letter-spacing: 1px; }
 
-  .speech-bubble {
-    position: absolute; top: -80px; left: 50%;
-    transform: translateX(-50%);
-    background: var(--card); border: 1px solid var(--accent);
-    padding: 12px 16px; max-width: 180px;
-    font-family: 'Space Mono', monospace; font-size: 11px;
-    line-height: 1.5; color: var(--accent);
-    animation: float 4s ease-in-out infinite;
-    animation-delay: .5s;
-    white-space: nowrap;
-  }
-  .speech-bubble::before {
-    content: '';
-    position: absolute; bottom: -10px; left: 50%;
-    transform: translateX(-50%);
-    border: 5px solid transparent;
-    border-top-color: var(--accent);
-  }
-
-  .glitch-frame {
-    position: absolute; inset: 0;
-    border: 2px solid var(--accent);
-    animation: glitch 8s infinite;
-    pointer-events: none;
-  }
-  .scanline-effect {
-    position: absolute; inset: 0; overflow: hidden;
-    pointer-events: none;
-  }
-  .scanline-effect::after {
-    content: '';
-    position: absolute; left: 0; width: 100%; height: 3px;
-    background: rgba(200,255,0,.15);
-    animation: scanline 3s linear infinite;
-  }
-
-  .char-tags {
-    display: flex; gap: 8px; margin-top: 20px; flex-wrap: wrap;
-    justify-content: center;
-  }
-  .char-tag {
-    font-family: 'Space Mono', monospace; font-size: 10px;
-    border: 1px solid var(--border); padding: 3px 8px;
-    color: var(--muted); letter-spacing: 1px;
-  }
-
-  .stats-bar {
-    display: flex; gap: 0;
-    border-bottom: 1px solid var(--border);
-    overflow-x: auto;
-  }
-  .stat-item {
-    flex: 1; min-width: 140px;
-    padding: 28px 32px;
-    border-right: 1px solid var(--border);
-  }
+  /* STATS BAR */
+  .stats-bar { display: flex; border-bottom: 1px solid var(--border); overflow-x: auto; }
+  .stat-item { flex: 1; min-width: 140px; padding: 28px 32px; border-right: 1px solid var(--border); }
   .stat-item:last-child { border-right: none; }
-  .stat-num {
-    font-family: 'Barlow Condensed', sans-serif;
-    font-weight: 900; font-size: 42px;
-    color: var(--accent); letter-spacing: -1px;
-    display: block;
-  }
-  .stat-label {
-    font-family: 'Space Mono', monospace;
-    font-size: 10px; color: var(--muted); letter-spacing: 1px;
-    text-transform: uppercase;
-  }
+  .stat-num { font-family: 'Barlow Condensed', sans-serif; font-weight: 900; font-size: 42px; color: var(--accent); letter-spacing: -1px; display: block; }
+  .stat-label { font-family: 'Space Mono', monospace; font-size: 10px; color: var(--muted); letter-spacing: 1px; text-transform: uppercase; }
 
+  /* SECTIONS */
   section { padding: 80px 40px; border-bottom: 1px solid var(--border); }
-  .section-tag {
-    font-family: 'Space Mono', monospace; font-size: 11px;
-    color: var(--muted); letter-spacing: 2px;
-    margin-bottom: 12px; display: block;
-  }
-  h2 {
-    font-family: 'Barlow Condensed', sans-serif;
-    font-weight: 900; font-size: clamp(36px, 5vw, 60px);
-    text-transform: uppercase; letter-spacing: -0.5px;
-    margin-bottom: 40px; line-height: 1;
-  }
+  .section-tag { font-family: 'Space Mono', monospace; font-size: 11px; color: var(--muted); letter-spacing: 2px; margin-bottom: 12px; display: block; }
+  h2 { font-family: 'Barlow Condensed', sans-serif; font-weight: 900; font-size: clamp(36px, 5vw, 60px); text-transform: uppercase; letter-spacing: -0.5px; margin-bottom: 40px; line-height: 1; }
   h2 em { color: var(--accent); font-style: normal; }
 
-  .kai-intro {
-    display: grid; grid-template-columns: 200px 1fr; gap: 48px;
-    align-items: start;
-  }
+  /* KAI INTRO */
+  .kai-intro { display: grid; grid-template-columns: 200px 1fr; gap: 48px; align-items: start; }
   .kai-mini-char { width: 180px; }
   .kai-bio p { color: #aaa; max-width: 600px; margin-bottom: 16px; line-height: 1.8; }
   .kai-bio strong { color: var(--accent); }
 
-  .myths-grid {
-    display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-    gap: 1px; background: var(--border);
-    margin-top: 40px;
-  }
-  .myth-card {
-    background: var(--card); padding: 28px 24px;
-    transition: background .2s;
-  }
+  /* MYTHS */
+  .myths-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1px; background: var(--border); margin-top: 40px; }
+  .myth-card { background: var(--card); padding: 28px 24px; transition: background .2s; }
   .myth-card:hover { background: #1a1a1a; }
-  .myth-num {
-    font-family: 'Barlow Condensed', sans-serif;
-    font-weight: 900; font-size: 48px;
-    color: var(--mid); line-height: 1; margin-bottom: 8px;
-  }
-  .myth-title {
-    font-family: 'Barlow Condensed', sans-serif;
-    font-weight: 700; font-size: 18px;
-    color: var(--accent2); text-transform: uppercase;
-    margin-bottom: 8px;
-  }
+  .myth-num { font-family: 'Barlow Condensed', sans-serif; font-weight: 900; font-size: 48px; color: var(--mid); line-height: 1; margin-bottom: 8px; }
+  .myth-title { font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 18px; color: var(--accent2); text-transform: uppercase; margin-bottom: 8px; }
   .myth-rebuttal { font-size: 14px; color: #aaa; line-height: 1.6; }
 
+  /* PHASES */
   .phases { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1px; background: var(--border); }
   .phase-card { background: var(--card); padding: 36px 28px; }
-  .phase-label {
-    font-family: 'Space Mono', monospace; font-size: 10px;
-    color: var(--muted); letter-spacing: 2px; margin-bottom: 16px;
-  }
-  .phase-title {
-    font-family: 'Barlow Condensed', sans-serif;
-    font-weight: 900; font-size: 32px;
-    text-transform: uppercase; color: var(--accent);
-    margin-bottom: 12px;
-  }
+  .phase-label { font-family: 'Space Mono', monospace; font-size: 10px; color: var(--muted); letter-spacing: 2px; margin-bottom: 16px; }
+  .phase-title { font-family: 'Barlow Condensed', sans-serif; font-weight: 900; font-size: 32px; text-transform: uppercase; color: var(--accent); margin-bottom: 12px; }
   .phase-desc { font-size: 14px; color: #aaa; line-height: 1.7; margin-bottom: 24px; }
 
+  /* WORKOUT */
   .workout-section { margin-top: 48px; }
-  .phase-header {
-    display: flex; align-items: center; gap: 16px;
-    margin-bottom: 24px; cursor: pointer;
-    padding: 16px 20px; background: var(--card);
-    border: 1px solid var(--border);
-    transition: border-color .2s;
-  }
+  .phase-header { display: flex; align-items: center; gap: 16px; margin-bottom: 24px; cursor: pointer; padding: 16px 20px; background: var(--card); border: 1px solid var(--border); transition: border-color .2s; }
   .phase-header:hover { border-color: var(--accent); }
-  .phase-header-title {
-    font-family: 'Barlow Condensed', sans-serif;
-    font-weight: 800; font-size: 22px;
-    text-transform: uppercase; letter-spacing: 1px;
-  }
-  .phase-toggle {
-    margin-left: auto;
-    font-family: 'Space Mono', monospace;
-    font-size: 18px; color: var(--accent);
-  }
+  .phase-header-title { font-family: 'Barlow Condensed', sans-serif; font-weight: 800; font-size: 22px; text-transform: uppercase; letter-spacing: 1px; }
+  .phase-toggle { margin-left: auto; font-family: 'Space Mono', monospace; font-size: 18px; color: var(--accent); }
   .phase-content { display: none; }
   .phase-content.open { display: block; }
-
   .day-block { margin-bottom: 32px; }
-  .day-label {
-    font-family: 'Space Mono', monospace; font-size: 11px;
-    color: var(--muted); letter-spacing: 2px;
-    padding: 8px 0; border-bottom: 1px solid var(--border);
-    margin-bottom: 0;
-  }
+  .day-label { font-family: 'Space Mono', monospace; font-size: 11px; color: var(--muted); letter-spacing: 2px; padding: 8px 0; border-bottom: 1px solid var(--border); margin-bottom: 0; }
   table { width: 100%; border-collapse: collapse; }
-  th {
-    font-family: 'Space Mono', monospace; font-size: 10px;
-    color: var(--muted); letter-spacing: 1px;
-    text-align: left; padding: 12px 16px;
-    border-bottom: 1px solid var(--border);
-    text-transform: uppercase;
-  }
-  td {
-    padding: 14px 16px; font-size: 14px;
-    border-bottom: 1px solid var(--border);
-    vertical-align: top;
-  }
+  th { font-family: 'Space Mono', monospace; font-size: 10px; color: var(--muted); letter-spacing: 1px; text-align: left; padding: 12px 16px; border-bottom: 1px solid var(--border); text-transform: uppercase; }
+  td { padding: 14px 16px; font-size: 14px; border-bottom: 1px solid var(--border); vertical-align: top; }
   tr:last-child td { border-bottom: none; }
   tr:hover td { background: rgba(200,255,0,.03); }
   .td-exercise { font-weight: 600; color: var(--text); }
@@ -328,202 +117,184 @@
   .td-muscle { font-size: 12px; color: var(--muted); }
   .td-note { font-size: 12px; color: #aaa; font-style: italic; }
 
-  .glossary-grid {
-    display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-    gap: 1px; background: var(--border); margin-top: 32px;
-  }
+  /* GLOSSARY */
+  .glossary-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 1px; background: var(--border); margin-top: 32px; }
   .glossary-card { background: var(--card); padding: 20px; }
-  .glossary-term {
-    font-family: 'Barlow Condensed', sans-serif;
-    font-weight: 800; font-size: 20px;
-    color: var(--accent); text-transform: uppercase;
-    margin-bottom: 6px;
-  }
+  .glossary-term { font-family: 'Barlow Condensed', sans-serif; font-weight: 800; font-size: 20px; color: var(--accent); text-transform: uppercase; margin-bottom: 6px; }
   .glossary-def { font-size: 13px; color: #aaa; line-height: 1.5; }
 
-  .nutrition-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; }
-  .nutrition-card {
-    background: var(--card); border: 1px solid var(--border); padding: 32px;
-  }
-  .nutrition-card h3 {
-    font-family: 'Barlow Condensed', sans-serif;
-    font-weight: 800; font-size: 24px;
-    text-transform: uppercase; color: var(--accent);
-    margin-bottom: 20px; letter-spacing: 1px;
-  }
+  /* KAI CALLOUT */
+  .kai-callout { display: flex; gap: 20px; align-items: flex-start; background: var(--card); border-left: 3px solid var(--accent); padding: 24px; margin: 32px 0; }
+  .kai-callout-avatar { width: 48px; height: 48px; flex-shrink: 0; }
+  .kai-callout-text { font-size: 15px; color: #ccc; line-height: 1.7; font-style: italic; }
+  .kai-callout-text strong { color: var(--accent); font-style: normal; }
+
+  /* HRT */
+  .hrt-section { background: #0d0d0d; }
+  .hrt-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; margin-top: 40px; }
+  .hrt-card { background: var(--card); border: 1px solid var(--border); padding: 28px; }
+  .hrt-card h3 { font-family: 'Barlow Condensed', sans-serif; font-weight: 800; font-size: 22px; color: var(--accent); text-transform: uppercase; margin-bottom: 16px; }
+  .hrt-card p { font-size: 14px; color: #aaa; line-height: 1.8; margin-bottom: 12px; }
+
+  /* ══ TDEE CALCULATOR ══ */
+  .tdee-wrap { border: 1px solid var(--border); background: var(--card); margin: 32px 0; display: block; width: 100%; }
+  .tdee-header { padding: 24px 32px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; }
+  .tdee-title { font-family: 'Barlow Condensed', sans-serif; font-weight: 900; font-size: 28px; text-transform: uppercase; letter-spacing: 1px; color: var(--text); line-height: 1; margin-bottom: 4px; }
+  .tdee-title em { color: var(--accent); font-style: normal; }
+  .tdee-subtitle { font-family: 'Space Mono', monospace; font-size: 10px; color: var(--muted); letter-spacing: 2px; }
+  .tdee-reset { font-family: 'Space Mono', monospace; font-size: 10px; color: var(--muted); letter-spacing: 1px; background: none; border: 1px solid var(--border); padding: 6px 14px; cursor: pointer; transition: border-color .2s, color .2s; }
+  .tdee-reset:hover { border-color: var(--accent); color: var(--accent); }
+  .tdee-body { display: grid; grid-template-columns: 1fr 1fr; }
+  .tdee-inputs { padding: 32px; border-right: 1px solid var(--border); }
+  .tdee-field { margin-bottom: 24px; }
+  .tdee-field:last-child { margin-bottom: 0; }
+  .tdee-label { font-family: 'Space Mono', monospace; font-size: 10px; color: var(--muted); letter-spacing: 2px; text-transform: uppercase; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; }
+  .tdee-label-val { color: var(--accent); font-size: 12px; letter-spacing: 1px; }
+  .tdee-toggle-row { display: flex; gap: 2px; }
+  .tdee-toggle { flex: 1; padding: 10px 0; text-align: center; font-family: 'Space Mono', monospace; font-size: 11px; color: var(--muted); letter-spacing: 1px; background: var(--black); border: 1px solid var(--border); cursor: pointer; transition: all .15s; }
+  .tdee-toggle.active { background: var(--accent); color: var(--black); border-color: var(--accent); font-weight: 700; }
+  .tdee-toggle:hover:not(.active) { border-color: var(--accent); color: var(--accent); }
+  .tdee-number-row { display: flex; gap: 2px; align-items: center; }
+  .tdee-num-btn { width: 36px; height: 40px; flex-shrink: 0; background: var(--black); border: 1px solid var(--border); color: var(--text); font-size: 18px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: border-color .15s, color .15s; font-family: 'Space Mono', monospace; }
+  .tdee-num-btn:hover { border-color: var(--accent); color: var(--accent); }
+  .tdee-num-input { flex: 1; height: 40px; text-align: center; background: var(--black); border: 1px solid var(--border); color: var(--text); font-family: 'Space Mono', monospace; font-size: 14px; outline: none; transition: border-color .2s; -moz-appearance: textfield; }
+  .tdee-num-input::-webkit-outer-spin-button, .tdee-num-input::-webkit-inner-spin-button { -webkit-appearance: none; }
+  .tdee-num-input:focus { border-color: var(--accent); }
+  .tdee-select { width: 100%; height: 40px; padding: 0 12px; background: var(--black); border: 1px solid var(--border); color: var(--text); font-family: 'Space Mono', monospace; font-size: 11px; outline: none; cursor: pointer; transition: border-color .2s; appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23666' stroke-width='1.5' fill='none'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 14px center; }
+  .tdee-select:focus { border-color: var(--accent); }
+  .tdee-select option { background: #111; }
+  .tdee-goal-row { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 2px; }
+  .tdee-goal-btn { padding: 10px 4px; text-align: center; font-family: 'Space Mono', monospace; font-size: 10px; color: var(--muted); letter-spacing: 1px; background: var(--black); border: 1px solid var(--border); cursor: pointer; transition: all .15s; line-height: 1.4; }
+  .tdee-goal-btn.active-cut      { background: #ff4b4b22; border-color: #ff4b4b; color: #ff4b4b; }
+  .tdee-goal-btn.active-maintain { background: rgba(200,255,0,.12); border-color: var(--accent); color: var(--accent); }
+  .tdee-goal-btn.active-bulk     { background: #4b9fff22; border-color: #4b9fff; color: #4b9fff; }
+  .tdee-goal-btn:hover:not(.active-cut):not(.active-maintain):not(.active-bulk) { border-color: var(--accent); color: var(--accent); }
+  .tdee-results { padding: 32px; display: flex; flex-direction: column; }
+  .tdee-result-main { text-align: center; padding-bottom: 24px; border-bottom: 1px solid var(--border); margin-bottom: 24px; }
+  .tdee-result-tag { font-family: 'Space Mono', monospace; font-size: 10px; color: var(--muted); letter-spacing: 2px; margin-bottom: 8px; }
+  .tdee-result-num { font-family: 'Barlow Condensed', sans-serif; font-weight: 900; font-size: 64px; color: var(--accent); letter-spacing: -2px; line-height: 1; }
+  .tdee-result-unit { font-family: 'Space Mono', monospace; font-size: 11px; color: var(--muted); letter-spacing: 2px; margin-top: 4px; }
+  .tdee-target-row { display: flex; justify-content: space-between; align-items: center; padding: 14px 0; border-bottom: 1px solid var(--border); }
+  .tdee-target-row:last-of-type { border-bottom: none; }
+  .tdee-target-label { font-family: 'Space Mono', monospace; font-size: 10px; color: var(--muted); letter-spacing: 1px; }
+  .tdee-target-val { font-family: 'Barlow Condensed', sans-serif; font-weight: 800; font-size: 22px; letter-spacing: -0.5px; }
+  .tdee-target-val.cut      { color: #ff4b4b; }
+  .tdee-target-val.maintain { color: var(--accent); }
+  .tdee-target-val.bulk     { color: #4b9fff; }
+  .tdee-verdict { margin-top: 24px; padding: 20px; border: 1px solid var(--border); background: var(--black); transition: border-color .3s, background .3s; }
+  .tdee-verdict.verdict-cut      { border-color: #ff4b4b; background: #ff4b4b0d; }
+  .tdee-verdict.verdict-bulk     { border-color: #4b9fff; background: #4b9fff0d; }
+  .tdee-verdict.verdict-recomp   { border-color: var(--accent); background: rgba(200,255,0,.05); }
+  .tdee-verdict.verdict-maintain { border-color: var(--accent); background: rgba(200,255,0,.05); }
+  .tdee-verdict-tag   { font-family: 'Space Mono', monospace; font-size: 9px; letter-spacing: 2px; margin-bottom: 6px; }
+  .tdee-verdict-tag.cut      { color: #ff4b4b; }
+  .tdee-verdict-tag.bulk     { color: #4b9fff; }
+  .tdee-verdict-tag.recomp   { color: var(--accent); }
+  .tdee-verdict-tag.maintain { color: var(--accent); }
+  .tdee-verdict-title { font-family: 'Barlow Condensed', sans-serif; font-weight: 900; font-size: 22px; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; line-height: 1; }
+  .tdee-verdict-title.cut      { color: #ff4b4b; }
+  .tdee-verdict-title.bulk     { color: #4b9fff; }
+  .tdee-verdict-title.recomp   { color: var(--accent); }
+  .tdee-verdict-title.maintain { color: var(--accent); }
+  .tdee-verdict-text { font-family: 'Space Mono', monospace; font-size: 11px; color: var(--muted); line-height: 1.7; letter-spacing: 0.3px; }
+  .tdee-macros { padding: 28px 32px; border-top: 1px solid var(--border); }
+  .tdee-macros-header { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 20px; }
+  .tdee-macros-title { font-family: 'Barlow Condensed', sans-serif; font-weight: 800; font-size: 18px; text-transform: uppercase; letter-spacing: 1px; color: var(--text); }
+  .tdee-macros-total { font-family: 'Space Mono', monospace; font-size: 10px; color: var(--muted); letter-spacing: 1px; }
+  .tdee-macros-total span { color: var(--accent); }
+  .tdee-macros-total.over span { color: #ff4b4b; }
+  .tdee-macro-row { margin-bottom: 20px; }
+  .tdee-macro-row:last-child { margin-bottom: 0; }
+  .tdee-macro-top { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 8px; }
+  .tdee-macro-name { font-family: 'Space Mono', monospace; font-size: 10px; letter-spacing: 2px; text-transform: uppercase; }
+  .tdee-macro-name.protein { color: var(--accent); }
+  .tdee-macro-name.carbs   { color: #4b9fff; }
+  .tdee-macro-name.fat     { color: #ff4b4b; }
+  .tdee-macro-info { font-family: 'Space Mono', monospace; font-size: 10px; color: var(--muted); letter-spacing: 0.5px; display: flex; gap: 16px; align-items: baseline; }
+  .tdee-macro-grams { font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 18px; line-height: 1; }
+  .tdee-macro-grams.protein { color: var(--accent); }
+  .tdee-macro-grams.carbs   { color: #4b9fff; }
+  .tdee-macro-grams.fat     { color: #ff4b4b; }
+  input[type="range"].tdee-slider { -webkit-appearance: none; width: 100%; height: 3px; background: var(--border); outline: none; cursor: pointer; border-radius: 0; }
+  input[type="range"].tdee-slider.protein::-webkit-slider-thumb { -webkit-appearance: none; width: 16px; height: 16px; background: var(--accent); cursor: pointer; border-radius: 0; border: 2px solid var(--black); }
+  input[type="range"].tdee-slider.carbs::-webkit-slider-thumb   { -webkit-appearance: none; width: 16px; height: 16px; background: #4b9fff; cursor: pointer; border-radius: 0; border: 2px solid var(--black); }
+  input[type="range"].tdee-slider.fat::-webkit-slider-thumb     { -webkit-appearance: none; width: 16px; height: 16px; background: #ff4b4b; cursor: pointer; border-radius: 0; border: 2px solid var(--black); }
+  input[type="range"].tdee-slider.protein::-moz-range-thumb { width:16px;height:16px;cursor:pointer;border-radius:0;border:2px solid var(--black);background:var(--accent); }
+  input[type="range"].tdee-slider.carbs::-moz-range-thumb   { width:16px;height:16px;cursor:pointer;border-radius:0;border:2px solid var(--black);background:#4b9fff; }
+  input[type="range"].tdee-slider.fat::-moz-range-thumb     { width:16px;height:16px;cursor:pointer;border-radius:0;border:2px solid var(--black);background:#ff4b4b; }
+  .tdee-macro-bar-bg { height: 6px; background: var(--border); margin-top: 16px; overflow: hidden; }
+  .tdee-macro-bar-fill { display: flex; height: 100%; }
+  .tdee-macro-bar-protein { background: var(--accent); transition: width .3s; }
+  .tdee-macro-bar-carbs   { background: #4b9fff; transition: width .3s; }
+  .tdee-macro-bar-fat     { background: #ff4b4b; transition: width .3s; }
+  .tdee-hrt-note { padding: 14px 32px; border-top: 1px solid var(--border); display: flex; align-items: center; gap: 12px; background: rgba(200,255,0,.03); }
+  .tdee-hrt-label { font-family: 'Space Mono', monospace; font-size: 10px; color: var(--muted); letter-spacing: 1px; flex: 1; }
+  .tdee-hrt-label strong { color: var(--accent); }
+  .tdee-switch { width: 36px; height: 20px; background: var(--border); border-radius: 10px; position: relative; transition: background .2s; cursor: pointer; flex-shrink: 0; border: none; outline: none; }
+  .tdee-switch.on { background: var(--accent); }
+  .tdee-switch::after { content: ''; position: absolute; width: 14px; height: 14px; border-radius: 7px; background: var(--black); top: 3px; left: 3px; transition: transform .2s; }
+  .tdee-switch.on::after { transform: translateX(16px); }
+  .tdee-switch-label { font-family: 'Space Mono', monospace; font-size: 10px; color: var(--muted); letter-spacing: 1px; }
+
+  /* NUTRITION GRID */
+  .nutrition-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; margin-top: 32px; }
+  .nutrition-card { background: var(--card); border: 1px solid var(--border); padding: 32px; }
+  .nutrition-card h3 { font-family: 'Barlow Condensed', sans-serif; font-weight: 800; font-size: 24px; text-transform: uppercase; color: var(--accent); margin-bottom: 20px; letter-spacing: 1px; }
   .food-list { list-style: none; }
-  .food-list li {
-    font-size: 14px; color: #aaa;
-    padding: 8px 0; border-bottom: 1px solid var(--border);
-    display: flex; justify-content: space-between; align-items: center;
-  }
+  .food-list li { font-size: 14px; color: #aaa; padding: 8px 0; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
   .food-list li:last-child { border-bottom: none; }
-  .food-price {
-    font-family: 'Space Mono', monospace; font-size: 11px;
-    color: var(--accent); letter-spacing: 1px;
-  }
+  .food-price { font-family: 'Space Mono', monospace; font-size: 11px; color: var(--accent); letter-spacing: 1px; }
   .macro-bar { margin-bottom: 16px; }
-  .macro-label {
-    font-family: 'Space Mono', monospace; font-size: 11px;
-    color: var(--muted); letter-spacing: 1px;
-    display: flex; justify-content: space-between; margin-bottom: 6px;
-  }
+  .macro-label { font-family: 'Space Mono', monospace; font-size: 11px; color: var(--muted); letter-spacing: 1px; display: flex; justify-content: space-between; margin-bottom: 6px; }
   .macro-track { height: 4px; background: var(--border); border-radius: 2px; }
-  .macro-fill {
-    height: 100%; border-radius: 2px; background: var(--accent);
-    transition: width 1s ease;
-  }
+  .macro-fill { height: 100%; border-radius: 2px; background: var(--accent); transition: width 1s ease; }
   .macro-fill.carbs { background: #4b9fff; }
   .macro-fill.fat   { background: #ff4b4b; }
 
-  .kai-callout {
-    display: flex; gap: 20px; align-items: flex-start;
-    background: var(--card); border-left: 3px solid var(--accent);
-    padding: 24px; margin: 32px 0;
-  }
-  .kai-callout-avatar { width: 48px; height: 48px; flex-shrink: 0; }
-  .kai-callout-text {
-    font-size: 15px; color: #ccc; line-height: 1.7;
-    font-style: italic;
-  }
-  .kai-callout-text strong { color: var(--accent); font-style: normal; }
-
-  .hrt-section { background: #0d0d0d; }
-  .hrt-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; margin-top: 40px; }
-  .hrt-card {
-    background: var(--card); border: 1px solid var(--border); padding: 28px;
-  }
-  .hrt-card h3 {
-    font-family: 'Barlow Condensed', sans-serif;
-    font-weight: 800; font-size: 22px;
-    color: var(--accent); text-transform: uppercase;
-    margin-bottom: 16px;
-  }
-  .hrt-card p { font-size: 14px; color: #aaa; line-height: 1.8; margin-bottom: 12px; }
-
-  .funnel-section {
-    background: linear-gradient(135deg, #0d0d0d 0%, #111 50%, #0a0a0a 100%);
-    position: relative; overflow: hidden;
-  }
-  .funnel-section::before {
-    content: 'GET THE PROGRAM';
-    position: absolute; top: 0; right: -20px;
-    font-family: 'Barlow Condensed', sans-serif;
-    font-weight: 900; font-size: 200px;
-    color: rgba(200,255,0,0.03); line-height: 1;
-    white-space: nowrap; pointer-events: none;
-    user-select: none;
-  }
+  /* FUNNEL */
+  .funnel-section { background: linear-gradient(135deg, #0d0d0d 0%, #111 50%, #0a0a0a 100%); position: relative; overflow: hidden; }
+  .funnel-section::before { content: 'GET THE PROGRAM'; position: absolute; top: 0; right: -20px; font-family: 'Barlow Condensed', sans-serif; font-weight: 900; font-size: 200px; color: rgba(200,255,0,0.03); line-height: 1; white-space: nowrap; pointer-events: none; user-select: none; }
   .funnel-inner { max-width: 600px; position: relative; z-index: 1; }
   .funnel-inner h2 { margin-bottom: 16px; }
   .funnel-inner p { font-size: 16px; color: #aaa; margin-bottom: 32px; line-height: 1.7; }
-  .form-group { display: flex; gap: 0; margin-bottom: 16px; }
-  .form-input {
-    flex: 1; background: var(--card); border: 1px solid var(--border);
-    border-right: none; color: var(--text);
-    font-family: 'Space Mono', monospace; font-size: 13px;
-    padding: 16px 20px; outline: none;
-    transition: border-color .2s;
-  }
+  .form-group { display: flex; margin-bottom: 16px; }
+  .form-input { flex: 1; background: var(--card); border: 1px solid var(--border); border-right: none; color: var(--text); font-family: 'Space Mono', monospace; font-size: 13px; padding: 16px 20px; outline: none; transition: border-color .2s; }
   .form-input:focus { border-color: var(--accent); }
   .form-input::placeholder { color: var(--muted); }
-  .form-submit {
-    background: var(--accent); color: var(--black);
-    font-family: 'Barlow Condensed', sans-serif;
-    font-weight: 800; font-size: 16px; letter-spacing: 2px;
-    padding: 16px 28px; border: none; cursor: pointer;
-    text-transform: uppercase; white-space: nowrap;
-    transition: opacity .2s;
-  }
+  .form-submit { background: var(--accent); color: var(--black); font-family: 'Barlow Condensed', sans-serif; font-weight: 800; font-size: 16px; letter-spacing: 2px; padding: 16px 28px; border: none; cursor: pointer; text-transform: uppercase; white-space: nowrap; transition: opacity .2s; }
   .form-submit:hover { opacity: .85; }
   .form-submit:disabled { opacity: .5; cursor: not-allowed; }
-  .form-fine {
-    font-family: 'Space Mono', monospace; font-size: 10px;
-    color: var(--muted); letter-spacing: 1px;
-  }
-
-  .funnel-success {
-    display: none;
-    background: var(--card); border: 1px solid var(--accent);
-    padding: 32px; text-align: center;
-  }
-  .funnel-success h3 {
-    font-family: 'Barlow Condensed', sans-serif;
-    font-weight: 900; font-size: 32px;
-    color: var(--accent); text-transform: uppercase;
-    margin-bottom: 12px;
-  }
+  .form-fine { font-family: 'Space Mono', monospace; font-size: 10px; color: var(--muted); letter-spacing: 1px; }
+  .funnel-success { display: none; background: var(--card); border: 1px solid var(--accent); padding: 32px; text-align: center; }
+  .funnel-success h3 { font-family: 'Barlow Condensed', sans-serif; font-weight: 900; font-size: 32px; color: var(--accent); text-transform: uppercase; margin-bottom: 12px; }
   .funnel-success p { color: #aaa; font-size: 15px; margin-bottom: 24px; }
-
-  /* ── FIXED: pdf-download-btn is now a button, not an anchor ── */
-  .pdf-download-btn {
-    display: inline-flex; align-items: center; gap: 12px;
-    background: var(--accent); color: var(--black);
-    font-family: 'Barlow Condensed', sans-serif;
-    font-weight: 800; font-size: 18px; letter-spacing: 2px;
-    padding: 18px 36px; border: none; cursor: pointer;
-    text-transform: uppercase;
-    transition: transform .15s, box-shadow .15s;
-  }
+  .pdf-download-btn { display: inline-flex; align-items: center; gap: 12px; background: var(--accent); color: var(--black); font-family: 'Barlow Condensed', sans-serif; font-weight: 800; font-size: 18px; letter-spacing: 2px; padding: 18px 36px; border: none; cursor: pointer; text-transform: uppercase; transition: transform .15s, box-shadow .15s; }
   .pdf-download-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 32px rgba(200,255,0,.25); }
   .pdf-download-btn:disabled { opacity: .6; cursor: not-allowed; transform: none; }
 
+  /* TEASER */
   .teaser-section { background: var(--black); }
-  .teaser-cards {
-    display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-    gap: 1px; background: var(--border); margin-top: 40px;
-  }
-  .teaser-card {
-    background: var(--card); padding: 32px 24px;
-    position: relative; overflow: hidden;
-    transition: background .2s;
-  }
+  .teaser-cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 1px; background: var(--border); margin-top: 40px; }
+  .teaser-card { background: var(--card); padding: 32px 24px; position: relative; overflow: hidden; transition: background .2s; }
   .teaser-card:hover { background: #181818; }
-  .teaser-card-num {
-    font-family: 'Barlow Condensed', sans-serif;
-    font-weight: 900; font-size: 72px;
-    color: rgba(200,255,0,.08); position: absolute;
-    right: -8px; top: -8px; line-height: 1;
-  }
-  .teaser-card h3 {
-    font-family: 'Barlow Condensed', sans-serif;
-    font-weight: 800; font-size: 22px;
-    color: var(--text); text-transform: uppercase;
-    margin-bottom: 10px; position: relative; z-index: 1;
-  }
+  .teaser-card-num { font-family: 'Barlow Condensed', sans-serif; font-weight: 900; font-size: 72px; color: rgba(200,255,0,.08); position: absolute; right: -8px; top: -8px; line-height: 1; }
+  .teaser-card h3 { font-family: 'Barlow Condensed', sans-serif; font-weight: 800; font-size: 22px; color: var(--text); text-transform: uppercase; margin-bottom: 10px; position: relative; z-index: 1; }
   .teaser-card p { font-size: 13px; color: var(--muted); line-height: 1.6; position: relative; z-index: 1; }
-  .teaser-locked {
-    display: inline-block; margin-top: 12px;
-    font-family: 'Space Mono', monospace; font-size: 10px;
-    color: var(--accent); letter-spacing: 1px;
-    border: 1px solid var(--accent); padding: 3px 8px;
-  }
-  footer {
-    padding: 40px 40px;
-    border-top: 1px solid var(--border);
-    display: flex; justify-content: space-between; align-items: center;
-    flex-wrap: wrap; gap: 20px;
-  }
-  .footer-logo {
-    font-family: 'Barlow Condensed', sans-serif;
-    font-weight: 900; font-size: 20px; letter-spacing: 2px;
-    color: var(--accent);
-  }
+  .teaser-locked { display: inline-block; margin-top: 12px; font-family: 'Space Mono', monospace; font-size: 10px; color: var(--accent); letter-spacing: 1px; border: 1px solid var(--accent); padding: 3px 8px; }
+
+  /* FOOTER */
+  footer { padding: 40px; border-top: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 20px; }
+  .footer-logo { font-family: 'Barlow Condensed', sans-serif; font-weight: 900; font-size: 20px; letter-spacing: 2px; color: var(--accent); }
   .footer-logo span { color: var(--muted); }
-  .footer-note {
-    font-family: 'Space Mono', monospace;
-    font-size: 10px; color: var(--muted); letter-spacing: 1px;
-  }
+  .footer-note { font-family: 'Space Mono', monospace; font-size: 10px; color: var(--muted); letter-spacing: 1px; }
 
-  @keyframes fadeUp {
-    from { opacity: 0; transform: translateY(30px); }
-    to   { opacity: 1; transform: translateY(0); }
-  }
-  .fade-up { animation: fadeUp .7s ease forwards; }
-  .delay-1 { animation-delay: .1s; opacity: 0; }
-  .delay-2 { animation-delay: .25s; opacity: 0; }
-  .delay-3 { animation-delay: .4s; opacity: 0; }
+  /* ANIMATIONS */
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+  .fade-up  { animation: fadeUp .7s ease forwards; }
+  .delay-1  { animation-delay: .1s; opacity: 0; }
+  .delay-2  { animation-delay: .25s; opacity: 0; }
 
+  /* RESPONSIVE */
   @media (max-width: 768px) {
     nav { padding: 14px 20px; }
     .nav-links { display: none; }
@@ -533,6 +304,11 @@
     .speech-bubble { display: none; }
     section { padding: 60px 20px; }
     .phases, .hrt-grid, .nutrition-grid { grid-template-columns: 1fr; }
+    .tdee-body { grid-template-columns: 1fr; }
+    .tdee-inputs { border-right: none; border-bottom: 1px solid var(--border); }
+    .tdee-result-num { font-size: 48px; }
+    .tdee-macros, .tdee-inputs, .tdee-results { padding: 24px 20px; }
+    .tdee-header { padding: 20px; }
     .kai-intro { grid-template-columns: 1fr; }
     .kai-mini-char { display: none; }
     .form-group { flex-direction: column; }
@@ -559,39 +335,23 @@
 <section class="hero">
   <div class="hero-text">
     <div class="tag tag-accent">[ FTM · MASC BUILD PROTOCOL · v1.0 ]</div>
-    <h1 class="fade-up">
-      ENGINEER<br>
-      YOUR<br>
-      <em>FRAME.</em>
-    </h1>
-    <p class="hero-sub fade-up delay-1">
-      No fluff. No bro-science. No gatekeeping. <strong>A 24-month body protocol</strong> built specifically for FTM and transmasc bodies. Free. Downloadable. Straight to the point.
-    </p>
+    <h1 class="fade-up">ENGINEER<br>YOUR<br><em>FRAME.</em></h1>
+    <p class="hero-sub fade-up delay-1">No fluff. No bro-science. No gatekeeping. <strong>A 24-month body protocol</strong> built specifically for FTM and transmasc bodies. Free. Downloadable. Straight to the point.</p>
     <div class="btn-row fade-up delay-2">
       <button class="btn-primary" onclick="document.getElementById('download').scrollIntoView({behavior:'smooth'})">grab the pdf →</button>
       <button class="btn-outline" onclick="document.getElementById('program').scrollIntoView({behavior:'smooth'})">see the program</button>
     </div>
   </div>
-
   <div class="hero-visual">
     <div class="char-wrapper">
       <svg class="char-svg char-float" viewBox="0 0 320 420" xmlns="http://www.w3.org/2000/svg">
         <defs>
-          <radialGradient id="bodyGrad" cx="50%" cy="40%" r="60%">
-            <stop offset="0%" stop-color="#2a2a2a"/>
-            <stop offset="100%" stop-color="#111"/>
-          </radialGradient>
-          <radialGradient id="skinGrad" cx="50%" cy="30%" r="70%">
-            <stop offset="0%" stop-color="#c8975a"/>
-            <stop offset="100%" stop-color="#a0733e"/>
-          </radialGradient>
-          <filter id="glow">
-            <feGaussianBlur stdDeviation="3" result="blur"/>
-            <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
-          </filter>
+          <radialGradient id="bodyGrad" cx="50%" cy="40%" r="60%"><stop offset="0%" stop-color="#2a2a2a"/><stop offset="100%" stop-color="#111"/></radialGradient>
+          <radialGradient id="skinGrad" cx="50%" cy="30%" r="70%"><stop offset="0%" stop-color="#c8975a"/><stop offset="100%" stop-color="#a0733e"/></radialGradient>
+          <filter id="glow"><feGaussianBlur stdDeviation="3" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
         </defs>
         <ellipse cx="160" cy="410" rx="80" ry="10" fill="rgba(200,255,0,0.08)"/>
-        <g class="char-body" style="transform-origin: 160px 250px;">
+        <g class="char-body" style="transform-origin:160px 250px;">
           <path d="M110 180 L210 180 L220 300 L100 300 Z" fill="url(#bodyGrad)" stroke="#333" stroke-width="1"/>
           <rect x="128" y="165" width="24" height="20" rx="2" fill="#1a1a1a" stroke="#333"/>
           <rect x="168" y="165" width="24" height="20" rx="2" fill="#1a1a1a" stroke="#333"/>
@@ -630,18 +390,8 @@
           <path d="M175 63 Q178 50 174 42" fill="none" stroke="#1a1212" stroke-width="6" stroke-linecap="round"/>
           <ellipse cx="110" cy="130" rx="10" ry="14" fill="#b07840"/>
           <ellipse cx="210" cy="130" rx="10" ry="14" fill="#b07840"/>
-          <g class="char-eye" style="transform-origin: 140px 125px;">
-            <ellipse cx="140" cy="125" rx="14" ry="8" fill="#1a1212"/>
-            <ellipse cx="140" cy="125" rx="8" ry="6" fill="#2a1a0a"/>
-            <ellipse cx="140" cy="125" rx="5" ry="4" fill="#111"/>
-            <ellipse cx="137" cy="123" rx="2" ry="1.5" fill="rgba(255,255,255,0.7)"/>
-          </g>
-          <g class="char-eye" style="transform-origin: 180px 125px; animation-delay: .1s;">
-            <ellipse cx="180" cy="125" rx="14" ry="8" fill="#1a1212"/>
-            <ellipse cx="180" cy="125" rx="8" ry="6" fill="#2a1a0a"/>
-            <ellipse cx="180" cy="125" rx="5" ry="4" fill="#111"/>
-            <ellipse cx="177" cy="123" rx="2" ry="1.5" fill="rgba(255,255,255,0.7)"/>
-          </g>
+          <g class="char-eye" style="transform-origin:140px 125px;"><ellipse cx="140" cy="125" rx="14" ry="8" fill="#1a1212"/><ellipse cx="140" cy="125" rx="8" ry="6" fill="#2a1a0a"/><ellipse cx="140" cy="125" rx="5" ry="4" fill="#111"/><ellipse cx="137" cy="123" rx="2" ry="1.5" fill="rgba(255,255,255,0.7)"/></g>
+          <g class="char-eye" style="transform-origin:180px 125px;animation-delay:.1s;"><ellipse cx="180" cy="125" rx="14" ry="8" fill="#1a1212"/><ellipse cx="180" cy="125" rx="8" ry="6" fill="#2a1a0a"/><ellipse cx="180" cy="125" rx="5" ry="4" fill="#111"/><ellipse cx="177" cy="123" rx="2" ry="1.5" fill="rgba(255,255,255,0.7)"/></g>
           <path d="M126 113 Q133 108 154 111" fill="none" stroke="#1a1212" stroke-width="3.5" stroke-linecap="round"/>
           <path d="M166 111 Q187 108 194 113" fill="none" stroke="#1a1212" stroke-width="3.5" stroke-linecap="round"/>
           <path d="M158 130 Q155 142 150 148 Q158 152 170 148 Q165 142 162 130" fill="none" stroke="#a07035" stroke-width="1.5" opacity="0.6"/>
@@ -730,29 +480,14 @@
   </div>
 </section>
 
-<!-- PROGRAM OVERVIEW -->
+<!-- PROGRAM -->
 <section id="program">
   <span class="section-tag">[ 02 · program overview ]</span>
   <h2>the <em>24-month</em><br>build protocol.</h2>
   <div class="phases">
-    <div class="phase-card">
-      <div class="phase-label">[ phase 01 · months 0–6 ]</div>
-      <div class="phase-title">Foundation</div>
-      <div class="phase-desc">This is your "learn your body" era. Don't skip it because it looks easy — it's not. You're building the movement patterns, stability, and baseline strength that every future gain runs on. 4 days a week, under 45 mins. Upper/lower split. Get familiar with failure.</div>
-      <div class="tag">stability + control</div>
-    </div>
-    <div class="phase-card" style="border-left: 1px solid var(--border);">
-      <div class="phase-label">[ phase 02 · months 6–12 ]</div>
-      <div class="phase-title">Frame Build</div>
-      <div class="phase-desc">Now we get to work. Lats, shoulders, triceps — the V-taper holy trinity. This phase is specifically engineered to widen your upper frame and start filling out a masculine silhouette. Weight progressions start here. Track everything.</div>
-      <div class="tag">v-taper focus</div>
-    </div>
-    <div class="phase-card" style="border-left: 1px solid var(--border);">
-      <div class="phase-label">[ phase 03 · months 12–24 ]</div>
-      <div class="phase-title">Bodybuilding</div>
-      <div class="phase-desc">Newbie gains are gone. Welcome to the real work. 5 training days, heavier compounds, full bodybuilding methodology. This is where your body actually starts to look different in the mirror. Read the progression section before you start this.</div>
-      <div class="tag">mass + volume</div>
-    </div>
+    <div class="phase-card"><div class="phase-label">[ phase 01 · months 0–6 ]</div><div class="phase-title">Foundation</div><div class="phase-desc">This is your "learn your body" era. Don't skip it because it looks easy — it's not. You're building the movement patterns, stability, and baseline strength that every future gain runs on. 4 days a week, under 45 mins. Upper/lower split. Get familiar with failure.</div><div class="tag">stability + control</div></div>
+    <div class="phase-card" style="border-left:1px solid var(--border);"><div class="phase-label">[ phase 02 · months 6–12 ]</div><div class="phase-title">Frame Build</div><div class="phase-desc">Now we get to work. Lats, shoulders, triceps — the V-taper holy trinity. This phase is specifically engineered to widen your upper frame and start filling out a masculine silhouette. Weight progressions start here. Track everything.</div><div class="tag">v-taper focus</div></div>
+    <div class="phase-card" style="border-left:1px solid var(--border);"><div class="phase-label">[ phase 03 · months 12–24 ]</div><div class="phase-title">Bodybuilding</div><div class="phase-desc">Newbie gains are gone. Welcome to the real work. 5 training days, heavier compounds, full bodybuilding methodology. This is where your body actually starts to look different in the mirror. Read the progression section before you start this.</div><div class="tag">mass + volume</div></div>
   </div>
 
   <div class="workout-section">
@@ -760,7 +495,6 @@
       <svg class="kai-callout-avatar" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg"><circle cx="24" cy="24" r="24" fill="#161616"/><ellipse cx="24" cy="20" rx="12" ry="13" fill="#c8975a"/><path d="M14 26 Q12 34 16 38 Q20 42 24 43 Q28 42 32 38 Q36 34 34 26" fill="#c8975a"/><path d="M13 19 Q14 8 24 6 Q34 8 35 19" fill="#1a1212"/><ellipse cx="20" cy="19" rx="4" ry="2.5" fill="#111"/><ellipse cx="28" cy="19" rx="4" ry="2.5" fill="#111"/><path d="M20 32 Q24 36 28 32" fill="none" stroke="#8a5a2a" stroke-width="1.2" stroke-linecap="round"/><line x1="13" y1="20" x2="16" y2="26" stroke="#8a6535" stroke-width="1" opacity="0.8"/></svg>
       <div class="kai-callout-text">"Before you look at the workouts, learn the vocab. I'm not gonna repeat myself mid-set. <strong>Know what a superset is. Know what RPE means. Know your tempo.</strong> It's in the glossary below. Read it once, then hit the program."</div>
     </div>
-
     <span class="section-tag">[ glossary ]</span>
     <div class="glossary-grid">
       <div class="glossary-card"><div class="glossary-term">Rep</div><div class="glossary-def">One complete motion of an exercise. 8 reps = 8 full movements.</div></div>
@@ -777,153 +511,31 @@
       <div class="glossary-card"><div class="glossary-term">Bulk / Cut</div><div class="glossary-def">Bulk = small caloric surplus to grow muscle. Cut = small deficit to lose fat.</div></div>
     </div>
 
-    <!-- PHASE 1 -->
     <br/><br/>
-    <div class="phase-header" onclick="togglePhase('phase1')">
-      <span class="phase-label" style="margin-bottom:0">[ phase 01 ]</span>
-      <span class="phase-header-title">Months 0–6 · Foundation Split</span>
-      <span class="phase-toggle" id="phase1-icon">+</span>
-    </div>
+    <div class="phase-header" onclick="togglePhase('phase1')"><span class="phase-label" style="margin-bottom:0">[ phase 01 ]</span><span class="phase-header-title">Months 0–6 · Foundation Split</span><span class="phase-toggle" id="phase1-icon">+</span></div>
     <div class="phase-content" id="phase1">
-      <div class="kai-callout">
-        <svg class="kai-callout-avatar" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg"><circle cx="24" cy="24" r="24" fill="#161616"/><ellipse cx="24" cy="20" rx="12" ry="13" fill="#c8975a"/><path d="M14 26 Q12 34 16 38 Q20 42 24 43 Q28 42 32 38 Q36 34 34 26" fill="#c8975a"/><path d="M13 19 Q14 8 24 6 Q34 8 35 19" fill="#1a1212"/><ellipse cx="20" cy="19" rx="4" ry="2.5" fill="#111"/><ellipse cx="28" cy="19" rx="4" ry="2.5" fill="#111"/><path d="M20 32 Q24 36 28 32" fill="none" stroke="#8a5a2a" stroke-width="1.2" stroke-linecap="round"/></svg>
-        <div class="kai-callout-text">"<strong>Movement quality over weight. Always.</strong> I don't care if the guy next to you is squatting twice what you are. You're learning patterns. Get them right now or pay for it later with an injury."</div>
-      </div>
-      <div class="day-block">
-        <div class="day-label">DAY 1 — LOWER A (stability focus)</div>
-        <table><thead><tr><th>Exercise</th><th>Sets & Reps</th><th>Tempo</th><th>Muscles</th><th>Notes</th></tr></thead>
-        <tbody>
-          <tr><td class="td-exercise">Lunges</td><td class="td-sets">4 × 10/leg</td><td class="td-tempo">2-1-2</td><td class="td-muscle">Quads, Glutes</td><td class="td-note">Drive UP not forward. Feel the glute contract at top.</td></tr>
-          <tr><td class="td-exercise">Hip Thrusts</td><td class="td-sets">3 × 15</td><td class="td-tempo">2-0-3</td><td class="td-muscle">Glutes</td><td class="td-note">Slow and controlled. Squeeze at the top for a full second.</td></tr>
-          <tr><td class="td-exercise">Calf Raises</td><td class="td-sets">4 × 12</td><td class="td-tempo">1-0-3</td><td class="td-muscle">Calves</td><td class="td-note">Fast up, SLOW down. Full stretch at the bottom.</td></tr>
-        </tbody></table>
-      </div>
-      <div class="day-block">
-        <div class="day-label">DAY 2 — UPPER A (stability focus)</div>
-        <table><thead><tr><th>Exercise</th><th>Sets & Reps</th><th>Tempo</th><th>Muscles</th><th>Notes</th></tr></thead>
-        <tbody>
-          <tr><td class="td-exercise">Bicep Curls</td><td class="td-sets">3 × 8</td><td class="td-tempo">3-1-2</td><td class="td-muscle">Biceps, Forearms</td><td class="td-note">Full extension at bottom. Don't swing.</td></tr>
-          <tr><td class="td-exercise">Tricep Extensions</td><td class="td-sets">3 × 8</td><td class="td-tempo">3-1-2</td><td class="td-muscle">Triceps</td><td class="td-note">Lock elbows. Only forearms move.</td></tr>
-          <tr><td class="td-exercise">Push-Ups</td><td class="td-sets">4 × 12</td><td class="td-tempo">2-0-2</td><td class="td-muscle">Chest, Triceps</td><td class="td-note">Incline if needed. Full ROM or don't count it.</td></tr>
-          <tr><td class="td-exercise">Knee Tucks</td><td class="td-sets">3 × 15</td><td class="td-tempo">1-1-3</td><td class="td-muscle">Core, Trunk</td><td class="td-note">Slow the eccentric down. Feel the abs stretching.</td></tr>
-        </tbody></table>
-      </div>
-      <div class="day-block">
-        <div class="day-label">DAY 3 — LOWER B (strength focus)</div>
-        <table><thead><tr><th>Exercise</th><th>Sets & Reps</th><th>Tempo</th><th>Muscles</th><th>Notes</th></tr></thead>
-        <tbody>
-          <tr><td class="td-exercise">Squats</td><td class="td-sets">4 × 6</td><td class="td-tempo">2-1-2</td><td class="td-muscle">Quads, Glutes</td><td class="td-note">Heavier day. Test your limits. Depth matters.</td></tr>
-          <tr><td class="td-exercise">Hip Thrusts</td><td class="td-sets">3 × 6</td><td class="td-tempo">2-0-3</td><td class="td-muscle">Glutes</td><td class="td-note">Load it up compared to Day 1.</td></tr>
-          <tr><td class="td-exercise">Hamstring Curls</td><td class="td-sets">4 × 10–12</td><td class="td-tempo">2-1-3</td><td class="td-muscle">Hamstrings</td><td class="td-note">Slow eccentric is the whole point here.</td></tr>
-          <tr><td class="td-exercise">Leg Abductions</td><td class="td-sets">3 × 12–15</td><td class="td-tempo">1-1-1</td><td class="td-muscle">Abductors</td><td class="td-note">Cable or machine. Control the movement.</td></tr>
-        </tbody></table>
-      </div>
-      <div class="day-block">
-        <div class="day-label">DAY 4 — UPPER B (strength focus)</div>
-        <table><thead><tr><th>Exercise</th><th>Sets & Reps</th><th>Tempo</th><th>Muscles</th><th>Notes</th></tr></thead>
-        <tbody>
-          <tr><td class="td-exercise">Low Rows</td><td class="td-sets">4 × 8–10</td><td class="td-tempo">1-0-2</td><td class="td-muscle">Lats, Rear Delts</td><td class="td-note">Squeeze the shoulder blades. Row to your stomach.</td></tr>
-          <tr><td class="td-exercise">Bench Press</td><td class="td-sets">2 × 12–15</td><td class="td-tempo">2-1-2</td><td class="td-muscle">Chest, Triceps</td><td class="td-note">Learn the bar path. Chest to bar, full lockout.</td></tr>
-          <tr><td class="td-exercise">Assisted Pull-Ups</td><td class="td-sets">4 × 8–10</td><td class="td-tempo">2-0-2</td><td class="td-muscle">Lats, Mid-Back</td><td class="td-note">Use the machine or bands. Full hang at bottom.</td></tr>
-          <tr><td class="td-exercise">Knee Tucks</td><td class="td-sets">3 × 15</td><td class="td-tempo">1-1-3</td><td class="td-muscle">Core, Trunk</td><td class="td-note">Same as Day 2. Feel the stretch.</td></tr>
-        </tbody></table>
-      </div>
+      <div class="kai-callout"><svg class="kai-callout-avatar" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg"><circle cx="24" cy="24" r="24" fill="#161616"/><ellipse cx="24" cy="20" rx="12" ry="13" fill="#c8975a"/><path d="M14 26 Q12 34 16 38 Q20 42 24 43 Q28 42 32 38 Q36 34 34 26" fill="#c8975a"/><path d="M13 19 Q14 8 24 6 Q34 8 35 19" fill="#1a1212"/><ellipse cx="20" cy="19" rx="4" ry="2.5" fill="#111"/><ellipse cx="28" cy="19" rx="4" ry="2.5" fill="#111"/><path d="M20 32 Q24 36 28 32" fill="none" stroke="#8a5a2a" stroke-width="1.2" stroke-linecap="round"/></svg><div class="kai-callout-text">"<strong>Movement quality over weight. Always.</strong> I don't care if the guy next to you is squatting twice what you are. You're learning patterns. Get them right now or pay for it later with an injury."</div></div>
+      <div class="day-block"><div class="day-label">DAY 1 — LOWER A (stability focus)</div><table><thead><tr><th>Exercise</th><th>Sets & Reps</th><th>Tempo</th><th>Muscles</th><th>Notes</th></tr></thead><tbody><tr><td class="td-exercise">Lunges</td><td class="td-sets">4 × 10/leg</td><td class="td-tempo">2-1-2</td><td class="td-muscle">Quads, Glutes</td><td class="td-note">Drive UP not forward. Feel the glute contract at top.</td></tr><tr><td class="td-exercise">Hip Thrusts</td><td class="td-sets">3 × 15</td><td class="td-tempo">2-0-3</td><td class="td-muscle">Glutes</td><td class="td-note">Slow and controlled. Squeeze at the top for a full second.</td></tr><tr><td class="td-exercise">Calf Raises</td><td class="td-sets">4 × 12</td><td class="td-tempo">1-0-3</td><td class="td-muscle">Calves</td><td class="td-note">Fast up, SLOW down. Full stretch at the bottom.</td></tr></tbody></table></div>
+      <div class="day-block"><div class="day-label">DAY 2 — UPPER A (stability focus)</div><table><thead><tr><th>Exercise</th><th>Sets & Reps</th><th>Tempo</th><th>Muscles</th><th>Notes</th></tr></thead><tbody><tr><td class="td-exercise">Bicep Curls</td><td class="td-sets">3 × 8</td><td class="td-tempo">3-1-2</td><td class="td-muscle">Biceps, Forearms</td><td class="td-note">Full extension at bottom. Don't swing.</td></tr><tr><td class="td-exercise">Tricep Extensions</td><td class="td-sets">3 × 8</td><td class="td-tempo">3-1-2</td><td class="td-muscle">Triceps</td><td class="td-note">Lock elbows. Only forearms move.</td></tr><tr><td class="td-exercise">Push-Ups</td><td class="td-sets">4 × 12</td><td class="td-tempo">2-0-2</td><td class="td-muscle">Chest, Triceps</td><td class="td-note">Incline if needed. Full ROM or don't count it.</td></tr><tr><td class="td-exercise">Knee Tucks</td><td class="td-sets">3 × 15</td><td class="td-tempo">1-1-3</td><td class="td-muscle">Core, Trunk</td><td class="td-note">Slow the eccentric down. Feel the abs stretching.</td></tr></tbody></table></div>
+      <div class="day-block"><div class="day-label">DAY 3 — LOWER B (strength focus)</div><table><thead><tr><th>Exercise</th><th>Sets & Reps</th><th>Tempo</th><th>Muscles</th><th>Notes</th></tr></thead><tbody><tr><td class="td-exercise">Squats</td><td class="td-sets">4 × 6</td><td class="td-tempo">2-1-2</td><td class="td-muscle">Quads, Glutes</td><td class="td-note">Heavier day. Test your limits. Depth matters.</td></tr><tr><td class="td-exercise">Hip Thrusts</td><td class="td-sets">3 × 6</td><td class="td-tempo">2-0-3</td><td class="td-muscle">Glutes</td><td class="td-note">Load it up compared to Day 1.</td></tr><tr><td class="td-exercise">Hamstring Curls</td><td class="td-sets">4 × 10–12</td><td class="td-tempo">2-1-3</td><td class="td-muscle">Hamstrings</td><td class="td-note">Slow eccentric is the whole point here.</td></tr><tr><td class="td-exercise">Leg Abductions</td><td class="td-sets">3 × 12–15</td><td class="td-tempo">1-1-1</td><td class="td-muscle">Abductors</td><td class="td-note">Cable or machine. Control the movement.</td></tr></tbody></table></div>
+      <div class="day-block"><div class="day-label">DAY 4 — UPPER B (strength focus)</div><table><thead><tr><th>Exercise</th><th>Sets & Reps</th><th>Tempo</th><th>Muscles</th><th>Notes</th></tr></thead><tbody><tr><td class="td-exercise">Low Rows</td><td class="td-sets">4 × 8–10</td><td class="td-tempo">1-0-2</td><td class="td-muscle">Lats, Rear Delts</td><td class="td-note">Squeeze the shoulder blades. Row to your stomach.</td></tr><tr><td class="td-exercise">Bench Press</td><td class="td-sets">2 × 12–15</td><td class="td-tempo">2-1-2</td><td class="td-muscle">Chest, Triceps</td><td class="td-note">Learn the bar path. Chest to bar, full lockout.</td></tr><tr><td class="td-exercise">Assisted Pull-Ups</td><td class="td-sets">4 × 8–10</td><td class="td-tempo">2-0-2</td><td class="td-muscle">Lats, Mid-Back</td><td class="td-note">Use the machine or bands. Full hang at bottom.</td></tr><tr><td class="td-exercise">Knee Tucks</td><td class="td-sets">3 × 15</td><td class="td-tempo">1-1-3</td><td class="td-muscle">Core, Trunk</td><td class="td-note">Same as Day 2. Feel the stretch.</td></tr></tbody></table></div>
     </div>
 
-    <!-- PHASE 2 -->
-    <div class="phase-header" onclick="togglePhase('phase2')">
-      <span class="phase-label" style="margin-bottom:0">[ phase 02 ]</span>
-      <span class="phase-header-title">Months 6–12 · Frame Build</span>
-      <span class="phase-toggle" id="phase2-icon">+</span>
-    </div>
+    <div class="phase-header" onclick="togglePhase('phase2')"><span class="phase-label" style="margin-bottom:0">[ phase 02 ]</span><span class="phase-header-title">Months 6–12 · Frame Build</span><span class="phase-toggle" id="phase2-icon">+</span></div>
     <div class="phase-content" id="phase2">
-      <div class="kai-callout">
-        <svg class="kai-callout-avatar" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg"><circle cx="24" cy="24" r="24" fill="#161616"/><ellipse cx="24" cy="20" rx="12" ry="13" fill="#c8975a"/><path d="M14 26 Q12 34 16 38 Q20 42 24 43 Q28 42 32 38 Q36 34 34 26" fill="#c8975a"/><path d="M13 19 Q14 8 24 6 Q34 8 35 19" fill="#1a1212"/><ellipse cx="20" cy="19" rx="4" ry="2.5" fill="#111"/><ellipse cx="28" cy="19" rx="4" ry="2.5" fill="#111"/><path d="M20 32 Q24 36 28 32" fill="none" stroke="#8a5a2a" stroke-width="1.2" stroke-linecap="round"/></svg>
-        <div class="kai-callout-text">"<strong>V-taper season.</strong> Lats, shoulders, triceps. This is what makes your upper body look wide and your waist look narrow without changing your waist at all. Geometry is your best friend. Track your weights every single session."</div>
-      </div>
-      <div class="day-block">
-        <div class="day-label">DAY 1 — LOWER</div>
-        <table><thead><tr><th>Exercise</th><th>Sets & Reps</th><th>Tempo</th><th>Muscles</th><th>Notes</th></tr></thead>
-        <tbody>
-          <tr><td class="td-exercise">Squats</td><td class="td-sets">4 × 6–10</td><td class="td-tempo">2-0-2</td><td class="td-muscle">Quads, Glutes</td><td class="td-note">Progressive overload starts now. Add 5lb when you hit top of range.</td></tr>
-          <tr><td class="td-exercise">Hip Thrusts</td><td class="td-sets">3 × 12–15</td><td class="td-tempo">1-1-1</td><td class="td-muscle">Glutes</td><td class="td-note">Loaded. Should be uncomfortable by rep 12.</td></tr>
-          <tr><td class="td-exercise">Hamstring Curls</td><td class="td-sets">3 × 8–15</td><td class="td-tempo">1-1-3</td><td class="td-muscle">Hamstrings</td><td class="td-note">Eccentric emphasis. Let it stretch at the bottom.</td></tr>
-          <tr><td class="td-exercise">Calf Raises</td><td class="td-sets">4 × 8–12</td><td class="td-tempo">2-0-2</td><td class="td-muscle">Calves</td><td class="td-note">Full range. Don't bounce at the bottom.</td></tr>
-        </tbody></table>
-      </div>
-      <div class="day-block">
-        <div class="day-label">DAY 2 — UPPER PUSH</div>
-        <table><thead><tr><th>Exercise</th><th>Sets & Reps</th><th>Tempo</th><th>Muscles</th><th>Notes</th></tr></thead>
-        <tbody>
-          <tr><td class="td-exercise">Flat Bench Press</td><td class="td-sets">5 × 6–10</td><td class="td-tempo">1-0-2</td><td class="td-muscle">Chest, Triceps</td><td class="td-note">This is your main chest builder. Prioritize it fresh.</td></tr>
-          <tr><td class="td-exercise">Forearm Curls</td><td class="td-sets">3 × 10–18</td><td class="td-tempo">1-1-2</td><td class="td-muscle">Forearms</td><td class="td-note">Bigger forearms = hands look bigger = masculine as hell.</td></tr>
-          <tr><td class="td-exercise">Tricep Extensions</td><td class="td-sets">2 × 10–15</td><td class="td-tempo">1-1-2</td><td class="td-muscle">Triceps</td><td class="td-note">Triceps = 2/3 of arm size. Don't sleep on these.</td></tr>
-          <tr><td class="td-exercise">Bicep Curls</td><td class="td-sets">3 × 6–12</td><td class="td-tempo">2-0-2</td><td class="td-muscle">Biceps</td><td class="td-note">Full stretch at the bottom. That's the growth stimulus.</td></tr>
-        </tbody></table>
-      </div>
-      <div class="day-block">
-        <div class="day-label">DAY 3 — LOWER + CORE</div>
-        <table><thead><tr><th>Exercise</th><th>Sets & Reps</th><th>Tempo</th><th>Muscles</th><th>Notes</th></tr></thead>
-        <tbody>
-          <tr><td class="td-exercise">RDLs (Romanian Deadlift)</td><td class="td-sets">4 × 10–15</td><td class="td-tempo">2-1-2</td><td class="td-muscle">Hamstrings, Glutes</td><td class="td-note">Hinge at the hips. Feel the stretch. Don't round your back.</td></tr>
-          <tr><td class="td-exercise">Farmer's Carries</td><td class="td-sets">3 × 60 sec</td><td class="td-tempo">N/A</td><td class="td-muscle">Forearms, Core</td><td class="td-note">Heavy. Shoulders back. Walk slowly.</td></tr>
-          <tr><td class="td-exercise">Leg Extensions</td><td class="td-sets">3 × 8–12</td><td class="td-tempo">1-1-2</td><td class="td-muscle">Quads</td><td class="td-note">Slow at the top. Don't let it just drop back down.</td></tr>
-          <tr><td class="td-exercise">Hamstring Curls</td><td class="td-sets">3 × 8–12</td><td class="td-tempo">1-1-3</td><td class="td-muscle">Hamstrings</td><td class="td-note">Second hamstring session this week — volume builds size.</td></tr>
-        </tbody></table>
-      </div>
-      <div class="day-block">
-        <div class="day-label">DAY 4 — UPPER PULL</div>
-        <table><thead><tr><th>Exercise</th><th>Sets & Reps</th><th>Tempo</th><th>Muscles</th><th>Notes</th></tr></thead>
-        <tbody>
-          <tr><td class="td-exercise">Dumbbell Incline Bench</td><td class="td-sets">3 × 6–8</td><td class="td-tempo">2-0-2</td><td class="td-muscle">Upper Chest</td><td class="td-note">Upper chest fills out that square chest look.</td></tr>
-          <tr><td class="td-exercise">Low Rows</td><td class="td-sets">4 × 8–10</td><td class="td-tempo">2-0-2</td><td class="td-muscle">Lats</td><td class="td-note">V-taper builder. Drive your elbows back and down.</td></tr>
-          <tr><td class="td-exercise">Bicep Curls</td><td class="td-sets">3 × 10–12</td><td class="td-tempo">3-1-2</td><td class="td-muscle">Biceps</td><td class="td-note">Slow today. Time under tension is the focus.</td></tr>
-          <tr><td class="td-exercise">Tricep Skis (Pushdowns)</td><td class="td-sets">3 × 10–12</td><td class="td-tempo">3-1-2</td><td class="td-muscle">Triceps</td><td class="td-note">Elbows pinned to sides. Full extension every rep.</td></tr>
-          <tr><td class="td-exercise">Leg Raises</td><td class="td-sets">3 × 15</td><td class="td-tempo">1-1-3</td><td class="td-muscle">Core</td><td class="td-note">Lower the legs S L O W. Don't let momentum do the work.</td></tr>
-        </tbody></table>
-      </div>
+      <div class="kai-callout"><svg class="kai-callout-avatar" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg"><circle cx="24" cy="24" r="24" fill="#161616"/><ellipse cx="24" cy="20" rx="12" ry="13" fill="#c8975a"/><path d="M14 26 Q12 34 16 38 Q20 42 24 43 Q28 42 32 38 Q36 34 34 26" fill="#c8975a"/><path d="M13 19 Q14 8 24 6 Q34 8 35 19" fill="#1a1212"/><ellipse cx="20" cy="19" rx="4" ry="2.5" fill="#111"/><ellipse cx="28" cy="19" rx="4" ry="2.5" fill="#111"/><path d="M20 32 Q24 36 28 32" fill="none" stroke="#8a5a2a" stroke-width="1.2" stroke-linecap="round"/></svg><div class="kai-callout-text">"<strong>V-taper season.</strong> Lats, shoulders, triceps. This is what makes your upper body look wide and your waist look narrow without changing your waist at all. Geometry is your best friend. Track your weights every single session."</div></div>
+      <div class="day-block"><div class="day-label">DAY 1 — LOWER</div><table><thead><tr><th>Exercise</th><th>Sets & Reps</th><th>Tempo</th><th>Muscles</th><th>Notes</th></tr></thead><tbody><tr><td class="td-exercise">Squats</td><td class="td-sets">4 × 6–10</td><td class="td-tempo">2-0-2</td><td class="td-muscle">Quads, Glutes</td><td class="td-note">Progressive overload starts now. Add 5lb when you hit top of range.</td></tr><tr><td class="td-exercise">Hip Thrusts</td><td class="td-sets">3 × 12–15</td><td class="td-tempo">1-1-1</td><td class="td-muscle">Glutes</td><td class="td-note">Loaded. Should be uncomfortable by rep 12.</td></tr><tr><td class="td-exercise">Hamstring Curls</td><td class="td-sets">3 × 8–15</td><td class="td-tempo">1-1-3</td><td class="td-muscle">Hamstrings</td><td class="td-note">Eccentric emphasis. Let it stretch at the bottom.</td></tr><tr><td class="td-exercise">Calf Raises</td><td class="td-sets">4 × 8–12</td><td class="td-tempo">2-0-2</td><td class="td-muscle">Calves</td><td class="td-note">Full range. Don't bounce at the bottom.</td></tr></tbody></table></div>
+      <div class="day-block"><div class="day-label">DAY 2 — UPPER PUSH</div><table><thead><tr><th>Exercise</th><th>Sets & Reps</th><th>Tempo</th><th>Muscles</th><th>Notes</th></tr></thead><tbody><tr><td class="td-exercise">Flat Bench Press</td><td class="td-sets">5 × 6–10</td><td class="td-tempo">1-0-2</td><td class="td-muscle">Chest, Triceps</td><td class="td-note">This is your main chest builder. Prioritize it fresh.</td></tr><tr><td class="td-exercise">Forearm Curls</td><td class="td-sets">3 × 10–18</td><td class="td-tempo">1-1-2</td><td class="td-muscle">Forearms</td><td class="td-note">Bigger forearms = hands look bigger = masculine as hell.</td></tr><tr><td class="td-exercise">Tricep Extensions</td><td class="td-sets">2 × 10–15</td><td class="td-tempo">1-1-2</td><td class="td-muscle">Triceps</td><td class="td-note">Triceps = 2/3 of arm size. Don't sleep on these.</td></tr><tr><td class="td-exercise">Bicep Curls</td><td class="td-sets">3 × 6–12</td><td class="td-tempo">2-0-2</td><td class="td-muscle">Biceps</td><td class="td-note">Full stretch at the bottom. That's the growth stimulus.</td></tr></tbody></table></div>
+      <div class="day-block"><div class="day-label">DAY 3 — LOWER + CORE</div><table><thead><tr><th>Exercise</th><th>Sets & Reps</th><th>Tempo</th><th>Muscles</th><th>Notes</th></tr></thead><tbody><tr><td class="td-exercise">RDLs (Romanian Deadlift)</td><td class="td-sets">4 × 10–15</td><td class="td-tempo">2-1-2</td><td class="td-muscle">Hamstrings, Glutes</td><td class="td-note">Hinge at the hips. Feel the stretch. Don't round your back.</td></tr><tr><td class="td-exercise">Farmer's Carries</td><td class="td-sets">3 × 60 sec</td><td class="td-tempo">N/A</td><td class="td-muscle">Forearms, Core</td><td class="td-note">Heavy. Shoulders back. Walk slowly.</td></tr><tr><td class="td-exercise">Leg Extensions</td><td class="td-sets">3 × 8–12</td><td class="td-tempo">1-1-2</td><td class="td-muscle">Quads</td><td class="td-note">Slow at the top. Don't let it just drop back down.</td></tr><tr><td class="td-exercise">Hamstring Curls</td><td class="td-sets">3 × 8–12</td><td class="td-tempo">1-1-3</td><td class="td-muscle">Hamstrings</td><td class="td-note">Second hamstring session this week — volume builds size.</td></tr></tbody></table></div>
+      <div class="day-block"><div class="day-label">DAY 4 — UPPER PULL</div><table><thead><tr><th>Exercise</th><th>Sets & Reps</th><th>Tempo</th><th>Muscles</th><th>Notes</th></tr></thead><tbody><tr><td class="td-exercise">Dumbbell Incline Bench</td><td class="td-sets">3 × 6–8</td><td class="td-tempo">2-0-2</td><td class="td-muscle">Upper Chest</td><td class="td-note">Upper chest fills out that square chest look.</td></tr><tr><td class="td-exercise">Low Rows</td><td class="td-sets">4 × 8–10</td><td class="td-tempo">2-0-2</td><td class="td-muscle">Lats</td><td class="td-note">V-taper builder. Drive your elbows back and down.</td></tr><tr><td class="td-exercise">Bicep Curls</td><td class="td-sets">3 × 10–12</td><td class="td-tempo">3-1-2</td><td class="td-muscle">Biceps</td><td class="td-note">Slow today. Time under tension is the focus.</td></tr><tr><td class="td-exercise">Tricep Skis (Pushdowns)</td><td class="td-sets">3 × 10–12</td><td class="td-tempo">3-1-2</td><td class="td-muscle">Triceps</td><td class="td-note">Elbows pinned to sides. Full extension every rep.</td></tr><tr><td class="td-exercise">Leg Raises</td><td class="td-sets">3 × 15</td><td class="td-tempo">1-1-3</td><td class="td-muscle">Core</td><td class="td-note">Lower the legs S L O W. Don't let momentum do the work.</td></tr></tbody></table></div>
     </div>
 
-    <!-- PHASE 3 -->
-    <div class="phase-header" onclick="togglePhase('phase3')">
-      <span class="phase-label" style="margin-bottom:0">[ phase 03 ]</span>
-      <span class="phase-header-title">Months 12–24 · Full Bodybuilding Protocol</span>
-      <span class="phase-toggle" id="phase3-icon">+</span>
-    </div>
+    <div class="phase-header" onclick="togglePhase('phase3')"><span class="phase-label" style="margin-bottom:0">[ phase 03 ]</span><span class="phase-header-title">Months 12–24 · Full Bodybuilding Protocol</span><span class="phase-toggle" id="phase3-icon">+</span></div>
     <div class="phase-content" id="phase3">
-      <div class="kai-callout">
-        <svg class="kai-callout-avatar" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg"><circle cx="24" cy="24" r="24" fill="#161616"/><ellipse cx="24" cy="20" rx="12" ry="13" fill="#c8975a"/><path d="M14 26 Q12 34 16 38 Q20 42 24 43 Q28 42 32 38 Q36 34 34 26" fill="#c8975a"/><path d="M13 19 Q14 8 24 6 Q34 8 35 19" fill="#1a1212"/><ellipse cx="20" cy="19" rx="4" ry="2.5" fill="#111"/><ellipse cx="28" cy="19" rx="4" ry="2.5" fill="#111"/><path d="M20 32 Q24 36 28 32" fill="none" stroke="#8a5a2a" stroke-width="1.2" stroke-linecap="round"/></svg>
-        <div class="kai-callout-text">"<strong>Newbie gains are done.</strong> Good. That means you built the base. Now the real work starts. 5 days, heavier compounds, actual bodybuilding. Progress will be slower — that's normal. Trust the process and the data."</div>
-      </div>
-      <div class="day-block">
-        <div class="day-label">DAY 1 — LOWER MODERATE</div>
-        <table><thead><tr><th>Exercise</th><th>Sets & Reps</th><th>Tempo</th><th>Muscles</th></tr></thead>
-        <tbody>
-          <tr><td class="td-exercise">Squats</td><td class="td-sets">5 × 8–12</td><td class="td-tempo">1-0-2</td><td class="td-muscle">Quads, Glutes</td></tr>
-          <tr><td class="td-exercise">RDLs</td><td class="td-sets">3 × 6–10</td><td class="td-tempo">2-1-1</td><td class="td-muscle">Hamstrings, Glutes</td></tr>
-          <tr><td class="td-exercise">Farmer's Carries</td><td class="td-sets">3 × 60 sec</td><td class="td-tempo">N/A</td><td class="td-muscle">Forearms, Core</td></tr>
-        </tbody></table>
-      </div>
-      <div class="day-block">
-        <div class="day-label">DAY 2 — UPPER PUSH + PULL</div>
-        <table><thead><tr><th>Exercise</th><th>Sets & Reps</th><th>Tempo</th><th>Muscles</th></tr></thead>
-        <tbody>
-          <tr><td class="td-exercise">Bench Press</td><td class="td-sets">5 × 6–8</td><td class="td-tempo">2-0-2</td><td class="td-muscle">Chest, Triceps</td></tr>
-          <tr><td class="td-exercise">Rows</td><td class="td-sets">5 × 6–8</td><td class="td-tempo">3-1-2</td><td class="td-muscle">Lats, Rear Delts</td></tr>
-          <tr><td class="td-exercise">Tricep Skis</td><td class="td-sets">4 × 10–12</td><td class="td-tempo">3-1-2</td><td class="td-muscle">Triceps</td></tr>
-          <tr><td class="td-exercise">Bicep Curls</td><td class="td-sets">4 × 10–12</td><td class="td-tempo">3-1-2</td><td class="td-muscle">Biceps</td></tr>
-        </tbody></table>
-      </div>
-      <div class="day-block">
-        <div class="day-label">DAY 3 — LOWER HEAVY</div>
-        <table><thead><tr><th>Exercise</th><th>Sets & Reps</th><th>Tempo</th><th>Muscles</th></tr></thead>
-        <tbody>
-          <tr><td class="td-exercise">Deadlifts</td><td class="td-sets">5 × 3–5</td><td class="td-tempo">N/A — form focus</td><td class="td-muscle">Lower Back, Hamstrings</td></tr>
-          <tr><td class="td-exercise">RDLs (light)</td><td class="td-sets">3 × 10–12</td><td class="td-tempo">2-1-2</td><td class="td-muscle">Hamstrings</td></tr>
-          <tr><td class="td-exercise">Hip Thrusts</td><td class="td-sets">3 × 12–15</td><td class="td-tempo">2-0-3</td><td class="td-muscle">Glutes</td></tr>
-          <tr><td class="td-exercise">Abductor + Adductor</td><td class="td-sets">3 × 10–12 each</td><td class="td-tempo">1-1-3</td><td class="td-muscle">Inner/Outer Thigh</td></tr>
-        </tbody></table>
-      </div>
+      <div class="kai-callout"><svg class="kai-callout-avatar" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg"><circle cx="24" cy="24" r="24" fill="#161616"/><ellipse cx="24" cy="20" rx="12" ry="13" fill="#c8975a"/><path d="M14 26 Q12 34 16 38 Q20 42 24 43 Q28 42 32 38 Q36 34 34 26" fill="#c8975a"/><path d="M13 19 Q14 8 24 6 Q34 8 35 19" fill="#1a1212"/><ellipse cx="20" cy="19" rx="4" ry="2.5" fill="#111"/><ellipse cx="28" cy="19" rx="4" ry="2.5" fill="#111"/><path d="M20 32 Q24 36 28 32" fill="none" stroke="#8a5a2a" stroke-width="1.2" stroke-linecap="round"/></svg><div class="kai-callout-text">"<strong>Newbie gains are done.</strong> Good. That means you built the base. Now the real work starts. 5 days, heavier compounds, actual bodybuilding. Progress will be slower — that's normal. Trust the process and the data."</div></div>
+      <div class="day-block"><div class="day-label">DAY 1 — LOWER MODERATE</div><table><thead><tr><th>Exercise</th><th>Sets & Reps</th><th>Tempo</th><th>Muscles</th></tr></thead><tbody><tr><td class="td-exercise">Squats</td><td class="td-sets">5 × 8–12</td><td class="td-tempo">1-0-2</td><td class="td-muscle">Quads, Glutes</td></tr><tr><td class="td-exercise">RDLs</td><td class="td-sets">3 × 6–10</td><td class="td-tempo">2-1-1</td><td class="td-muscle">Hamstrings, Glutes</td></tr><tr><td class="td-exercise">Farmer's Carries</td><td class="td-sets">3 × 60 sec</td><td class="td-tempo">N/A</td><td class="td-muscle">Forearms, Core</td></tr></tbody></table></div>
+      <div class="day-block"><div class="day-label">DAY 2 — UPPER PUSH + PULL</div><table><thead><tr><th>Exercise</th><th>Sets & Reps</th><th>Tempo</th><th>Muscles</th></tr></thead><tbody><tr><td class="td-exercise">Bench Press</td><td class="td-sets">5 × 6–8</td><td class="td-tempo">2-0-2</td><td class="td-muscle">Chest, Triceps</td></tr><tr><td class="td-exercise">Rows</td><td class="td-sets">5 × 6–8</td><td class="td-tempo">3-1-2</td><td class="td-muscle">Lats, Rear Delts</td></tr><tr><td class="td-exercise">Tricep Skis</td><td class="td-sets">4 × 10–12</td><td class="td-tempo">3-1-2</td><td class="td-muscle">Triceps</td></tr><tr><td class="td-exercise">Bicep Curls</td><td class="td-sets">4 × 10–12</td><td class="td-tempo">3-1-2</td><td class="td-muscle">Biceps</td></tr></tbody></table></div>
+      <div class="day-block"><div class="day-label">DAY 3 — LOWER HEAVY</div><table><thead><tr><th>Exercise</th><th>Sets & Reps</th><th>Tempo</th><th>Muscles</th></tr></thead><tbody><tr><td class="td-exercise">Deadlifts</td><td class="td-sets">5 × 3–5</td><td class="td-tempo">N/A — form focus</td><td class="td-muscle">Lower Back, Hamstrings</td></tr><tr><td class="td-exercise">RDLs (light)</td><td class="td-sets">3 × 10–12</td><td class="td-tempo">2-1-2</td><td class="td-muscle">Hamstrings</td></tr><tr><td class="td-exercise">Hip Thrusts</td><td class="td-sets">3 × 12–15</td><td class="td-tempo">2-0-3</td><td class="td-muscle">Glutes</td></tr><tr><td class="td-exercise">Abductor + Adductor</td><td class="td-sets">3 × 10–12 each</td><td class="td-tempo">1-1-3</td><td class="td-muscle">Inner/Outer Thigh</td></tr></tbody></table></div>
       <div class="day-block">
         <div class="day-label">DAY 4 — UPPER PUSH + CORE</div>
         <table><thead><tr><th>Exercise</th><th>Sets & Reps</th><th>Tempo</th><th>Muscles</th></tr></thead>
